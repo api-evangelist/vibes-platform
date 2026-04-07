@@ -5,9 +5,9 @@ apis:
   - aid: vibes-platform:vibes-platform
     name: Vibes Platform API
     tags:
-      - SMS
-      - Push Notifications
       - Mobile Marketing
+      - Push Notifications
+      - SMS
     humanURL: https://developer-platform.vibes.com/
     properties:
       - url: https://developer-platform.vibes.com/reference/our-apis
@@ -20,10 +20,10 @@ apis:
       Broadcasts are delivered to subscribers within your mobile contact book.
 name: Vibes Platform
 tags:
-  - SMS
+  - Mobile Marketing
   - Mobile Messaging
   - Push Notifications
-  - Mobile Marketing
+  - SMS
 type: Contract
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
