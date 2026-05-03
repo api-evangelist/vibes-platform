@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://public-api.vibescm.com/companies/ABC123/broadcasts?status=sent&page=1&per_page=25",
+    "headers": {
+      "Authorization": "Basic dXNlcm5hbWU6cGFzc3dvcmQ=",
+      "Accept": "application/json"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "broadcasts": [
+        {
+          "id": "bc_7f3a9d12",
+          "name": "Summer Sale Announcement",
+          "status": "sent",
+          "message_type": "sms",
+          "message_text": "Hi {{first_name}}! Our Summer Sale starts now - 30% off everything. Shop at vibes.com/summer. Reply STOP to opt out.",
+          "subscription_list_id": "sl_4e2c1b88",
+          "scheduled_at": "2026-06-15T10:00:00Z",
+          "sent_at": "2026-06-15T10:00:03Z",
+          "created_at": "2026-06-14T08:30:00Z",
+          "updated_at": "2026-06-15T10:00:03Z"
+        },
+        {
+          "id": "bc_8a4d2e31",
+          "name": "Flash Deal Push Notification",
+          "status": "sent",
+          "message_type": "push",
+          "message_text": "24-hour flash sale! 50% off select items.",
+          "subscription_list_id": "sl_9c7f3a45",
+          "scheduled_at": "2026-06-10T14:00:00Z",
+          "sent_at": "2026-06-10T14:00:01Z",
+          "created_at": "2026-06-09T11:00:00Z",
+          "updated_at": "2026-06-10T14:00:01Z"
+        }
+      ],
+      "total": 2,
+      "page": 1,
+      "per_page": 25
+    }
+  }
+}

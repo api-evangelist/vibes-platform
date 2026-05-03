@@ -1,0 +1,427 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Vibes Mobile Messaging"
+  description: >-
+    Unified mobile messaging capability combining the Vibes Platform API and
+    Vibes Connect API for end-to-end mobile engagement workflows. Covers
+    SMS/MMS sending, broadcast campaign management, push notifications,
+    acquisition campaigns, subscription list management, and event-triggered
+    messages. Used by mobile marketing teams and developers building
+    customer engagement workflows.
+  tags:
+    - Mobile Marketing
+    - SMS
+    - MMS
+    - Push Notifications
+    - Broadcast Messaging
+    - Acquisition Campaigns
+    - Subscription Management
+    - Mobile Engagement
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      VIBES_PLATFORM_USERNAME: VIBES_PLATFORM_USERNAME
+      VIBES_PLATFORM_PASSWORD: VIBES_PLATFORM_PASSWORD
+      VIBES_COMPANY_KEY: VIBES_COMPANY_KEY
+      VIBES_CONNECT_USERNAME: VIBES_CONNECT_USERNAME
+      VIBES_CONNECT_PASSWORD: VIBES_CONNECT_PASSWORD
+
+capability:
+  consumes:
+    - import: vibes-platform
+      location: ./shared/vibes-platform.yaml
+    - import: vibes-connect
+      location: ./shared/vibes-connect.yaml
+
+  exposes:
+    - type: rest
+      port: 8080
+      namespace: vibes-mobile-messaging-api
+      description: "Unified REST API for Vibes mobile messaging and engagement workflows."
+      resources:
+        - path: /v1/broadcasts
+          name: broadcasts
+          description: "Manage SMS and push notification broadcasts."
+          operations:
+            - method: GET
+              name: list-broadcasts
+              description: "List all broadcasts for the company."
+              call: "vibes-platform.list-broadcasts"
+              with:
+                company_key: "rest.company_key"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-broadcast
+              description: "Create a new broadcast message send."
+              call: "vibes-platform.create-broadcast"
+              with:
+                company_key: "rest.company_key"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/broadcasts/{broadcast_id}
+          name: broadcast-detail
+          description: "Retrieve a specific broadcast."
+          operations:
+            - method: GET
+              name: get-broadcast
+              description: "Get broadcast details and status."
+              call: "vibes-platform.get-broadcast"
+              with:
+                company_key: "rest.company_key"
+                broadcast_id: "rest.broadcast_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/acquisition-campaigns
+          name: acquisition-campaigns
+          description: "Manage subscriber acquisition campaigns."
+          operations:
+            - method: GET
+              name: list-acquisition-campaigns
+              description: "List all acquisition campaigns."
+              call: "vibes-platform.list-acquisition-campaigns"
+              with:
+                company_key: "rest.company_key"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/acquisition-campaigns/{campaign_id}/participants
+          name: campaign-participants
+          description: "Manage campaign participants."
+          operations:
+            - method: GET
+              name: list-pending-participants
+              description: "List pending participants in a campaign."
+              call: "vibes-platform.list-pending-participants"
+              with:
+                company_key: "rest.company_key"
+                campaign_id: "rest.campaign_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: add-participant
+              description: "Add a person to an acquisition campaign."
+              call: "vibes-platform.add-participant"
+              with:
+                company_key: "rest.company_key"
+                campaign_id: "rest.campaign_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/subscription-lists
+          name: subscription-lists
+          description: "Manage subscriber subscription lists."
+          operations:
+            - method: GET
+              name: list-subscription-lists
+              description: "List all subscription lists."
+              call: "vibes-platform.list-subscription-lists"
+              with:
+                company_key: "rest.company_key"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/subscribers/{person_key}
+          name: subscribers
+          description: "Manage individual subscribers."
+          operations:
+            - method: GET
+              name: get-person
+              description: "Get subscriber details by person key."
+              call: "vibes-platform.get-person"
+              with:
+                company_key: "rest.company_key"
+                person_key: "rest.person_key"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/events
+          name: events
+          description: "Submit events to trigger messages."
+          operations:
+            - method: POST
+              name: create-event
+              description: "Submit an event to trigger SMS or push notifications."
+              call: "vibes-platform.create-event"
+              with:
+                company_key: "rest.company_key"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/wallet-passes
+          name: wallet-passes
+          description: "Manage mobile wallet passes."
+          operations:
+            - method: GET
+              name: list-wallet-items
+              description: "List all wallet passes."
+              call: "vibes-platform.list-wallet-items"
+              with:
+                company_key: "rest.company_key"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-wallet-item
+              description: "Create a new wallet pass for a subscriber."
+              call: "vibes-platform.create-wallet-item"
+              with:
+                company_key: "rest.company_key"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/callbacks
+          name: callbacks
+          description: "Manage opt-in and delivery status callbacks."
+          operations:
+            - method: GET
+              name: list-callbacks
+              description: "List all registered callbacks."
+              call: "vibes-platform.list-callbacks"
+              with:
+                company_key: "rest.company_key"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: register-callback
+              description: "Register a new callback endpoint."
+              call: "vibes-platform.register-callback"
+              with:
+                company_key: "rest.company_key"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/sms-messages
+          name: sms-messages
+          description: "Send transactional SMS messages."
+          operations:
+            - method: POST
+              name: send-sms-message
+              description: "Send an SMS message via the Connect aggregation API."
+              call: "vibes-connect.send-sms-message"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/mms-messages
+          name: mms-messages
+          description: "Send MMS messages with multimedia content."
+          operations:
+            - method: POST
+              name: send-mms-message
+              description: "Send an MMS message with pictures, links, or other media."
+              call: "vibes-connect.send-mms-message"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/carrier-lookup
+          name: carrier-lookup
+          description: "Look up carrier information for mobile numbers."
+          operations:
+            - method: POST
+              name: lookup-carrier
+              description: "Retrieve carrier information for a mobile number."
+              call: "vibes-connect.lookup-carrier"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9090
+      namespace: vibes-mobile-messaging-mcp
+      transport: http
+      description: "MCP server for AI-assisted mobile messaging and engagement campaign management."
+      tools:
+        - name: list-broadcasts
+          description: "List all SMS and push notification broadcasts for the company."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "vibes-platform.list-broadcasts"
+          with:
+            company_key: "tools.company_key"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-broadcast
+          description: "Create a new SMS or push notification broadcast message send."
+          hints:
+            readOnly: false
+            destructive: false
+          call: "vibes-platform.create-broadcast"
+          with:
+            company_key: "tools.company_key"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-broadcast
+          description: "Get details and delivery status for a specific broadcast."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "vibes-platform.get-broadcast"
+          with:
+            company_key: "tools.company_key"
+            broadcast_id: "tools.broadcast_id"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-acquisition-campaigns
+          description: "List all subscriber acquisition campaigns and their status."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "vibes-platform.list-acquisition-campaigns"
+          with:
+            company_key: "tools.company_key"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-pending-participants
+          description: "List pending participants in an acquisition campaign."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "vibes-platform.list-pending-participants"
+          with:
+            company_key: "tools.company_key"
+            campaign_id: "tools.campaign_id"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: add-participant
+          description: "Add a person to an acquisition campaign."
+          hints:
+            readOnly: false
+            destructive: false
+          call: "vibes-platform.add-participant"
+          with:
+            company_key: "tools.company_key"
+            campaign_id: "tools.campaign_id"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-subscription-lists
+          description: "List all subscriber subscription lists and their counts."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "vibes-platform.list-subscription-lists"
+          with:
+            company_key: "tools.company_key"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-subscriber
+          description: "Get subscriber details and subscription status by person key."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "vibes-platform.get-person"
+          with:
+            company_key: "tools.company_key"
+            person_key: "tools.person_key"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-event
+          description: "Submit an event to trigger event-based SMS messages or push notifications."
+          hints:
+            readOnly: false
+            destructive: false
+          call: "vibes-platform.create-event"
+          with:
+            company_key: "tools.company_key"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-wallet-passes
+          description: "List all mobile wallet passes (Apple Wallet and Google Pay) for the company."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "vibes-platform.list-wallet-items"
+          with:
+            company_key: "tools.company_key"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-wallet-pass
+          description: "Create a new mobile wallet pass for a subscriber."
+          hints:
+            readOnly: false
+            destructive: false
+          call: "vibes-platform.create-wallet-item"
+          with:
+            company_key: "tools.company_key"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-callbacks
+          description: "List all registered callback endpoints for opt-in and delivery notifications."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "vibes-platform.list-callbacks"
+          with:
+            company_key: "tools.company_key"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: register-callback
+          description: "Register a callback endpoint for opt-in or delivery status notifications."
+          hints:
+            readOnly: false
+            destructive: false
+          call: "vibes-platform.register-callback"
+          with:
+            company_key: "tools.company_key"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: send-sms-message
+          description: "Send a transactional SMS message directly via the Vibes Connect aggregation API."
+          hints:
+            readOnly: false
+            destructive: false
+          call: "vibes-connect.send-sms-message"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: send-mms-message
+          description: "Send an MMS message with pictures, links, or other multimedia content."
+          hints:
+            readOnly: false
+            destructive: false
+          call: "vibes-connect.send-mms-message"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: lookup-carrier
+          description: "Look up the carrier and number type for a mobile number."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "vibes-connect.lookup-carrier"
+          outputParameters:
+            - type: object
+              mapping: "$."

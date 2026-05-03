@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://public-api.vibescm.com/companies/ABC123/campaigns/acquisition/camp_5b9e3f12/participants",
+    "headers": {
+      "Authorization": "Basic dXNlcm5hbWU6cGFzc3dvcmQ=",
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "body": {
+      "mobile_phone": "+15551234567",
+      "external_person_id": "customer_98765"
+    }
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": "part_a7b2c3d4",
+      "mobile_phone": "+15551234567",
+      "status": "pending",
+      "created_at": "2026-05-03T12:05:00Z"
+    }
+  }
+}

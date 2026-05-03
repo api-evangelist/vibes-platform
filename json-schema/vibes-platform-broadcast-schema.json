@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://developer-platform.vibes.com/schema/broadcast",
+  "title": "Broadcast",
+  "description": "A Vibes Platform broadcast representing a scheduled or sent SMS or push notification message send to a subscription list.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the broadcast."
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name of the broadcast."
+    },
+    "status": {
+      "type": "string",
+      "description": "Current lifecycle status of the broadcast.",
+      "enum": ["draft", "scheduled", "sent", "cancelled"]
+    },
+    "message_type": {
+      "type": "string",
+      "description": "Type of message channel for the broadcast.",
+      "enum": ["sms", "push"]
+    },
+    "message_text": {
+      "type": "string",
+      "description": "Message content template. Supports personalization placeholders using {{field_name}} syntax.",
+      "maxLength": 1600
+    },
+    "subscription_list_id": {
+      "type": "string",
+      "description": "Identifier of the subscription list this broadcast is delivered to."
+    },
+    "scheduled_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the broadcast is scheduled to send."
+    },
+    "sent_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the broadcast was actually sent."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the broadcast was created."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the broadcast was last updated."
+    }
+  },
+  "required": ["id", "name", "status", "message_type", "message_text", "subscription_list_id"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "id": "bc_7f3a9d12",
+      "name": "Summer Sale Announcement",
+      "status": "sent",
+      "message_type": "sms",
+      "message_text": "Hi {{first_name}}! Our Summer Sale starts now - 30% off everything. Reply STOP to opt out.",
+      "subscription_list_id": "sl_4e2c1b88",
+      "scheduled_at": "2026-06-15T10:00:00Z",
+      "sent_at": "2026-06-15T10:00:03Z",
+      "created_at": "2026-06-14T08:30:00Z",
+      "updated_at": "2026-06-15T10:00:03Z"
+    }
+  ]
+}

@@ -1,0 +1,386 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Vibes Platform API"
+  description: >-
+    The Vibes Platform API provides programmatic access to mobile engagement
+    capabilities including broadcast messaging, acquisition campaign management,
+    subscription list management, wallet pass management, event-triggered
+    messages, and callback registrations.
+  tags:
+    - Mobile Marketing
+    - SMS
+    - Push Notifications
+    - Broadcast Messaging
+    - Acquisition Campaigns
+    - Subscription Management
+    - Wallet Passes
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      VIBES_PLATFORM_USERNAME: VIBES_PLATFORM_USERNAME
+      VIBES_PLATFORM_PASSWORD: VIBES_PLATFORM_PASSWORD
+      VIBES_COMPANY_KEY: VIBES_COMPANY_KEY
+
+capability:
+  consumes:
+    - type: http
+      namespace: vibes-platform
+      baseUri: https://public-api.vibescm.com
+      description: "Vibes Platform API for broadcast messaging, acquisition campaigns, and subscription management."
+      authentication:
+        type: basic
+        username: "{{VIBES_PLATFORM_USERNAME}}"
+        password: "{{VIBES_PLATFORM_PASSWORD}}"
+      resources:
+        - name: broadcasts
+          path: /companies/{company_key}/broadcasts
+          description: "Manage SMS and push notification broadcasts."
+          operations:
+            - name: list-broadcasts
+              method: GET
+              description: "Retrieve a list of broadcasts for the company."
+              inputParameters:
+                - name: company_key
+                  in: path
+                  type: string
+                  required: true
+                  description: "Your Vibes company identifier."
+                - name: status
+                  in: query
+                  type: string
+                  required: false
+                  description: "Filter broadcasts by status (draft, scheduled, sent, cancelled)."
+                - name: page
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Page number for pagination."
+                - name: per_page
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Number of results per page (max 100)."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: create-broadcast
+              method: POST
+              description: "Create a new broadcast (SMS or push notification send)."
+              inputParameters:
+                - name: company_key
+                  in: path
+                  type: string
+                  required: true
+                  description: "Your Vibes company identifier."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  name: "{{tools.broadcast_name}}"
+                  message_type: "{{tools.message_type}}"
+                  message_text: "{{tools.message_text}}"
+                  subscription_list_id: "{{tools.subscription_list_id}}"
+                  scheduled_at: "{{tools.scheduled_at}}"
+
+        - name: broadcast-detail
+          path: /companies/{company_key}/broadcasts/{broadcast_id}
+          description: "Get, update individual broadcast."
+          operations:
+            - name: get-broadcast
+              method: GET
+              description: "Retrieve metadata and status for a specific broadcast."
+              inputParameters:
+                - name: company_key
+                  in: path
+                  type: string
+                  required: true
+                  description: "Your Vibes company identifier."
+                - name: broadcast_id
+                  in: path
+                  type: string
+                  required: true
+                  description: "The broadcast identifier."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: acquisition-campaigns
+          path: /companies/{company_key}/campaigns/acquisition
+          description: "Manage acquisition campaigns."
+          operations:
+            - name: list-acquisition-campaigns
+              method: GET
+              description: "Retrieve all acquisition campaigns for the company."
+              inputParameters:
+                - name: company_key
+                  in: path
+                  type: string
+                  required: true
+                  description: "Your Vibes company identifier."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: campaign-participants
+          path: /companies/{company_key}/campaigns/acquisition/{campaign_id}/participants
+          description: "Manage acquisition campaign participants."
+          operations:
+            - name: list-pending-participants
+              method: GET
+              description: "Search for pending participants in an acquisition campaign."
+              inputParameters:
+                - name: company_key
+                  in: path
+                  type: string
+                  required: true
+                  description: "Your Vibes company identifier."
+                - name: campaign_id
+                  in: path
+                  type: string
+                  required: true
+                  description: "The campaign identifier."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: add-participant
+              method: POST
+              description: "Add a person to an acquisition campaign."
+              inputParameters:
+                - name: company_key
+                  in: path
+                  type: string
+                  required: true
+                  description: "Your Vibes company identifier."
+                - name: campaign_id
+                  in: path
+                  type: string
+                  required: true
+                  description: "The campaign identifier."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  mobile_phone: "{{tools.mobile_phone}}"
+                  external_person_id: "{{tools.external_person_id}}"
+
+        - name: subscription-lists
+          path: /companies/{company_key}/mobiledb/subscription_lists
+          description: "Manage subscription lists."
+          operations:
+            - name: list-subscription-lists
+              method: GET
+              description: "Retrieve all subscription lists for the company."
+              inputParameters:
+                - name: company_key
+                  in: path
+                  type: string
+                  required: true
+                  description: "Your Vibes company identifier."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: persons
+          path: /companies/{company_key}/mobiledb/persons/{person_key}
+          description: "Manage subscribers in the mobile contact book."
+          operations:
+            - name: get-person
+              method: GET
+              description: "Retrieve a subscriber by their internal Vibes person key."
+              inputParameters:
+                - name: company_key
+                  in: path
+                  type: string
+                  required: true
+                  description: "Your Vibes company identifier."
+                - name: person_key
+                  in: path
+                  type: string
+                  required: true
+                  description: "The internal Vibes person key."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: events
+          path: /companies/{company_key}/events
+          description: "Submit events that trigger messages."
+          operations:
+            - name: create-event
+              method: POST
+              description: "Submit an event to trigger SMS messages and push notifications."
+              inputParameters:
+                - name: company_key
+                  in: path
+                  type: string
+                  required: true
+                  description: "Your Vibes company identifier."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  event_type: "{{tools.event_type}}"
+                  person_key: "{{tools.person_key}}"
+                  attributes: "{{tools.attributes}}"
+
+        - name: wallet-items
+          path: /companies/{company_key}/wallet_items
+          description: "Manage mobile wallet passes."
+          operations:
+            - name: list-wallet-items
+              method: GET
+              description: "Retrieve all wallet passes for the company."
+              inputParameters:
+                - name: company_key
+                  in: path
+                  type: string
+                  required: true
+                  description: "Your Vibes company identifier."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: create-wallet-item
+              method: POST
+              description: "Create a new mobile wallet pass for a subscriber."
+              inputParameters:
+                - name: company_key
+                  in: path
+                  type: string
+                  required: true
+                  description: "Your Vibes company identifier."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  person_key: "{{tools.person_key}}"
+                  wallet_type: "{{tools.wallet_type}}"
+                  template_id: "{{tools.template_id}}"
+                  fields: "{{tools.fields}}"
+
+        - name: callbacks
+          path: /companies/{company_key}/callbacks
+          description: "Manage callback endpoint registrations."
+          operations:
+            - name: list-callbacks
+              method: GET
+              description: "Retrieve all registered callback endpoints."
+              inputParameters:
+                - name: company_key
+                  in: path
+                  type: string
+                  required: true
+                  description: "Your Vibes company identifier."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: register-callback
+              method: POST
+              description: "Register a new callback endpoint for opt-in or delivery status notifications."
+              inputParameters:
+                - name: company_key
+                  in: path
+                  type: string
+                  required: true
+                  description: "Your Vibes company identifier."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  callback_type: "{{tools.callback_type}}"
+                  url: "{{tools.url}}"
+
+  exposes:
+    - type: rest
+      port: 8100
+      namespace: vibes-platform-api
+      resources:
+        - path: /v1/broadcasts
+          name: broadcasts
+          description: "Manage broadcasts."
+          operations:
+            - method: GET
+              name: list-broadcasts
+              description: "List broadcasts."
+              call: "vibes-platform.list-broadcasts"
+              with:
+                company_key: "rest.company_key"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-broadcast
+              description: "Create a broadcast."
+              call: "vibes-platform.create-broadcast"
+              with:
+                company_key: "rest.company_key"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9100
+      namespace: vibes-platform-mcp
+      transport: http
+      tools:
+        - name: list-broadcasts
+          description: "List all broadcasts for the company."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "vibes-platform.list-broadcasts"
+          with:
+            company_key: "tools.company_key"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-broadcast
+          description: "Create a new SMS or push notification broadcast."
+          hints:
+            readOnly: false
+            destructive: false
+          call: "vibes-platform.create-broadcast"
+          with:
+            company_key: "tools.company_key"
+          outputParameters:
+            - type: object
+              mapping: "$."

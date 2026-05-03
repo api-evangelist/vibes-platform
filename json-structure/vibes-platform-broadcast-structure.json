@@ -1,0 +1,108 @@
+{
+  "title": "Broadcast Structure",
+  "description": "JSON structure documentation for the Vibes Platform Broadcast resource.",
+  "resource": "Broadcast",
+  "baseUrl": "https://public-api.vibescm.com",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string",
+      "required": false,
+      "description": "System-generated unique identifier for the broadcast.",
+      "example": "bc_7f3a9d12"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "Human-readable name for the broadcast.",
+      "example": "Summer Sale Announcement"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "required": false,
+      "description": "Broadcast lifecycle status.",
+      "enum": ["draft", "scheduled", "sent", "cancelled"],
+      "example": "scheduled"
+    },
+    {
+      "name": "message_type",
+      "type": "string",
+      "required": true,
+      "description": "Message channel: sms for text message, push for push notification.",
+      "enum": ["sms", "push"],
+      "example": "sms"
+    },
+    {
+      "name": "message_text",
+      "type": "string",
+      "required": true,
+      "description": "Message content template. Use {{field_name}} for personalization.",
+      "example": "Hi {{first_name}}! Sale starts now. Reply STOP to opt out."
+    },
+    {
+      "name": "subscription_list_id",
+      "type": "string",
+      "required": true,
+      "description": "ID of the subscription list to deliver to.",
+      "example": "sl_4e2c1b88"
+    },
+    {
+      "name": "scheduled_at",
+      "type": "string",
+      "format": "date-time",
+      "required": false,
+      "description": "ISO 8601 scheduled send time. Omit for immediate send.",
+      "example": "2026-06-15T10:00:00Z"
+    },
+    {
+      "name": "sent_at",
+      "type": "string",
+      "format": "date-time",
+      "required": false,
+      "description": "ISO 8601 actual send time (read-only, populated after send).",
+      "example": "2026-06-15T10:00:03Z"
+    },
+    {
+      "name": "created_at",
+      "type": "string",
+      "format": "date-time",
+      "required": false,
+      "description": "ISO 8601 creation timestamp (read-only).",
+      "example": "2026-06-14T08:30:00Z"
+    },
+    {
+      "name": "updated_at",
+      "type": "string",
+      "format": "date-time",
+      "required": false,
+      "description": "ISO 8601 last update timestamp (read-only).",
+      "example": "2026-06-15T10:00:03Z"
+    }
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/companies/{company_key}/broadcasts",
+      "description": "List all broadcasts.",
+      "queryParams": ["status", "page", "per_page"]
+    },
+    {
+      "method": "POST",
+      "path": "/companies/{company_key}/broadcasts",
+      "description": "Create a new broadcast.",
+      "requiredFields": ["name", "message_type", "message_text", "subscription_list_id"]
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{company_key}/broadcasts/{broadcast_id}",
+      "description": "Get a specific broadcast."
+    },
+    {
+      "method": "PUT",
+      "path": "/companies/{company_key}/broadcasts/{broadcast_id}",
+      "description": "Update a broadcast."
+    }
+  ]
+}

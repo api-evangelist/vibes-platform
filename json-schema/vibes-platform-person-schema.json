@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://developer-platform.vibes.com/schema/person",
+  "title": "Person",
+  "description": "A subscriber (person) in the Vibes Platform mobile contact book.",
+  "type": "object",
+  "properties": {
+    "person_key": {
+      "type": "string",
+      "description": "Internal Vibes Platform unique identifier for the person."
+    },
+    "external_person_id": {
+      "type": ["string", "null"],
+      "description": "External identifier assigned by the customer's system."
+    },
+    "mobile_phone": {
+      "type": "string",
+      "description": "Person's mobile phone number. Recommended format: E.164 (e.g. +15551234567).",
+      "pattern": "^\\+?[1-9]\\d{7,14}$"
+    },
+    "status": {
+      "type": "string",
+      "description": "Subscription status of the person.",
+      "enum": ["subscribed", "unsubscribed"]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the person was added to the contact book."
+    }
+  },
+  "required": ["person_key", "mobile_phone", "status"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "person_key": "person_e4f5a6b7",
+      "external_person_id": "customer_98765",
+      "mobile_phone": "+15551234567",
+      "status": "subscribed",
+      "created_at": "2025-01-15T09:00:00Z"
+    }
+  ]
+}

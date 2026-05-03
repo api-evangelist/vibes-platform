@@ -1,0 +1,932 @@
+openapi: 3.0.3
+info:
+  title: Vibes Platform API
+  description: >-
+    The Vibes Platform API provides programmatic access to mobile engagement
+    capabilities including broadcast messaging (SMS and push notifications),
+    acquisition campaign management, subscription list management, wallet pass
+    management, event-triggered messages, and callback registrations. Vibes is
+    a Tier 1 mobile messaging provider with direct carrier connections to AT&T,
+    Verizon, T-Mobile, and regional carriers in the US and Canada.
+  version: '1.0'
+  contact:
+    url: https://developer-platform.vibes.com/docs/support-1
+  termsOfService: https://www.vibes.com/legal/terms
+  license:
+    name: Proprietary
+externalDocs:
+  url: https://developer-platform.vibes.com/reference/our-apis
+  description: Vibes Platform Developer Documentation
+servers:
+  - url: https://public-api.vibescm.com
+    description: US Production Environment
+  - url: https://public-api.eu.vibes.com
+    description: EU Production Environment
+security:
+  - basicAuth: []
+tags:
+  - name: Broadcasts
+    description: Manage SMS and push notification broadcasts (message sends).
+  - name: Acquisition Campaigns
+    description: Manage acquisition campaigns for adding new subscribers.
+  - name: Subscription Lists
+    description: Manage subscription lists and subscriber memberships.
+  - name: Persons
+    description: Manage persons (subscribers) in the mobile contact book.
+  - name: Events
+    description: Submit events that trigger SMS messages and push notifications.
+  - name: Wallet Passes
+    description: Manage mobile wallet passes (Apple Wallet, Google Pay).
+  - name: Callbacks
+    description: Register and manage callback endpoints for opt-in and delivery notifications.
+paths:
+  /companies/{company_key}/broadcasts:
+    get:
+      operationId: listBroadcasts
+      summary: List Broadcasts
+      description: Retrieve a list of broadcasts (message sends) for the company.
+      tags:
+        - Broadcasts
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+        - name: status
+          in: query
+          description: Filter broadcasts by status.
+          required: false
+          schema:
+            type: string
+            enum:
+              - draft
+              - scheduled
+              - sent
+              - cancelled
+        - name: page
+          in: query
+          description: Page number for pagination.
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          description: Number of results per page.
+          required: false
+          schema:
+            type: integer
+            default: 25
+            maximum: 100
+      responses:
+        '200':
+          description: A list of broadcasts.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  broadcasts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Broadcast'
+                  total:
+                    type: integer
+                  page:
+                    type: integer
+                  per_page:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      operationId: createBroadcast
+      summary: Create Broadcast
+      description: >-
+        Create a new broadcast (message send). When creating a broadcast, you
+        create a template for the message which will be filled in with
+        personalization if applicable.
+      tags:
+        - Broadcasts
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BroadcastCreate'
+      responses:
+        '201':
+          description: Broadcast created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Broadcast'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/broadcasts/{broadcast_id}:
+    get:
+      operationId: getBroadcast
+      summary: Get Broadcast
+      description: Retrieve metadata and status for a specific broadcast.
+      tags:
+        - Broadcasts
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+        - $ref: '#/components/parameters/broadcast_id'
+      responses:
+        '200':
+          description: Broadcast details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Broadcast'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      operationId: updateBroadcast
+      summary: Update Broadcast
+      description: Update an existing broadcast.
+      tags:
+        - Broadcasts
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+        - $ref: '#/components/parameters/broadcast_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BroadcastCreate'
+      responses:
+        '200':
+          description: Broadcast updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Broadcast'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/campaigns/acquisition:
+    get:
+      operationId: listAcquisitionCampaigns
+      summary: List Acquisition Campaigns
+      description: Retrieve a list of acquisition campaigns for the company.
+      tags:
+        - Acquisition Campaigns
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+      responses:
+        '200':
+          description: A list of acquisition campaigns.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  campaigns:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AcquisitionCampaign'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/campaigns/acquisition/{campaign_id}:
+    get:
+      operationId: getAcquisitionCampaign
+      summary: Get Acquisition Campaign
+      description: Retrieve metadata for a specific acquisition campaign.
+      tags:
+        - Acquisition Campaigns
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+        - $ref: '#/components/parameters/campaign_id'
+      responses:
+        '200':
+          description: Acquisition campaign details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcquisitionCampaign'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/campaigns/acquisition/{campaign_id}/participants:
+    get:
+      operationId: listPendingParticipants
+      summary: List Pending Participants
+      description: Search for pending participants in an acquisition campaign.
+      tags:
+        - Acquisition Campaigns
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+        - $ref: '#/components/parameters/campaign_id'
+      responses:
+        '200':
+          description: A list of pending participants.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  participants:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Participant'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      operationId: addParticipant
+      summary: Add Participant
+      description: Add a person to an acquisition campaign.
+      tags:
+        - Acquisition Campaigns
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+        - $ref: '#/components/parameters/campaign_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParticipantCreate'
+      responses:
+        '201':
+          description: Participant added successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Participant'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/mobiledb/subscription_lists:
+    get:
+      operationId: listSubscriptionLists
+      summary: List Subscription Lists
+      description: Retrieve all subscription lists for the company.
+      tags:
+        - Subscription Lists
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+      responses:
+        '200':
+          description: A list of subscription lists.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subscription_lists:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SubscriptionList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/mobiledb/subscription_lists/{subscription_list_id}:
+    get:
+      operationId: getSubscriptionList
+      summary: Get Subscription List
+      description: Retrieve details for a specific subscription list.
+      tags:
+        - Subscription Lists
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+        - $ref: '#/components/parameters/subscription_list_id'
+      responses:
+        '200':
+          description: Subscription list details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/mobiledb/persons/{person_key}:
+    get:
+      operationId: getPerson
+      summary: Get Person
+      description: Retrieve a subscriber (person) from the mobile contact book by their internal key.
+      tags:
+        - Persons
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+        - $ref: '#/components/parameters/person_key'
+      responses:
+        '200':
+          description: Person details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/mobiledb/persons/{person_key}/subscriptions/{subscription_list_id}:
+    delete:
+      operationId: unsubscribePerson
+      summary: Unsubscribe Person
+      description: Remove a person from a subscription list by their internal person key.
+      tags:
+        - Subscription Lists
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+        - $ref: '#/components/parameters/person_key'
+        - $ref: '#/components/parameters/subscription_list_id'
+      responses:
+        '204':
+          description: Person unsubscribed successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/mobiledb/persons/external/{external_person_id}/subscriptions/{subscription_list_id}:
+    delete:
+      operationId: unsubscribePersonByExternalId
+      summary: Unsubscribe Person by External ID
+      description: Remove a person from a subscription list by their external person ID.
+      tags:
+        - Subscription Lists
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+        - $ref: '#/components/parameters/external_person_id'
+        - $ref: '#/components/parameters/subscription_list_id'
+      responses:
+        '204':
+          description: Person unsubscribed successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/events:
+    post:
+      operationId: createEvent
+      summary: Create Event
+      description: >-
+        Submit an event that triggers SMS messages and push notifications.
+        Events are used to create event-triggered messages based on customer
+        actions or data changes.
+      tags:
+        - Events
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventCreate'
+      responses:
+        '201':
+          description: Event submitted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/wallet_items:
+    get:
+      operationId: listWalletItems
+      summary: List Wallet Items
+      description: Retrieve all wallet passes (Apple Wallet and Google Pay) for the company.
+      tags:
+        - Wallet Passes
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+      responses:
+        '200':
+          description: A list of wallet items.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  wallet_items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WalletItem'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      operationId: createWalletItem
+      summary: Create Wallet Item
+      description: Create a new mobile wallet pass for a subscriber.
+      tags:
+        - Wallet Passes
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletItemCreate'
+      responses:
+        '201':
+          description: Wallet item created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/callbacks:
+    get:
+      operationId: listCallbacks
+      summary: List Callbacks
+      description: Retrieve all registered callback endpoints for the company.
+      tags:
+        - Callbacks
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+      responses:
+        '200':
+          description: A list of registered callbacks.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  callbacks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Callback'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      operationId: registerCallback
+      summary: Register Callback
+      description: Register a new callback endpoint for opt-in or delivery status notifications.
+      tags:
+        - Callbacks
+      parameters:
+        - $ref: '#/components/parameters/company_key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CallbackCreate'
+      responses:
+        '201':
+          description: Callback registered successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Callback'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: >-
+        HTTP Basic Authentication. Combine the username and password into a
+        "username:password" string, encode it using Base64, and add the
+        Authorization HTTP header set to "Basic " plus the encoded string.
+  parameters:
+    company_key:
+      name: company_key
+      in: path
+      required: true
+      description: Your Vibes company identifier.
+      schema:
+        type: string
+    broadcast_id:
+      name: broadcast_id
+      in: path
+      required: true
+      description: The unique identifier for the broadcast.
+      schema:
+        type: string
+    campaign_id:
+      name: campaign_id
+      in: path
+      required: true
+      description: The unique identifier for the acquisition campaign.
+      schema:
+        type: string
+    subscription_list_id:
+      name: subscription_list_id
+      in: path
+      required: true
+      description: The unique identifier for the subscription list.
+      schema:
+        type: string
+    person_key:
+      name: person_key
+      in: path
+      required: true
+      description: The internal Vibes person key for the subscriber.
+      schema:
+        type: string
+    external_person_id:
+      name: external_person_id
+      in: path
+      required: true
+      description: The external person identifier for the subscriber.
+      schema:
+        type: string
+  schemas:
+    Broadcast:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the broadcast.
+        name:
+          type: string
+          description: Name of the broadcast.
+        status:
+          type: string
+          description: Current status of the broadcast.
+          enum:
+            - draft
+            - scheduled
+            - sent
+            - cancelled
+        message_type:
+          type: string
+          description: Type of message (SMS or push notification).
+          enum:
+            - sms
+            - push
+        message_text:
+          type: string
+          description: Message content template.
+        subscription_list_id:
+          type: string
+          description: The subscription list to send the broadcast to.
+        scheduled_at:
+          type: string
+          format: date-time
+          description: When the broadcast is scheduled to send.
+        sent_at:
+          type: string
+          format: date-time
+          description: When the broadcast was sent.
+        created_at:
+          type: string
+          format: date-time
+          description: When the broadcast was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: When the broadcast was last updated.
+    BroadcastCreate:
+      type: object
+      required:
+        - name
+        - message_type
+        - message_text
+        - subscription_list_id
+      properties:
+        name:
+          type: string
+          description: Name of the broadcast.
+        message_type:
+          type: string
+          description: Type of message (SMS or push notification).
+          enum:
+            - sms
+            - push
+        message_text:
+          type: string
+          description: Message content template (supports personalization placeholders).
+        subscription_list_id:
+          type: string
+          description: The subscription list to send the broadcast to.
+        scheduled_at:
+          type: string
+          format: date-time
+          description: When to schedule the broadcast. Omit for immediate send.
+    AcquisitionCampaign:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the acquisition campaign.
+        name:
+          type: string
+          description: Name of the acquisition campaign.
+        status:
+          type: string
+          description: Current status of the campaign.
+          enum:
+            - active
+            - inactive
+            - expired
+        subscription_list_id:
+          type: string
+          description: The subscription list subscribers will be added to.
+        keyword:
+          type: string
+          description: SMS keyword associated with the campaign (e.g., JOIN).
+        short_code:
+          type: string
+          description: SMS short code for the campaign.
+        created_at:
+          type: string
+          format: date-time
+          description: When the campaign was created.
+    Participant:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the participant.
+        mobile_phone:
+          type: string
+          description: Participant's mobile phone number.
+        status:
+          type: string
+          description: Participant status in the campaign.
+          enum:
+            - pending
+            - opted_in
+            - opted_out
+        created_at:
+          type: string
+          format: date-time
+          description: When the participant was added.
+    ParticipantCreate:
+      type: object
+      required:
+        - mobile_phone
+      properties:
+        mobile_phone:
+          type: string
+          description: Participant's mobile phone number (E.164 format recommended).
+        external_person_id:
+          type: string
+          description: External identifier for the person.
+    SubscriptionList:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the subscription list.
+        name:
+          type: string
+          description: Name of the subscription list.
+        description:
+          type: string
+          description: Description of the subscription list.
+        subscriber_count:
+          type: integer
+          description: Number of active subscribers in the list.
+        created_at:
+          type: string
+          format: date-time
+          description: When the subscription list was created.
+    Person:
+      type: object
+      properties:
+        person_key:
+          type: string
+          description: Internal Vibes person key.
+        external_person_id:
+          type: string
+          description: External person identifier.
+        mobile_phone:
+          type: string
+          description: Person's mobile phone number.
+        status:
+          type: string
+          description: Subscription status.
+          enum:
+            - subscribed
+            - unsubscribed
+        created_at:
+          type: string
+          format: date-time
+          description: When the person was added.
+    EventCreate:
+      type: object
+      required:
+        - event_type
+        - person_key
+      properties:
+        event_type:
+          type: string
+          description: Type of event that triggers messaging.
+        person_key:
+          type: string
+          description: Internal Vibes person key or external_person_id.
+        attributes:
+          type: object
+          description: Custom attributes to personalize triggered messages.
+          additionalProperties:
+            type: string
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the event.
+        event_type:
+          type: string
+          description: Type of event.
+        person_key:
+          type: string
+          description: Person key the event was submitted for.
+        status:
+          type: string
+          description: Processing status of the event.
+          enum:
+            - queued
+            - processed
+            - failed
+        created_at:
+          type: string
+          format: date-time
+          description: When the event was submitted.
+    WalletItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the wallet item.
+        person_key:
+          type: string
+          description: Person key the wallet item belongs to.
+        wallet_type:
+          type: string
+          description: Type of wallet pass.
+          enum:
+            - apple_wallet
+            - google_pay
+        status:
+          type: string
+          description: Current status of the wallet item.
+          enum:
+            - active
+            - voided
+            - expired
+        created_at:
+          type: string
+          format: date-time
+          description: When the wallet item was created.
+    WalletItemCreate:
+      type: object
+      required:
+        - person_key
+        - wallet_type
+        - template_id
+      properties:
+        person_key:
+          type: string
+          description: Person key to create the wallet item for.
+        wallet_type:
+          type: string
+          description: Type of wallet pass.
+          enum:
+            - apple_wallet
+            - google_pay
+        template_id:
+          type: string
+          description: Wallet pass template identifier.
+        fields:
+          type: object
+          description: Custom field values for the wallet pass.
+          additionalProperties:
+            type: string
+    Callback:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the callback registration.
+        callback_type:
+          type: string
+          description: Type of event that triggers this callback.
+          enum:
+            - opt_in
+            - opt_out
+            - delivery_status
+            - mms_received
+        url:
+          type: string
+          format: uri
+          description: URL to call when the event occurs.
+        created_at:
+          type: string
+          format: date-time
+          description: When the callback was registered.
+    CallbackCreate:
+      type: object
+      required:
+        - callback_type
+        - url
+      properties:
+        callback_type:
+          type: string
+          description: Type of event that triggers this callback.
+          enum:
+            - opt_in
+            - opt_out
+            - delivery_status
+            - mms_received
+        url:
+          type: string
+          format: uri
+          description: HTTPS URL to receive callback POST requests.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier.
+        message:
+          type: string
+          description: Human-readable error message.
+        details:
+          type: array
+          items:
+            type: string
+          description: Additional error details.
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Number of seconds to wait before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

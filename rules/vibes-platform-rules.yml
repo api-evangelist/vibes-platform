@@ -1,0 +1,148 @@
+extends: spectral:oas
+rules:
+  # Vibes Platform API conventions
+  vibes-company-key-path-required:
+    description: All Vibes Platform API paths must include the company_key path parameter.
+    message: "Path '{{path}}' should include {company_key} as the first path segment pattern."
+    severity: warn
+    given: "$.paths[*]"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^/companies/\\{company_key\\}"
+
+  vibes-operationid-camel-case:
+    description: Operation IDs must use camelCase naming.
+    message: "Operation ID '{{value}}' must be in camelCase format."
+    severity: warn
+    given: "$.paths[*][*].operationId"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-zA-Z0-9]*$"
+
+  vibes-operation-summary-title-case:
+    description: Operation summaries must use Title Case.
+    message: "Operation summary '{{value}}' should use Title Case."
+    severity: warn
+    given: "$.paths[*][*].summary"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[A-Z][a-zA-Z0-9]*(\\s[A-Z][a-zA-Z0-9]*)*$"
+
+  vibes-response-200-or-201-required:
+    description: Every operation must have a 200 or 201 success response.
+    message: "Operation at '{{path}}' must define a 200 or 201 response."
+    severity: error
+    given: "$.paths[*][get,post,put,patch]"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            responses:
+              type: object
+              anyOf:
+                - required: ['200']
+                - required: ['201']
+
+  vibes-401-response-required:
+    description: All operations must include a 401 Unauthorized response.
+    message: "Operation at '{{path}}' must define a 401 response for authentication failures."
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].responses"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required: ['401']
+
+  vibes-429-response-required:
+    description: All operations must include a 429 Too Many Requests response.
+    message: "Operation at '{{path}}' must define a 429 response for rate limiting."
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].responses"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required: ['429']
+
+  vibes-basic-auth-security:
+    description: Vibes Platform APIs use HTTP Basic authentication.
+    message: "API must define basicAuth as a security scheme."
+    severity: error
+    given: "$.components.securitySchemes"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required: ['basicAuth']
+
+  vibes-request-body-json:
+    description: POST and PUT request bodies must use application/json content type.
+    message: "Request body for '{{path}}' must use application/json."
+    severity: warn
+    given: "$.paths[*][post,put].requestBody.content"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required: ['application/json']
+
+  vibes-response-json-content:
+    description: Success responses must return application/json content.
+    message: "Response must use application/json content type."
+    severity: warn
+    given: "$.paths[*][*].responses[200,201].content"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required: ['application/json']
+
+  vibes-no-trailing-slash:
+    description: API paths must not have trailing slashes.
+    message: "Path '{{path}}' must not end with a trailing slash."
+    severity: warn
+    given: "$.paths[*]~"
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ".*/$"
+
+  vibes-path-kebab-case:
+    description: Path segments must use lowercase kebab-case.
+    message: "Path '{{value}}' should use lowercase kebab-case segments."
+    severity: warn
+    given: "$.paths[*]~"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^(/[a-z0-9{}-]+)+$"
+
+  vibes-operation-description-required:
+    description: All operations must have a description.
+    message: "Operation at '{{path}}' is missing a description."
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: description
+      function: truthy
+
+  vibes-tag-required:
+    description: All operations must have at least one tag.
+    message: "Operation at '{{path}}' must have at least one tag."
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].tags"
+    then:
+      function: length
+      functionOptions:
+        min: 1

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://developer-platform.vibes.com/schema/subscription-list",
+  "title": "Subscription List",
+  "description": "A Vibes Platform subscription list containing opted-in mobile subscribers.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the subscription list."
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name of the subscription list."
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "Optional description of the subscription list."
+    },
+    "subscriber_count": {
+      "type": "integer",
+      "description": "Number of active opted-in subscribers in the list.",
+      "minimum": 0
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the subscription list was created."
+    }
+  },
+  "required": ["id", "name", "subscriber_count"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "id": "sl_4e2c1b88",
+      "name": "Marketing SMS Subscribers",
+      "description": "Opted-in subscribers for promotional SMS campaigns.",
+      "subscriber_count": 45230,
+      "created_at": "2024-03-01T00:00:00Z"
+    }
+  ]
+}

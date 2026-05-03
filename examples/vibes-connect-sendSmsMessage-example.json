@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://messageapi.vibesapps.com/api/v1/sms/messages",
+    "headers": {
+      "Authorization": "Basic dXNlcm5hbWU6cGFzc3dvcmQ=",
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "body": {
+      "to": "+15551234567",
+      "from": "12345",
+      "text": "Your verification code is 847291. This code expires in 10 minutes.",
+      "callback_url": "https://api.example.com/vibes/delivery-receipts"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "message_id": "msg_f1a2b3c4",
+      "status": "accepted",
+      "to": "+15551234567",
+      "from": "12345"
+    }
+  }
+}

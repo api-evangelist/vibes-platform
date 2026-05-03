@@ -1,0 +1,72 @@
+{
+  "@context": {
+    "@vocab": "https://developer-platform.vibes.com/vocab#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "Broadcast": "schema:Action",
+    "AcquisitionCampaign": "schema:MarketingAction",
+    "SubscriptionList": "schema:ItemList",
+    "Person": "schema:Person",
+    "Event": "schema:Event",
+    "WalletItem": "schema:DigitalDocument",
+    "Callback": "schema:WebAPI",
+    "SmsMessage": "schema:Message",
+    "MmsMessage": "schema:Message",
+
+    "id": "@id",
+    "name": "schema:name",
+    "description": "schema:description",
+    "status": "schema:actionStatus",
+    "created_at": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "updated_at": {
+      "@id": "schema:dateModified",
+      "@type": "xsd:dateTime"
+    },
+    "scheduled_at": {
+      "@id": "schema:scheduledTime",
+      "@type": "xsd:dateTime"
+    },
+    "sent_at": {
+      "@id": "schema:endTime",
+      "@type": "xsd:dateTime"
+    },
+
+    "message_type": "schema:encodingFormat",
+    "message_text": "schema:text",
+    "subscription_list_id": "schema:itemListElement",
+
+    "mobile_phone": "schema:telephone",
+    "external_person_id": "schema:identifier",
+    "person_key": "schema:identifier",
+
+    "subscriber_count": "schema:numberOfItems",
+    "keyword": "schema:keywords",
+    "short_code": "schema:identifier",
+
+    "event_type": "schema:additionalType",
+    "attributes": "schema:additionalProperty",
+
+    "wallet_type": "schema:encodingFormat",
+    "template_id": "schema:isBasedOn",
+    "fields": "schema:additionalProperty",
+
+    "callback_type": "schema:additionalType",
+    "url": "schema:url",
+
+    "to": "schema:recipient",
+    "from": "schema:sender",
+    "text": "schema:text",
+    "subject": "schema:about",
+    "content": "schema:encodesCreativeWork",
+
+    "carrier": "schema:provider",
+    "number_type": "schema:additionalType",
+    "country_code": "schema:addressCountry",
+
+    "company_key": "schema:identifier"
+  }
+}

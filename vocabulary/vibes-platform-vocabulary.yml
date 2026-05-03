@@ -1,0 +1,274 @@
+vocabulary:
+  name: Vibes Platform Vocabulary
+  description: >-
+    Taxonomy and vocabulary for the Vibes mobile engagement platform, covering
+    mobile messaging channels, campaign management, subscriber lifecycle,
+    and delivery mechanics.
+  version: '1.0'
+  created: '2026-05-03'
+  modified: '2026-05-03'
+
+domains:
+  - name: Mobile Messaging
+    description: Channels and protocols for delivering messages to mobile devices.
+    terms:
+      - term: Broadcast
+        definition: >-
+          A Vibes term for a message send to a subscription list. A broadcast
+          can refer to either an SMS message or a push notification delivered
+          to all subscribers in a mobile contact book.
+        synonyms:
+          - Message Send
+          - Campaign Send
+          - Bulk Message
+        relatedTerms:
+          - SMS
+          - Push Notification
+          - Subscription List
+
+      - term: SMS
+        definition: >-
+          Short Message Service. A text messaging protocol that delivers
+          messages up to 160 characters per segment to mobile phones.
+          Vibes is a Tier 1 SMS provider with direct carrier connections.
+        relatedTerms:
+          - MMS
+          - Short Code
+          - Long Code
+
+      - term: MMS
+        definition: >-
+          Multimedia Messaging Service. A messaging standard allowing
+          transmission of multimedia content (images, videos, audio) to
+          mobile phones. Vibes Connect supports MMS via MM7 Protocol.
+        relatedTerms:
+          - SMS
+          - MM7 Protocol
+
+      - term: Push Notification
+        definition: >-
+          A message delivered directly to a mobile app without requiring
+          the user to open the app. Vibes supports push notifications
+          through the Mobile App Push SDK.
+        synonyms:
+          - Push Message
+          - App Notification
+
+      - term: RCS
+        definition: >-
+          Rich Communication Services. A successor to SMS offering richer
+          media capabilities, interactive buttons, and read receipts.
+          Vibes offers RCS for Business (RBM) through a dedicated API.
+        synonyms:
+          - RCS for Business
+          - RBM
+          - Rich Business Messaging
+
+      - term: Short Code
+        definition: >-
+          A 5 or 6-digit phone number used for high-throughput SMS and MMS
+          messaging. Short codes are leased from carriers and approved for
+          specific use cases.
+        relatedTerms:
+          - Long Code
+          - Keyword
+
+      - term: Long Code
+        definition: >-
+          A standard 10-digit phone number used for lower-volume SMS
+          messaging with two-way communication capability.
+        synonyms:
+          - 10DLC
+          - Local Number
+
+  - name: Campaign Management
+    description: Concepts related to planning and executing mobile engagement campaigns.
+    terms:
+      - term: Acquisition Campaign
+        definition: >-
+          A Vibes campaign type that adds new subscribers to subscription
+          lists. Acquisition campaigns are configured in the Vibes platform
+          and can be triggered programmatically via the API by adding
+          participants.
+        relatedTerms:
+          - Subscription List
+          - Participant
+          - Keyword
+
+      - term: Keyword
+        definition: >-
+          A word or phrase that mobile users text to a short code to opt
+          in to a subscription list or trigger an acquisition campaign
+          (e.g., "JOIN", "SAVE20").
+        relatedTerms:
+          - Short Code
+          - Acquisition Campaign
+          - Opt-In
+
+      - term: Participant
+        definition: >-
+          A person who has been submitted to an acquisition campaign but
+          has not yet completed the opt-in process. Participants have a
+          "pending" status until they confirm their opt-in.
+        relatedTerms:
+          - Acquisition Campaign
+          - Opt-In
+
+  - name: Subscriber Management
+    description: Concepts related to managing mobile subscribers and subscription lists.
+    terms:
+      - term: Subscription List
+        definition: >-
+          A Vibes resource that contains opted-in mobile subscribers.
+          Broadcasts are delivered to all subscribers in a subscription
+          list. Lists are populated through acquisition campaigns.
+        synonyms:
+          - Mobile Contact List
+          - Subscriber List
+        relatedTerms:
+          - Person
+          - Broadcast
+          - Acquisition Campaign
+
+      - term: Person
+        definition: >-
+          A mobile subscriber record in the Vibes mobile contact book.
+          Identified by an internal person_key and optionally an
+          external_person_id for cross-system correlation.
+        synonyms:
+          - Subscriber
+          - Contact
+          - Mobile Contact
+
+      - term: Opt-In
+        definition: >-
+          The process by which a mobile subscriber consents to receive
+          messages from a company. TCPA compliance requires explicit
+          opt-in consent before sending marketing messages.
+        synonyms:
+          - Subscribe
+          - Consent
+        relatedTerms:
+          - Opt-Out
+          - TCPA
+          - Acquisition Campaign
+
+      - term: Opt-Out
+        definition: >-
+          The process by which a subscriber revokes consent to receive
+          messages, typically by replying STOP. Vibes automatically
+          handles opt-outs and updates subscription status.
+        synonyms:
+          - Unsubscribe
+          - STOP
+        relatedTerms:
+          - Opt-In
+          - Subscription List
+
+  - name: Event-Triggered Messaging
+    description: Concepts related to event-based and triggered message delivery.
+    terms:
+      - term: Event-Triggered Message
+        definition: >-
+          A message automatically sent when a specific event occurs, such
+          as cart abandonment, order confirmation, or appointment reminder.
+          Events are submitted via the Events API with custom attributes
+          for personalization.
+        synonyms:
+          - Triggered Message
+          - Transactional Message
+        relatedTerms:
+          - Event
+          - File-Triggered Message
+
+      - term: File-Triggered Message
+        definition: >-
+          A message triggered by uploading a file of subscriber records
+          and event data to the Vibes platform, enabling batch-triggered
+          personalized messages.
+        relatedTerms:
+          - Event-Triggered Message
+
+  - name: Mobile Wallet
+    description: Concepts related to mobile wallet passes and digital passes.
+    terms:
+      - term: Wallet Pass
+        definition: >-
+          A digital pass stored in Apple Wallet or Google Pay on a
+          subscriber's device. Vibes supports creating and managing
+          wallet passes for loyalty cards, coupons, boarding passes,
+          and tickets.
+        synonyms:
+          - Digital Pass
+          - Mobile Pass
+        relatedTerms:
+          - Apple Wallet
+          - Google Pay
+
+  - name: Delivery and Compliance
+    description: Concepts related to message delivery mechanics and regulatory compliance.
+    terms:
+      - term: Callback
+        definition: >-
+          A webhook endpoint registered with Vibes to receive real-time
+          notifications for events such as opt-ins, opt-outs, delivery
+          receipts, and inbound messages.
+        synonyms:
+          - Webhook
+          - Notification Endpoint
+
+      - term: Delivery Receipt
+        definition: >-
+          A notification sent to a callback URL indicating whether an SMS
+          or MMS message was successfully delivered to the recipient's
+          device.
+        synonyms:
+          - Delivery Status
+          - DLR
+
+      - term: TCPA
+        definition: >-
+          Telephone Consumer Protection Act. US federal law governing
+          automated marketing messages sent to mobile phones. Requires
+          prior express written consent for marketing SMS messages.
+        relatedTerms:
+          - Opt-In
+          - Opt-Out
+
+      - term: Tier 1 Provider
+        definition: >-
+          A mobile messaging provider with direct connections to major
+          carriers (AT&T, Verizon, T-Mobile) rather than routing through
+          intermediary aggregators. Tier 1 status enables faster delivery
+          and higher deliverability rates.
+        relatedTerms:
+          - Carrier
+          - Aggregator
+
+      - term: Rate Limiting
+        definition: >-
+          Vibes enforces rate limits on API requests per user. Requests
+          that exceed the rate limit receive a 429 Too Many Requests
+          response with a Retry-After header.
+        relatedTerms:
+          - 429 Too Many Requests
+
+  - name: Authentication
+    description: Authentication and security concepts for API access.
+    terms:
+      - term: Basic Authentication
+        definition: >-
+          The authentication method used by all Vibes APIs. Credentials
+          are provided by combining the username and password into a
+          "username:password" string, encoding with Base64, and including
+          in the Authorization header as "Basic <encoded>".
+        relatedTerms:
+          - Client Certificate Authentication
+
+      - term: Company Key
+        definition: >-
+          The unique identifier for a company within the Vibes Platform.
+          Used as a path parameter in all Vibes Platform API endpoints
+          (e.g., /companies/{company_key}/broadcasts).
+        synonyms:
+          - company_key
