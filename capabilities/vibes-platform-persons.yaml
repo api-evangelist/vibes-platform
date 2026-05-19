@@ -1,0 +1,71 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Vibes Platform API — Persons
+  description: 'Vibes Platform API — Persons. 1 operations. Lead operation: Get Person. Self-contained Naftiko capability
+    covering one Vibes Platform business surface.'
+  tags:
+  - Vibes Platform
+  - Persons
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VIBES_PLATFORM_API_KEY: VIBES_PLATFORM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: vibes-platform-persons
+    baseUri: https://public-api.vibescm.com
+    description: Vibes Platform API — Persons business capability. Self-contained, no shared references.
+    resources:
+    - name: companies-company_key-mobiledb-persons-person_key
+      path: /companies/{company_key}/mobiledb/persons/{person_key}
+      operations:
+      - name: getperson
+        method: GET
+        description: Get Person
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: basic
+      username: '{{env.VIBES_PLATFORM_USER}}'
+      password: '{{env.VIBES_PLATFORM_PASS}}'
+  exposes:
+  - type: rest
+    namespace: vibes-platform-persons-rest
+    port: 8080
+    description: REST adapter for Vibes Platform API — Persons. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/companies/{company-key}/mobiledb/persons/{person-key}
+      name: companies-company-key-mobiledb-persons-person-key
+      description: REST surface for companies-company_key-mobiledb-persons-person_key.
+      operations:
+      - method: GET
+        name: getperson
+        description: Get Person
+        call: vibes-platform-persons.getperson
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: vibes-platform-persons-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Vibes Platform API — Persons. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: get-person
+      description: Get Person
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: vibes-platform-persons.getperson
+      outputParameters:
+      - type: object
+        mapping: $.

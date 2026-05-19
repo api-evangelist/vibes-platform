@@ -1,0 +1,194 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Vibes Platform API — Broadcasts
+  description: 'Vibes Platform API — Broadcasts. 4 operations. Lead operation: List Broadcasts. Self-contained Naftiko capability
+    covering one Vibes Platform business surface.'
+  tags:
+  - Vibes Platform
+  - Broadcasts
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VIBES_PLATFORM_API_KEY: VIBES_PLATFORM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: vibes-platform-broadcasts
+    baseUri: https://public-api.vibescm.com
+    description: Vibes Platform API — Broadcasts business capability. Self-contained, no shared references.
+    resources:
+    - name: companies-company_key-broadcasts
+      path: /companies/{company_key}/broadcasts
+      operations:
+      - name: listbroadcasts
+        method: GET
+        description: List Broadcasts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: status
+          in: query
+          type: string
+          description: Filter broadcasts by status.
+        - name: page
+          in: query
+          type: integer
+          description: Page number for pagination.
+        - name: per_page
+          in: query
+          type: integer
+          description: Number of results per page.
+      - name: createbroadcast
+        method: POST
+        description: Create Broadcast
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: companies-company_key-broadcasts-broadcast_id
+      path: /companies/{company_key}/broadcasts/{broadcast_id}
+      operations:
+      - name: getbroadcast
+        method: GET
+        description: Get Broadcast
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updatebroadcast
+        method: PUT
+        description: Update Broadcast
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: basic
+      username: '{{env.VIBES_PLATFORM_USER}}'
+      password: '{{env.VIBES_PLATFORM_PASS}}'
+  exposes:
+  - type: rest
+    namespace: vibes-platform-broadcasts-rest
+    port: 8080
+    description: REST adapter for Vibes Platform API — Broadcasts. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/companies/{company-key}/broadcasts
+      name: companies-company-key-broadcasts
+      description: REST surface for companies-company_key-broadcasts.
+      operations:
+      - method: GET
+        name: listbroadcasts
+        description: List Broadcasts
+        call: vibes-platform-broadcasts.listbroadcasts
+        with:
+          status: rest.status
+          page: rest.page
+          per_page: rest.per_page
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createbroadcast
+        description: Create Broadcast
+        call: vibes-platform-broadcasts.createbroadcast
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/companies/{company-key}/broadcasts/{broadcast-id}
+      name: companies-company-key-broadcasts-broadcast-id
+      description: REST surface for companies-company_key-broadcasts-broadcast_id.
+      operations:
+      - method: GET
+        name: getbroadcast
+        description: Get Broadcast
+        call: vibes-platform-broadcasts.getbroadcast
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updatebroadcast
+        description: Update Broadcast
+        call: vibes-platform-broadcasts.updatebroadcast
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: vibes-platform-broadcasts-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Vibes Platform API — Broadcasts. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: list-broadcasts
+      description: List Broadcasts
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: vibes-platform-broadcasts.listbroadcasts
+      with:
+        status: tools.status
+        page: tools.page
+        per_page: tools.per_page
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-broadcast
+      description: Create Broadcast
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: vibes-platform-broadcasts.createbroadcast
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-broadcast
+      description: Get Broadcast
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: vibes-platform-broadcasts.getbroadcast
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-broadcast
+      description: Update Broadcast
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: vibes-platform-broadcasts.updatebroadcast
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
