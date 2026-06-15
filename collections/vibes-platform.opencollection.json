@@ -1,0 +1,523 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Vibes Platform API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Broadcasts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Broadcasts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://public-api.vibescm.com/companies/:company_key/broadcasts",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter broadcasts by status."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page."
+              }
+            ]
+          },
+          "docs": "Retrieve a list of broadcasts (message sends) for the company."
+        },
+        {
+          "info": {
+            "name": "Create Broadcast",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://public-api.vibescm.com/companies/:company_key/broadcasts",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new broadcast (message send). When creating a broadcast, you create a template for the message which will be filled in with personalization if applicable."
+        },
+        {
+          "info": {
+            "name": "Get Broadcast",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://public-api.vibescm.com/companies/:company_key/broadcasts/:broadcast_id",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "broadcast_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the broadcast."
+              }
+            ]
+          },
+          "docs": "Retrieve metadata and status for a specific broadcast."
+        },
+        {
+          "info": {
+            "name": "Update Broadcast",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://public-api.vibescm.com/companies/:company_key/broadcasts/:broadcast_id",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "broadcast_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the broadcast."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing broadcast."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Acquisition Campaigns",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Acquisition Campaigns",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://public-api.vibescm.com/companies/:company_key/campaigns/acquisition",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              }
+            ]
+          },
+          "docs": "Retrieve a list of acquisition campaigns for the company."
+        },
+        {
+          "info": {
+            "name": "Get Acquisition Campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://public-api.vibescm.com/companies/:company_key/campaigns/acquisition/:campaign_id",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the acquisition campaign."
+              }
+            ]
+          },
+          "docs": "Retrieve metadata for a specific acquisition campaign."
+        },
+        {
+          "info": {
+            "name": "List Pending Participants",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://public-api.vibescm.com/companies/:company_key/campaigns/acquisition/:campaign_id/participants",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the acquisition campaign."
+              }
+            ]
+          },
+          "docs": "Search for pending participants in an acquisition campaign."
+        },
+        {
+          "info": {
+            "name": "Add Participant",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://public-api.vibescm.com/companies/:company_key/campaigns/acquisition/:campaign_id/participants",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the acquisition campaign."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a person to an acquisition campaign."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Subscription Lists",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Subscription Lists",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://public-api.vibescm.com/companies/:company_key/mobiledb/subscription_lists",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              }
+            ]
+          },
+          "docs": "Retrieve all subscription lists for the company."
+        },
+        {
+          "info": {
+            "name": "Get Subscription List",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://public-api.vibescm.com/companies/:company_key/mobiledb/subscription_lists/:subscription_list_id",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "subscription_list_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the subscription list."
+              }
+            ]
+          },
+          "docs": "Retrieve details for a specific subscription list."
+        },
+        {
+          "info": {
+            "name": "Unsubscribe Person",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://public-api.vibescm.com/companies/:company_key/mobiledb/persons/:person_key/subscriptions/:subscription_list_id",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "person_key",
+                "value": "",
+                "type": "path",
+                "description": "The internal Vibes person key for the subscriber."
+              },
+              {
+                "name": "subscription_list_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the subscription list."
+              }
+            ]
+          },
+          "docs": "Remove a person from a subscription list by their internal person key."
+        },
+        {
+          "info": {
+            "name": "Unsubscribe Person by External ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://public-api.vibescm.com/companies/:company_key/mobiledb/persons/external/:external_person_id/subscriptions/:subscription_list_id",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "external_person_id",
+                "value": "",
+                "type": "path",
+                "description": "The external person identifier for the subscriber."
+              },
+              {
+                "name": "subscription_list_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the subscription list."
+              }
+            ]
+          },
+          "docs": "Remove a person from a subscription list by their external person ID."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Persons",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Person",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://public-api.vibescm.com/companies/:company_key/mobiledb/persons/:person_key",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "person_key",
+                "value": "",
+                "type": "path",
+                "description": "The internal Vibes person key for the subscriber."
+              }
+            ]
+          },
+          "docs": "Retrieve a subscriber (person) from the mobile contact book by their internal key."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Events",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://public-api.vibescm.com/companies/:company_key/events",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit an event that triggers SMS messages and push notifications. Events are used to create event-triggered messages based on customer actions or data changes."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Wallet Passes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Wallet Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://public-api.vibescm.com/companies/:company_key/wallet_items",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              }
+            ]
+          },
+          "docs": "Retrieve all wallet passes (Apple Wallet and Google Pay) for the company."
+        },
+        {
+          "info": {
+            "name": "Create Wallet Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://public-api.vibescm.com/companies/:company_key/wallet_items",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new mobile wallet pass for a subscriber."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Callbacks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Callbacks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://public-api.vibescm.com/companies/:company_key/callbacks",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              }
+            ]
+          },
+          "docs": "Retrieve all registered callback endpoints for the company."
+        },
+        {
+          "info": {
+            "name": "Register Callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://public-api.vibescm.com/companies/:company_key/callbacks",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Register a new callback endpoint for opt-in or delivery status notifications."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

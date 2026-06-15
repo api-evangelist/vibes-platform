@@ -1,0 +1,101 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Vibes Connect HTTP Message API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Messages",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Send SMS Message",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://messageapi.vibesapps.com/api/v1/sms/messages",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Send an SMS message to one or more mobile numbers via the Vibes Connect HTTP Message API. Supports single and batch message sends."
+        },
+        {
+          "info": {
+            "name": "Send MMS Message",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://messageapi.vibesapps.com/api/v1/mms/messages",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Send an MMS message including pictures, links, and other media content via HTTP call. Uses MM7 Protocol with custom headers."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Carrier Lookup",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lookup Carrier",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://messageapi.vibesapps.com/api/v1/carrier-lookup",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieve carrier information for a specific mobile number."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Inbound Messages",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Register SMS Callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://messageapi.vibesapps.com/api/v1/callbacks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set up a callback URL to receive inbound SMS messages and delivery receipts."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
