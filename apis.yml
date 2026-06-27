@@ -137,13 +137,13 @@ artifacts:
     type: SpectralRuleset
     name: Vibes Platform Spectral Rules
   - url: capabilities/mobile-messaging.yaml
-    type: NaftikoCapability
+    type: X-NaftikoCapability
     name: Vibes Mobile Messaging Capability
   - url: capabilities/shared/vibes-platform.yaml
-    type: NaftikoCapability
+    type: X-NaftikoCapability
     name: Vibes Platform Shared Capability
   - url: capabilities/shared/vibes-connect.yaml
-    type: NaftikoCapability
+    type: X-NaftikoCapability
     name: Vibes Connect Shared Capability
   - url: json-schema/vibes-platform-broadcast-schema.json
     type: JSONSchema
