@@ -83,6 +83,12 @@ description: >-
   workflows, subscription list management, wallet pass management, and callback notifications for opt-ins and delivery
   status. Vibes operates as a Tier 1 provider with direct carrier connections in the US and Canada.
 common:
+  - type: TrustCenter
+    url: security/vibes-platform-trust-center.yml
+  - type: DomainSecurity
+    url: security/vibes-platform-domain-security.yml
+  - type: Authentication
+    url: authentication/vibes-platform-authentication.yml
   - url: https://developer-platform.vibes.com/
     name: Vibes Platform Developer Portal
     type: Portal

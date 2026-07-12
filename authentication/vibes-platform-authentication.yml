@@ -1,0 +1,16 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/vibes-connect-openapi.yml, openapi/vibes-platform-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: basicAuth
+  type: http
+  scheme: basic
+  description: HTTP Basic Authentication. Combine the username and password into a "username:password"
+    string, encode it using Base64, and add the Authorization HTTP header set to "Basic " plus
+    the encoded string.
+  sources:
+  - openapi/vibes-connect-openapi.yml
+  - openapi/vibes-platform-openapi.yml

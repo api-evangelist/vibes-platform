@@ -1,0 +1,25 @@
+generated: '2026-07-11'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: developer-platform.vibes.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  3 16:52:42 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: developer-aggregation.vibes.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 18 10:14:44 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: developer-rbm.vibes.com
+  https: false
+domains:
+- domain: vibes.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject
