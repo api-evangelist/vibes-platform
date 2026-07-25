@@ -1,0 +1,178 @@
+openapi: 3.0.3
+info:
+  title: Vibes Connect HTTP Message Acquisition Campaigns Wallet Passes API
+  description: The Vibes Connect HTTP Message API enables sending and receiving SMS and MMS messages via HTTP calls. Vibes is a Tier 1 carrier in the United States with direct connections to Verizon, AT&T, T-Mobile, and regional providers. The API supports SMS messaging, MMS messaging with multimedia content, callback setup for inbound messages, and carrier information lookups.
+  version: '3.0'
+  contact:
+    url: https://developer-aggregation.vibes.com
+  license:
+    name: Proprietary
+servers:
+- url: https://messageapi.vibesapps.com
+  description: US and Canada SMS Endpoint
+- url: https://messageapi-mms.vibesapps.com
+  description: US MMS Endpoint
+security:
+- basicAuth: []
+tags:
+- name: Wallet Passes
+  description: Manage mobile wallet passes (Apple Wallet, Google Pay).
+paths:
+  /companies/{company_key}/wallet_items:
+    get:
+      operationId: listWalletItems
+      summary: List Wallet Items
+      description: Retrieve all wallet passes (Apple Wallet and Google Pay) for the company.
+      tags:
+      - Wallet Passes
+      parameters:
+      - $ref: '#/components/parameters/company_key'
+      responses:
+        '200':
+          description: A list of wallet items.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  wallet_items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WalletItem'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      operationId: createWalletItem
+      summary: Create Wallet Item
+      description: Create a new mobile wallet pass for a subscriber.
+      tags:
+      - Wallet Passes
+      parameters:
+      - $ref: '#/components/parameters/company_key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletItemCreate'
+      responses:
+        '201':
+          description: Wallet item created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    WalletItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the wallet item.
+        person_key:
+          type: string
+          description: Person key the wallet item belongs to.
+        wallet_type:
+          type: string
+          description: Type of wallet pass.
+          enum:
+          - apple_wallet
+          - google_pay
+        status:
+          type: string
+          description: Current status of the wallet item.
+          enum:
+          - active
+          - voided
+          - expired
+        created_at:
+          type: string
+          format: date-time
+          description: When the wallet item was created.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier.
+        message:
+          type: string
+          description: Human-readable error message.
+        details:
+          type: array
+          items:
+            type: string
+          description: Additional error details.
+    WalletItemCreate:
+      type: object
+      required:
+      - person_key
+      - wallet_type
+      - template_id
+      properties:
+        person_key:
+          type: string
+          description: Person key to create the wallet item for.
+        wallet_type:
+          type: string
+          description: Type of wallet pass.
+          enum:
+          - apple_wallet
+          - google_pay
+        template_id:
+          type: string
+          description: Wallet pass template identifier.
+        fields:
+          type: object
+          description: Custom field values for the wallet pass.
+          additionalProperties:
+            type: string
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Number of seconds to wait before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    company_key:
+      name: company_key
+      in: path
+      required: true
+      description: Your Vibes company identifier.
+      schema:
+        type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Combine the username and password into a "username:password" string, encode it using Base64, and add the Authorization HTTP header set to "Basic " plus the encoded string.
+externalDocs:
+  url: https://developer-aggregation.vibes.com/reference/http-message-api
+  description: Vibes Connect API Documentation

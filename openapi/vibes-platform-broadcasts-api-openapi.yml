@@ -1,0 +1,298 @@
+openapi: 3.0.3
+info:
+  title: Vibes Connect HTTP Message Acquisition Campaigns Broadcasts API
+  description: The Vibes Connect HTTP Message API enables sending and receiving SMS and MMS messages via HTTP calls. Vibes is a Tier 1 carrier in the United States with direct connections to Verizon, AT&T, T-Mobile, and regional providers. The API supports SMS messaging, MMS messaging with multimedia content, callback setup for inbound messages, and carrier information lookups.
+  version: '3.0'
+  contact:
+    url: https://developer-aggregation.vibes.com
+  license:
+    name: Proprietary
+servers:
+- url: https://messageapi.vibesapps.com
+  description: US and Canada SMS Endpoint
+- url: https://messageapi-mms.vibesapps.com
+  description: US MMS Endpoint
+security:
+- basicAuth: []
+tags:
+- name: Broadcasts
+  description: Manage SMS and push notification broadcasts (message sends).
+paths:
+  /companies/{company_key}/broadcasts:
+    get:
+      operationId: listBroadcasts
+      summary: List Broadcasts
+      description: Retrieve a list of broadcasts (message sends) for the company.
+      tags:
+      - Broadcasts
+      parameters:
+      - $ref: '#/components/parameters/company_key'
+      - name: status
+        in: query
+        description: Filter broadcasts by status.
+        required: false
+        schema:
+          type: string
+          enum:
+          - draft
+          - scheduled
+          - sent
+          - cancelled
+      - name: page
+        in: query
+        description: Page number for pagination.
+        required: false
+        schema:
+          type: integer
+          default: 1
+      - name: per_page
+        in: query
+        description: Number of results per page.
+        required: false
+        schema:
+          type: integer
+          default: 25
+          maximum: 100
+      responses:
+        '200':
+          description: A list of broadcasts.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  broadcasts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Broadcast'
+                  total:
+                    type: integer
+                  page:
+                    type: integer
+                  per_page:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      operationId: createBroadcast
+      summary: Create Broadcast
+      description: Create a new broadcast (message send). When creating a broadcast, you create a template for the message which will be filled in with personalization if applicable.
+      tags:
+      - Broadcasts
+      parameters:
+      - $ref: '#/components/parameters/company_key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BroadcastCreate'
+      responses:
+        '201':
+          description: Broadcast created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Broadcast'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/broadcasts/{broadcast_id}:
+    get:
+      operationId: getBroadcast
+      summary: Get Broadcast
+      description: Retrieve metadata and status for a specific broadcast.
+      tags:
+      - Broadcasts
+      parameters:
+      - $ref: '#/components/parameters/company_key'
+      - $ref: '#/components/parameters/broadcast_id'
+      responses:
+        '200':
+          description: Broadcast details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Broadcast'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      operationId: updateBroadcast
+      summary: Update Broadcast
+      description: Update an existing broadcast.
+      tags:
+      - Broadcasts
+      parameters:
+      - $ref: '#/components/parameters/company_key'
+      - $ref: '#/components/parameters/broadcast_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BroadcastCreate'
+      responses:
+        '200':
+          description: Broadcast updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Broadcast'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  responses:
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Number of seconds to wait before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Broadcast:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the broadcast.
+        name:
+          type: string
+          description: Name of the broadcast.
+        status:
+          type: string
+          description: Current status of the broadcast.
+          enum:
+          - draft
+          - scheduled
+          - sent
+          - cancelled
+        message_type:
+          type: string
+          description: Type of message (SMS or push notification).
+          enum:
+          - sms
+          - push
+        message_text:
+          type: string
+          description: Message content template.
+        subscription_list_id:
+          type: string
+          description: The subscription list to send the broadcast to.
+        scheduled_at:
+          type: string
+          format: date-time
+          description: When the broadcast is scheduled to send.
+        sent_at:
+          type: string
+          format: date-time
+          description: When the broadcast was sent.
+        created_at:
+          type: string
+          format: date-time
+          description: When the broadcast was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: When the broadcast was last updated.
+    BroadcastCreate:
+      type: object
+      required:
+      - name
+      - message_type
+      - message_text
+      - subscription_list_id
+      properties:
+        name:
+          type: string
+          description: Name of the broadcast.
+        message_type:
+          type: string
+          description: Type of message (SMS or push notification).
+          enum:
+          - sms
+          - push
+        message_text:
+          type: string
+          description: Message content template (supports personalization placeholders).
+        subscription_list_id:
+          type: string
+          description: The subscription list to send the broadcast to.
+        scheduled_at:
+          type: string
+          format: date-time
+          description: When to schedule the broadcast. Omit for immediate send.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier.
+        message:
+          type: string
+          description: Human-readable error message.
+        details:
+          type: array
+          items:
+            type: string
+          description: Additional error details.
+  parameters:
+    broadcast_id:
+      name: broadcast_id
+      in: path
+      required: true
+      description: The unique identifier for the broadcast.
+      schema:
+        type: string
+    company_key:
+      name: company_key
+      in: path
+      required: true
+      description: Your Vibes company identifier.
+      schema:
+        type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Combine the username and password into a "username:password" string, encode it using Base64, and add the Authorization HTTP header set to "Basic " plus the encoded string.
+externalDocs:
+  url: https://developer-aggregation.vibes.com/reference/http-message-api
+  description: Vibes Connect API Documentation

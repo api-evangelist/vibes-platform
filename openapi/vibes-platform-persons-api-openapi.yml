@@ -1,0 +1,128 @@
+openapi: 3.0.3
+info:
+  title: Vibes Connect HTTP Message Acquisition Campaigns Persons API
+  description: The Vibes Connect HTTP Message API enables sending and receiving SMS and MMS messages via HTTP calls. Vibes is a Tier 1 carrier in the United States with direct connections to Verizon, AT&T, T-Mobile, and regional providers. The API supports SMS messaging, MMS messaging with multimedia content, callback setup for inbound messages, and carrier information lookups.
+  version: '3.0'
+  contact:
+    url: https://developer-aggregation.vibes.com
+  license:
+    name: Proprietary
+servers:
+- url: https://messageapi.vibesapps.com
+  description: US and Canada SMS Endpoint
+- url: https://messageapi-mms.vibesapps.com
+  description: US MMS Endpoint
+security:
+- basicAuth: []
+tags:
+- name: Persons
+  description: Manage persons (subscribers) in the mobile contact book.
+paths:
+  /companies/{company_key}/mobiledb/persons/{person_key}:
+    get:
+      operationId: getPerson
+      summary: Get Person
+      description: Retrieve a subscriber (person) from the mobile contact book by their internal key.
+      tags:
+      - Persons
+      parameters:
+      - $ref: '#/components/parameters/company_key'
+      - $ref: '#/components/parameters/person_key'
+      responses:
+        '200':
+          description: Person details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  responses:
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Number of seconds to wait before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier.
+        message:
+          type: string
+          description: Human-readable error message.
+        details:
+          type: array
+          items:
+            type: string
+          description: Additional error details.
+    Person:
+      type: object
+      properties:
+        person_key:
+          type: string
+          description: Internal Vibes person key.
+        external_person_id:
+          type: string
+          description: External person identifier.
+        mobile_phone:
+          type: string
+          description: Person's mobile phone number.
+        status:
+          type: string
+          description: Subscription status.
+          enum:
+          - subscribed
+          - unsubscribed
+        created_at:
+          type: string
+          format: date-time
+          description: When the person was added.
+  parameters:
+    person_key:
+      name: person_key
+      in: path
+      required: true
+      description: The internal Vibes person key for the subscriber.
+      schema:
+        type: string
+    company_key:
+      name: company_key
+      in: path
+      required: true
+      description: Your Vibes company identifier.
+      schema:
+        type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Combine the username and password into a "username:password" string, encode it using Base64, and add the Authorization HTTP header set to "Basic " plus the encoded string.
+externalDocs:
+  url: https://developer-aggregation.vibes.com/reference/http-message-api
+  description: Vibes Connect API Documentation

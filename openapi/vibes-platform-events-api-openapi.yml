@@ -1,0 +1,144 @@
+openapi: 3.0.3
+info:
+  title: Vibes Connect HTTP Message Acquisition Campaigns Events API
+  description: The Vibes Connect HTTP Message API enables sending and receiving SMS and MMS messages via HTTP calls. Vibes is a Tier 1 carrier in the United States with direct connections to Verizon, AT&T, T-Mobile, and regional providers. The API supports SMS messaging, MMS messaging with multimedia content, callback setup for inbound messages, and carrier information lookups.
+  version: '3.0'
+  contact:
+    url: https://developer-aggregation.vibes.com
+  license:
+    name: Proprietary
+servers:
+- url: https://messageapi.vibesapps.com
+  description: US and Canada SMS Endpoint
+- url: https://messageapi-mms.vibesapps.com
+  description: US MMS Endpoint
+security:
+- basicAuth: []
+tags:
+- name: Events
+  description: Submit events that trigger SMS messages and push notifications.
+paths:
+  /companies/{company_key}/events:
+    post:
+      operationId: createEvent
+      summary: Create Event
+      description: Submit an event that triggers SMS messages and push notifications. Events are used to create event-triggered messages based on customer actions or data changes.
+      tags:
+      - Events
+      parameters:
+      - $ref: '#/components/parameters/company_key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventCreate'
+      responses:
+        '201':
+          description: Event submitted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Number of seconds to wait before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier.
+        message:
+          type: string
+          description: Human-readable error message.
+        details:
+          type: array
+          items:
+            type: string
+          description: Additional error details.
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the event.
+        event_type:
+          type: string
+          description: Type of event.
+        person_key:
+          type: string
+          description: Person key the event was submitted for.
+        status:
+          type: string
+          description: Processing status of the event.
+          enum:
+          - queued
+          - processed
+          - failed
+        created_at:
+          type: string
+          format: date-time
+          description: When the event was submitted.
+    EventCreate:
+      type: object
+      required:
+      - event_type
+      - person_key
+      properties:
+        event_type:
+          type: string
+          description: Type of event that triggers messaging.
+        person_key:
+          type: string
+          description: Internal Vibes person key or external_person_id.
+        attributes:
+          type: object
+          description: Custom attributes to personalize triggered messages.
+          additionalProperties:
+            type: string
+  parameters:
+    company_key:
+      name: company_key
+      in: path
+      required: true
+      description: Your Vibes company identifier.
+      schema:
+        type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Combine the username and password into a "username:password" string, encode it using Base64, and add the Authorization HTTP header set to "Basic " plus the encoded string.
+externalDocs:
+  url: https://developer-aggregation.vibes.com/reference/http-message-api
+  description: Vibes Connect API Documentation

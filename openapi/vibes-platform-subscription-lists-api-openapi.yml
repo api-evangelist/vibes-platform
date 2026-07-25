@@ -1,0 +1,204 @@
+openapi: 3.0.3
+info:
+  title: Vibes Connect HTTP Message Acquisition Campaigns Subscription Lists API
+  description: The Vibes Connect HTTP Message API enables sending and receiving SMS and MMS messages via HTTP calls. Vibes is a Tier 1 carrier in the United States with direct connections to Verizon, AT&T, T-Mobile, and regional providers. The API supports SMS messaging, MMS messaging with multimedia content, callback setup for inbound messages, and carrier information lookups.
+  version: '3.0'
+  contact:
+    url: https://developer-aggregation.vibes.com
+  license:
+    name: Proprietary
+servers:
+- url: https://messageapi.vibesapps.com
+  description: US and Canada SMS Endpoint
+- url: https://messageapi-mms.vibesapps.com
+  description: US MMS Endpoint
+security:
+- basicAuth: []
+tags:
+- name: Subscription Lists
+  description: Manage subscription lists and subscriber memberships.
+paths:
+  /companies/{company_key}/mobiledb/subscription_lists:
+    get:
+      operationId: listSubscriptionLists
+      summary: List Subscription Lists
+      description: Retrieve all subscription lists for the company.
+      tags:
+      - Subscription Lists
+      parameters:
+      - $ref: '#/components/parameters/company_key'
+      responses:
+        '200':
+          description: A list of subscription lists.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subscription_lists:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SubscriptionList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/mobiledb/subscription_lists/{subscription_list_id}:
+    get:
+      operationId: getSubscriptionList
+      summary: Get Subscription List
+      description: Retrieve details for a specific subscription list.
+      tags:
+      - Subscription Lists
+      parameters:
+      - $ref: '#/components/parameters/company_key'
+      - $ref: '#/components/parameters/subscription_list_id'
+      responses:
+        '200':
+          description: Subscription list details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/mobiledb/persons/{person_key}/subscriptions/{subscription_list_id}:
+    delete:
+      operationId: unsubscribePerson
+      summary: Unsubscribe Person
+      description: Remove a person from a subscription list by their internal person key.
+      tags:
+      - Subscription Lists
+      parameters:
+      - $ref: '#/components/parameters/company_key'
+      - $ref: '#/components/parameters/person_key'
+      - $ref: '#/components/parameters/subscription_list_id'
+      responses:
+        '204':
+          description: Person unsubscribed successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/mobiledb/persons/external/{external_person_id}/subscriptions/{subscription_list_id}:
+    delete:
+      operationId: unsubscribePersonByExternalId
+      summary: Unsubscribe Person by External ID
+      description: Remove a person from a subscription list by their external person ID.
+      tags:
+      - Subscription Lists
+      parameters:
+      - $ref: '#/components/parameters/company_key'
+      - $ref: '#/components/parameters/external_person_id'
+      - $ref: '#/components/parameters/subscription_list_id'
+      responses:
+        '204':
+          description: Person unsubscribed successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  parameters:
+    subscription_list_id:
+      name: subscription_list_id
+      in: path
+      required: true
+      description: The unique identifier for the subscription list.
+      schema:
+        type: string
+    person_key:
+      name: person_key
+      in: path
+      required: true
+      description: The internal Vibes person key for the subscriber.
+      schema:
+        type: string
+    external_person_id:
+      name: external_person_id
+      in: path
+      required: true
+      description: The external person identifier for the subscriber.
+      schema:
+        type: string
+    company_key:
+      name: company_key
+      in: path
+      required: true
+      description: Your Vibes company identifier.
+      schema:
+        type: string
+  responses:
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Number of seconds to wait before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier.
+        message:
+          type: string
+          description: Human-readable error message.
+        details:
+          type: array
+          items:
+            type: string
+          description: Additional error details.
+    SubscriptionList:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the subscription list.
+        name:
+          type: string
+          description: Name of the subscription list.
+        description:
+          type: string
+          description: Description of the subscription list.
+        subscriber_count:
+          type: integer
+          description: Number of active subscribers in the list.
+        created_at:
+          type: string
+          format: date-time
+          description: When the subscription list was created.
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Combine the username and password into a "username:password" string, encode it using Base64, and add the Authorization HTTP header set to "Basic " plus the encoded string.
+externalDocs:
+  url: https://developer-aggregation.vibes.com/reference/http-message-api
+  description: Vibes Connect API Documentation

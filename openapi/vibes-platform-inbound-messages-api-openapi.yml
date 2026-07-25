@@ -1,0 +1,122 @@
+openapi: 3.0.3
+info:
+  title: Vibes Connect HTTP Message Acquisition Campaigns Inbound Messages API
+  description: The Vibes Connect HTTP Message API enables sending and receiving SMS and MMS messages via HTTP calls. Vibes is a Tier 1 carrier in the United States with direct connections to Verizon, AT&T, T-Mobile, and regional providers. The API supports SMS messaging, MMS messaging with multimedia content, callback setup for inbound messages, and carrier information lookups.
+  version: '3.0'
+  contact:
+    url: https://developer-aggregation.vibes.com
+  license:
+    name: Proprietary
+servers:
+- url: https://messageapi.vibesapps.com
+  description: US and Canada SMS Endpoint
+- url: https://messageapi-mms.vibesapps.com
+  description: US MMS Endpoint
+security:
+- basicAuth: []
+tags:
+- name: Inbound Messages
+  description: Manage inbound message callbacks.
+paths:
+  /api/v1/callbacks:
+    post:
+      operationId: registerSmsCallback
+      summary: Register SMS Callback
+      description: Set up a callback URL to receive inbound SMS messages and delivery receipts.
+      tags:
+      - Inbound Messages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CallbackCreate'
+      responses:
+        '201':
+          description: Callback registered successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Callback'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    CallbackCreate:
+      type: object
+      required:
+      - callback_type
+      - url
+      properties:
+        callback_type:
+          type: string
+          description: Type of event that triggers this callback.
+          enum:
+          - inbound_sms
+          - delivery_receipt
+        url:
+          type: string
+          format: uri
+          description: HTTPS URL to receive callback POST requests.
+        short_code:
+          type: string
+          description: Short code to associate with this callback.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier.
+        message:
+          type: string
+          description: Human-readable error message.
+    Callback:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the callback registration.
+        callback_type:
+          type: string
+          description: Type of event that triggers this callback.
+        url:
+          type: string
+          format: uri
+          description: Callback URL.
+        short_code:
+          type: string
+          description: Associated short code.
+        created_at:
+          type: string
+          format: date-time
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Combine the username and password into a "username:password" string, encode it using Base64, and add the Authorization HTTP header set to "Basic " plus the encoded string.
+externalDocs:
+  url: https://developer-aggregation.vibes.com/reference/http-message-api
+  description: Vibes Connect API Documentation

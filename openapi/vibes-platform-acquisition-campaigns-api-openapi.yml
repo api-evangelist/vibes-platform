@@ -1,0 +1,253 @@
+openapi: 3.0.3
+info:
+  title: Vibes Connect HTTP Message Acquisition Campaigns API
+  description: The Vibes Connect HTTP Message API enables sending and receiving SMS and MMS messages via HTTP calls. Vibes is a Tier 1 carrier in the United States with direct connections to Verizon, AT&T, T-Mobile, and regional providers. The API supports SMS messaging, MMS messaging with multimedia content, callback setup for inbound messages, and carrier information lookups.
+  version: '3.0'
+  contact:
+    url: https://developer-aggregation.vibes.com
+  license:
+    name: Proprietary
+servers:
+- url: https://messageapi.vibesapps.com
+  description: US and Canada SMS Endpoint
+- url: https://messageapi-mms.vibesapps.com
+  description: US MMS Endpoint
+security:
+- basicAuth: []
+tags:
+- name: Acquisition Campaigns
+  description: Manage acquisition campaigns for adding new subscribers.
+paths:
+  /companies/{company_key}/campaigns/acquisition:
+    get:
+      operationId: listAcquisitionCampaigns
+      summary: List Acquisition Campaigns
+      description: Retrieve a list of acquisition campaigns for the company.
+      tags:
+      - Acquisition Campaigns
+      parameters:
+      - $ref: '#/components/parameters/company_key'
+      responses:
+        '200':
+          description: A list of acquisition campaigns.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  campaigns:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AcquisitionCampaign'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/campaigns/acquisition/{campaign_id}:
+    get:
+      operationId: getAcquisitionCampaign
+      summary: Get Acquisition Campaign
+      description: Retrieve metadata for a specific acquisition campaign.
+      tags:
+      - Acquisition Campaigns
+      parameters:
+      - $ref: '#/components/parameters/company_key'
+      - $ref: '#/components/parameters/campaign_id'
+      responses:
+        '200':
+          description: Acquisition campaign details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcquisitionCampaign'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /companies/{company_key}/campaigns/acquisition/{campaign_id}/participants:
+    get:
+      operationId: listPendingParticipants
+      summary: List Pending Participants
+      description: Search for pending participants in an acquisition campaign.
+      tags:
+      - Acquisition Campaigns
+      parameters:
+      - $ref: '#/components/parameters/company_key'
+      - $ref: '#/components/parameters/campaign_id'
+      responses:
+        '200':
+          description: A list of pending participants.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  participants:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Participant'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      operationId: addParticipant
+      summary: Add Participant
+      description: Add a person to an acquisition campaign.
+      tags:
+      - Acquisition Campaigns
+      parameters:
+      - $ref: '#/components/parameters/company_key'
+      - $ref: '#/components/parameters/campaign_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParticipantCreate'
+      responses:
+        '201':
+          description: Participant added successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Participant'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    AcquisitionCampaign:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the acquisition campaign.
+        name:
+          type: string
+          description: Name of the acquisition campaign.
+        status:
+          type: string
+          description: Current status of the campaign.
+          enum:
+          - active
+          - inactive
+          - expired
+        subscription_list_id:
+          type: string
+          description: The subscription list subscribers will be added to.
+        keyword:
+          type: string
+          description: SMS keyword associated with the campaign (e.g., JOIN).
+        short_code:
+          type: string
+          description: SMS short code for the campaign.
+        created_at:
+          type: string
+          format: date-time
+          description: When the campaign was created.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier.
+        message:
+          type: string
+          description: Human-readable error message.
+        details:
+          type: array
+          items:
+            type: string
+          description: Additional error details.
+    ParticipantCreate:
+      type: object
+      required:
+      - mobile_phone
+      properties:
+        mobile_phone:
+          type: string
+          description: Participant's mobile phone number (E.164 format recommended).
+        external_person_id:
+          type: string
+          description: External identifier for the person.
+    Participant:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the participant.
+        mobile_phone:
+          type: string
+          description: Participant's mobile phone number.
+        status:
+          type: string
+          description: Participant status in the campaign.
+          enum:
+          - pending
+          - opted_in
+          - opted_out
+        created_at:
+          type: string
+          format: date-time
+          description: When the participant was added.
+  responses:
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Number of seconds to wait before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    campaign_id:
+      name: campaign_id
+      in: path
+      required: true
+      description: The unique identifier for the acquisition campaign.
+      schema:
+        type: string
+    company_key:
+      name: company_key
+      in: path
+      required: true
+      description: Your Vibes company identifier.
+      schema:
+        type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication. Combine the username and password into a "username:password" string, encode it using Base64, and add the Authorization HTTP header set to "Basic " plus the encoded string.
+externalDocs:
+  url: https://developer-aggregation.vibes.com/reference/http-message-api
+  description: Vibes Connect API Documentation
