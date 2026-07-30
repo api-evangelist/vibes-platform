@@ -1,64 +1,286 @@
 aid: vibes-platform
 url: https://raw.githubusercontent.com/api-evangelist/vibes-platform/refs/heads/main/apis.yml
 apis:
-  - aid: vibes-platform:vibes-platform-api
-    name: Vibes Platform API
-    tags:
-      - Mobile Marketing
-      - Push Notifications
-      - SMS
-      - Broadcast
-      - Acquisition
-      - Subscription Management
-      - Wallet Passes
-    humanURL: https://developer-platform.vibes.com/
-    baseURL: https://public-api.vibescm.com
-    properties:
-      - url: https://developer-platform.vibes.com/reference/our-apis
-        type: Documentation
-      - url: https://developer-platform.vibes.com/reference/broadcast-api-1
-        type: Reference
-      - url: https://developer-platform.vibes.com/reference/acquisition-campaign-api-1
-        type: Reference
-      - url: https://developer-platform.vibes.com/reference/subscription-list-api
-        type: Reference
-      - url: https://developer-platform.vibes.com/reference/callbacks
-        type: Reference
-      - url: https://developer-platform.vibes.com/reference/technical-details
-        type: Reference
-      - url: openapi/vibes-platform-openapi.yml
-        type: OpenAPI
-      - url: rules/vibes-platform-rules.yml
-        type: SpectralRuleset
-    description: >-
-      The Vibes Platform API provides programmatic access to broadcast messaging (SMS and push notifications),
-      acquisition workflows, subscription list management, wallet pass management, and event-triggered message
-      capabilities. Broadcasts are delivered to subscribers within your mobile contact book. Authentication uses HTTP
-      Basic Auth with Base64-encoded credentials. The US environment base URL is https://public-api.vibescm.com and the
-      EU environment base URL is https://public-api.eu.vibes.com.
-  - aid: vibes-platform:vibes-connect-api
-    name: Vibes Connect API
-    tags:
-      - SMS
-      - MMS
-      - Aggregation
-      - Messaging
-      - Mobile
-    humanURL: https://developer-aggregation.vibes.com
-    baseURL: https://messageapi.vibesapps.com
-    properties:
-      - url: https://developer-aggregation.vibes.com
-        type: Documentation
-      - url: https://developer-aggregation.vibes.com/reference/http-message-api
-        type: Reference
-      - url: openapi/vibes-connect-openapi.yml
-        type: OpenAPI
-    description: >-
-      Vibes Connect provides aggregation-layer APIs for sending and receiving SMS and MMS messages via HTTP calls. Three
-      APIs are offered: the HTTP Message API for SMS, the SMPP Gateway API for persistent SMPP bindings, and the MMS
-      Message API using MM7 Protocol. Vibes is a Tier 1 provider with direct connections to Verizon, AT&T, T-Mobile, and
-      regional carriers. US SMS endpoint: https://messageapi.vibesapps.com; US MMS endpoint:
-      https://messageapi-mms.vibesapps.com.
+- aid: vibes-platform:vibes-platform-acquisition-campaigns-api
+  name: Vibes Platform Acquisition Campaigns API
+  description: Manage acquisition campaigns for adding new subscribers.
+  humanURL: https://developer-platform.vibes.com/
+  baseURL: https://public-api.vibescm.com
+  tags:
+  - Acquisition Campaigns
+  properties:
+  - type: OpenAPI
+    url: openapi/vibes-platform-acquisition-campaigns-api-openapi.yml
+  - type: Documentation
+    url: https://developer-platform.vibes.com/reference/our-apis
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/broadcast-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/acquisition-campaign-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/subscription-list-api
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/callbacks
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/technical-details
+  - type: SpectralRuleset
+    url: rules/vibes-platform-rules.yml
+  - type: Documentation
+    url: https://developer-aggregation.vibes.com
+  - type: Reference
+    url: https://developer-aggregation.vibes.com/reference/http-message-api
+- aid: vibes-platform:vibes-platform-broadcasts-api
+  name: Vibes Platform Broadcasts API
+  description: Manage SMS and push notification broadcasts (message sends).
+  humanURL: https://developer-platform.vibes.com/
+  baseURL: https://public-api.vibescm.com
+  tags:
+  - Broadcasts
+  properties:
+  - type: OpenAPI
+    url: openapi/vibes-platform-broadcasts-api-openapi.yml
+  - type: Documentation
+    url: https://developer-platform.vibes.com/reference/our-apis
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/broadcast-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/acquisition-campaign-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/subscription-list-api
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/callbacks
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/technical-details
+  - type: SpectralRuleset
+    url: rules/vibes-platform-rules.yml
+  - type: Documentation
+    url: https://developer-aggregation.vibes.com
+  - type: Reference
+    url: https://developer-aggregation.vibes.com/reference/http-message-api
+- aid: vibes-platform:vibes-platform-callbacks-api
+  name: Vibes Platform Callbacks API
+  description: Register and manage callback endpoints for opt-in and delivery notifications.
+  humanURL: https://developer-platform.vibes.com/
+  baseURL: https://public-api.vibescm.com
+  tags:
+  - Callbacks
+  properties:
+  - type: OpenAPI
+    url: openapi/vibes-platform-callbacks-api-openapi.yml
+  - type: Documentation
+    url: https://developer-platform.vibes.com/reference/our-apis
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/broadcast-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/acquisition-campaign-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/subscription-list-api
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/callbacks
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/technical-details
+  - type: SpectralRuleset
+    url: rules/vibes-platform-rules.yml
+  - type: Documentation
+    url: https://developer-aggregation.vibes.com
+  - type: Reference
+    url: https://developer-aggregation.vibes.com/reference/http-message-api
+- aid: vibes-platform:vibes-platform-carrier-lookup-api
+  name: Vibes Platform Carrier Lookup API
+  description: Retrieve carrier information for mobile numbers.
+  humanURL: https://developer-platform.vibes.com/
+  baseURL: https://public-api.vibescm.com
+  tags:
+  - Carrier Lookup
+  properties:
+  - type: OpenAPI
+    url: openapi/vibes-platform-carrier-lookup-api-openapi.yml
+  - type: Documentation
+    url: https://developer-platform.vibes.com/reference/our-apis
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/broadcast-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/acquisition-campaign-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/subscription-list-api
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/callbacks
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/technical-details
+  - type: SpectralRuleset
+    url: rules/vibes-platform-rules.yml
+  - type: Documentation
+    url: https://developer-aggregation.vibes.com
+  - type: Reference
+    url: https://developer-aggregation.vibes.com/reference/http-message-api
+- aid: vibes-platform:vibes-platform-events-api
+  name: Vibes Platform Events API
+  description: Submit events that trigger SMS messages and push notifications.
+  humanURL: https://developer-platform.vibes.com/
+  baseURL: https://public-api.vibescm.com
+  tags:
+  - Events
+  properties:
+  - type: OpenAPI
+    url: openapi/vibes-platform-events-api-openapi.yml
+  - type: Documentation
+    url: https://developer-platform.vibes.com/reference/our-apis
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/broadcast-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/acquisition-campaign-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/subscription-list-api
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/callbacks
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/technical-details
+  - type: SpectralRuleset
+    url: rules/vibes-platform-rules.yml
+  - type: Documentation
+    url: https://developer-aggregation.vibes.com
+  - type: Reference
+    url: https://developer-aggregation.vibes.com/reference/http-message-api
+- aid: vibes-platform:vibes-platform-inbound-messages-api
+  name: Vibes Platform Inbound Messages API
+  description: Manage inbound message callbacks.
+  humanURL: https://developer-platform.vibes.com/
+  baseURL: https://public-api.vibescm.com
+  tags:
+  - Inbound Messages
+  properties:
+  - type: OpenAPI
+    url: openapi/vibes-platform-inbound-messages-api-openapi.yml
+  - type: Documentation
+    url: https://developer-platform.vibes.com/reference/our-apis
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/broadcast-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/acquisition-campaign-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/subscription-list-api
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/callbacks
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/technical-details
+  - type: SpectralRuleset
+    url: rules/vibes-platform-rules.yml
+  - type: Documentation
+    url: https://developer-aggregation.vibes.com
+  - type: Reference
+    url: https://developer-aggregation.vibes.com/reference/http-message-api
+- aid: vibes-platform:vibes-platform-messages-api
+  name: Vibes Platform Messages API
+  description: Send SMS and MMS messages.
+  humanURL: https://developer-platform.vibes.com/
+  baseURL: https://public-api.vibescm.com
+  tags:
+  - Messages
+  properties:
+  - type: OpenAPI
+    url: openapi/vibes-platform-messages-api-openapi.yml
+  - type: Documentation
+    url: https://developer-platform.vibes.com/reference/our-apis
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/broadcast-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/acquisition-campaign-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/subscription-list-api
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/callbacks
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/technical-details
+  - type: SpectralRuleset
+    url: rules/vibes-platform-rules.yml
+  - type: Documentation
+    url: https://developer-aggregation.vibes.com
+  - type: Reference
+    url: https://developer-aggregation.vibes.com/reference/http-message-api
+- aid: vibes-platform:vibes-platform-persons-api
+  name: Vibes Platform Persons API
+  description: Manage persons (subscribers) in the mobile contact book.
+  humanURL: https://developer-platform.vibes.com/
+  baseURL: https://public-api.vibescm.com
+  tags:
+  - Persons
+  properties:
+  - type: OpenAPI
+    url: openapi/vibes-platform-persons-api-openapi.yml
+  - type: Documentation
+    url: https://developer-platform.vibes.com/reference/our-apis
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/broadcast-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/acquisition-campaign-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/subscription-list-api
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/callbacks
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/technical-details
+  - type: SpectralRuleset
+    url: rules/vibes-platform-rules.yml
+  - type: Documentation
+    url: https://developer-aggregation.vibes.com
+  - type: Reference
+    url: https://developer-aggregation.vibes.com/reference/http-message-api
+- aid: vibes-platform:vibes-platform-subscription-lists-api
+  name: Vibes Platform Subscription Lists API
+  description: Manage subscription lists and subscriber memberships.
+  humanURL: https://developer-platform.vibes.com/
+  baseURL: https://public-api.vibescm.com
+  tags:
+  - Subscription Lists
+  properties:
+  - type: OpenAPI
+    url: openapi/vibes-platform-subscription-lists-api-openapi.yml
+  - type: Documentation
+    url: https://developer-platform.vibes.com/reference/our-apis
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/broadcast-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/acquisition-campaign-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/subscription-list-api
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/callbacks
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/technical-details
+  - type: SpectralRuleset
+    url: rules/vibes-platform-rules.yml
+  - type: Documentation
+    url: https://developer-aggregation.vibes.com
+  - type: Reference
+    url: https://developer-aggregation.vibes.com/reference/http-message-api
+- aid: vibes-platform:vibes-platform-wallet-passes-api
+  name: Vibes Platform Wallet Passes API
+  description: Manage mobile wallet passes (Apple Wallet, Google Pay).
+  humanURL: https://developer-platform.vibes.com/
+  baseURL: https://public-api.vibescm.com
+  tags:
+  - Wallet Passes
+  properties:
+  - type: OpenAPI
+    url: openapi/vibes-platform-wallet-passes-api-openapi.yml
+  - type: Documentation
+    url: https://developer-platform.vibes.com/reference/our-apis
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/broadcast-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/acquisition-campaign-api-1
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/subscription-list-api
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/callbacks
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/technical-details
+  - type: SpectralRuleset
+    url: rules/vibes-platform-rules.yml
+  - type: Documentation
+    url: https://developer-aggregation.vibes.com
+  - type: Reference
+    url: https://developer-aggregation.vibes.com/reference/http-message-api
 name: Vibes Platform
 tags:
   - Mobile Marketing
@@ -72,7 +294,20 @@ tags:
   - Wallet Passes
   - RCS
 kind: contract
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/vibes-platform.png
 access: 3rd-Party
 created: '2024-11-14'
 modified: '2026-05-19'
