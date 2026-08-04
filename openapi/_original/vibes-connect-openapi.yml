@@ -1,0 +1,344 @@
+openapi: 3.0.3
+info:
+  title: Vibes Connect HTTP Message API
+  description: >-
+    The Vibes Connect HTTP Message API enables sending and receiving SMS and MMS
+    messages via HTTP calls. Vibes is a Tier 1 carrier in the United States with
+    direct connections to Verizon, AT&T, T-Mobile, and regional providers. The
+    API supports SMS messaging, MMS messaging with multimedia content, callback
+    setup for inbound messages, and carrier information lookups.
+  version: '3.0'
+  contact:
+    url: https://developer-aggregation.vibes.com
+  license:
+    name: Proprietary
+externalDocs:
+  url: https://developer-aggregation.vibes.com/reference/http-message-api
+  description: Vibes Connect API Documentation
+servers:
+  - url: https://messageapi.vibesapps.com
+    description: US and Canada SMS Endpoint
+  - url: https://messageapi-mms.vibesapps.com
+    description: US MMS Endpoint
+security:
+  - basicAuth: []
+tags:
+  - name: Messages
+    description: Send SMS and MMS messages.
+  - name: Carrier Lookup
+    description: Retrieve carrier information for mobile numbers.
+  - name: Inbound Messages
+    description: Manage inbound message callbacks.
+paths:
+  /api/v1/sms/messages:
+    post:
+      operationId: sendSmsMessage
+      summary: Send SMS Message
+      description: >-
+        Send an SMS message to one or more mobile numbers via the Vibes Connect
+        HTTP Message API. Supports single and batch message sends.
+      tags:
+        - Messages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SmsMessageCreate'
+      responses:
+        '200':
+          description: Message accepted for delivery.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SmsMessageResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /api/v1/mms/messages:
+    post:
+      operationId: sendMmsMessage
+      summary: Send MMS Message
+      description: >-
+        Send an MMS message including pictures, links, and other media content
+        via HTTP call. Uses MM7 Protocol with custom headers.
+      tags:
+        - Messages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MmsMessageCreate'
+      responses:
+        '200':
+          description: MMS message accepted for delivery.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MmsMessageResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /api/v1/carrier-lookup:
+    post:
+      operationId: lookupCarrier
+      summary: Lookup Carrier
+      description: Retrieve carrier information for a specific mobile number.
+      tags:
+        - Carrier Lookup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mobile_number
+              properties:
+                mobile_number:
+                  type: string
+                  description: Mobile number to look up carrier information for (E.164 format).
+                  example: '+15551234567'
+      responses:
+        '200':
+          description: Carrier information for the mobile number.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarrierInfo'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /api/v1/callbacks:
+    post:
+      operationId: registerSmsCallback
+      summary: Register SMS Callback
+      description: Set up a callback URL to receive inbound SMS messages and delivery receipts.
+      tags:
+        - Inbound Messages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CallbackCreate'
+      responses:
+        '201':
+          description: Callback registered successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Callback'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: >-
+        HTTP Basic Authentication. Combine the username and password into a
+        "username:password" string, encode it using Base64, and add the
+        Authorization HTTP header set to "Basic " plus the encoded string.
+  schemas:
+    SmsMessageCreate:
+      type: object
+      required:
+        - to
+        - from
+        - text
+      properties:
+        to:
+          type: string
+          description: Recipient mobile number in E.164 format.
+          example: '+15551234567'
+        from:
+          type: string
+          description: Short code or long code to send from.
+          example: '12345'
+        text:
+          type: string
+          description: SMS message text content (up to 160 characters per segment).
+          maxLength: 1600
+        callback_url:
+          type: string
+          format: uri
+          description: URL to receive delivery receipt callbacks.
+    SmsMessageResponse:
+      type: object
+      properties:
+        message_id:
+          type: string
+          description: Unique identifier for the submitted message.
+        status:
+          type: string
+          description: Delivery status of the message.
+          enum:
+            - accepted
+            - queued
+            - sent
+            - delivered
+            - failed
+        to:
+          type: string
+          description: Recipient mobile number.
+        from:
+          type: string
+          description: Sender short code or long code.
+    MmsMessageCreate:
+      type: object
+      required:
+        - to
+        - from
+        - subject
+        - content
+      properties:
+        to:
+          type: string
+          description: Recipient mobile number in E.164 format.
+          example: '+15551234567'
+        from:
+          type: string
+          description: Short code or long code to send from.
+        subject:
+          type: string
+          description: MMS message subject line.
+        content:
+          type: array
+          description: Array of media content parts for the MMS message.
+          items:
+            type: object
+            properties:
+              content_type:
+                type: string
+                description: MIME type of the content (e.g., image/jpeg, text/plain).
+              url:
+                type: string
+                format: uri
+                description: URL of the media content.
+        callback_url:
+          type: string
+          format: uri
+          description: URL to receive delivery receipt callbacks.
+    MmsMessageResponse:
+      type: object
+      properties:
+        message_id:
+          type: string
+          description: Unique identifier for the submitted MMS message.
+        status:
+          type: string
+          description: Delivery status of the MMS message.
+          enum:
+            - accepted
+            - queued
+            - sent
+            - delivered
+            - failed
+        to:
+          type: string
+          description: Recipient mobile number.
+    CarrierInfo:
+      type: object
+      properties:
+        mobile_number:
+          type: string
+          description: The mobile number that was looked up.
+        carrier:
+          type: string
+          description: Name of the mobile carrier.
+          example: 'Verizon Wireless'
+        carrier_id:
+          type: string
+          description: Carrier identifier code.
+        number_type:
+          type: string
+          description: Type of number.
+          enum:
+            - mobile
+            - landline
+            - voip
+        country_code:
+          type: string
+          description: Two-letter ISO country code.
+          example: 'US'
+    CallbackCreate:
+      type: object
+      required:
+        - callback_type
+        - url
+      properties:
+        callback_type:
+          type: string
+          description: Type of event that triggers this callback.
+          enum:
+            - inbound_sms
+            - delivery_receipt
+        url:
+          type: string
+          format: uri
+          description: HTTPS URL to receive callback POST requests.
+        short_code:
+          type: string
+          description: Short code to associate with this callback.
+    Callback:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the callback registration.
+        callback_type:
+          type: string
+          description: Type of event that triggers this callback.
+        url:
+          type: string
+          format: uri
+          description: Callback URL.
+        short_code:
+          type: string
+          description: Associated short code.
+        created_at:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier.
+        message:
+          type: string
+          description: Human-readable error message.
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

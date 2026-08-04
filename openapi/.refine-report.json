@@ -1,0 +1,32 @@
+{
+  "provider": "vibes-platform",
+  "sources": [
+    "vibes-platform-acquisition-campaigns-api-openapi.yml",
+    "vibes-platform-broadcasts-api-openapi.yml",
+    "vibes-platform-callbacks-api-openapi.yml",
+    "vibes-platform-carrier-lookup-api-openapi.yml",
+    "vibes-platform-events-api-openapi.yml",
+    "vibes-platform-inbound-messages-api-openapi.yml",
+    "vibes-platform-messages-api-openapi.yml",
+    "vibes-platform-persons-api-openapi.yml",
+    "vibes-platform-subscription-lists-api-openapi.yml",
+    "vibes-platform-wallet-passes-api-openapi.yml"
+  ],
+  "outputs": [
+    "vibes-platform-acquisition-campaigns-api-openapi.yml",
+    "vibes-platform-broadcasts-api-openapi.yml",
+    "vibes-platform-callbacks-api-openapi.yml",
+    "vibes-platform-carrier-lookup-api-openapi.yml",
+    "vibes-platform-events-api-openapi.yml",
+    "vibes-platform-inbound-messages-api-openapi.yml",
+    "vibes-platform-messages-api-openapi.yml",
+    "vibes-platform-persons-api-openapi.yml",
+    "vibes-platform-subscription-lists-api-openapi.yml",
+    "vibes-platform-wallet-passes-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
