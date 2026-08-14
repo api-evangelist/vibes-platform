@@ -1,6 +1,69 @@
 aid: vibes-platform
 url: https://raw.githubusercontent.com/api-evangelist/vibes-platform/refs/heads/main/apis.yml
 apis:
+- aid: vibes-platform:vibes-platform-api
+  name: Vibes Platform API
+  description: >-
+    The complete Vibes Platform REST API as Vibes publishes it — 48 paths and 75 operations across
+    the Acquisition Campaign, Broadcast, Callback, Event, Event-Triggered Campaign, Incentive Code,
+    Incentive Pool, Person, Push Device Manager, Source Code, Subscription, Subscription List,
+    Wallet Campaign, Wallet Messaging, Android/iOS Wallet Template, Wallet Location Selector and
+    Wallet Store Location APIs. HTTP Basic authentication, JSON only, versioned by the
+    X-API-Version header, with US and EU regional hosts.
+  humanURL: https://developer-platform.vibes.com/reference/our-apis
+  baseURL: https://public-api.vibescm.com
+  tags:
+  - Mobile Messaging
+  - SMS
+  - MMS
+  - Push Notifications
+  - Wallet Passes
+  - Subscription Management
+  properties:
+  - type: OpenAPI
+    url: openapi/vibes-platform-api-openapi.json
+  - type: Overlay
+    url: overlays/vibes-platform-platform-api-overlay.yaml
+  - type: Documentation
+    url: https://developer-platform.vibes.com/reference/our-apis
+  - type: Reference
+    url: https://developer-platform.vibes.com/reference/technical-details
+  - type: DataModel
+    url: data-model/vibes-platform-data-model.yml
+  - type: ErrorCatalog
+    url: errors/vibes-platform-problem-types.yml
+  - type: Conventions
+    url: conventions/vibes-platform-conventions.yml
+  - type: Webhooks
+    url: asyncapi/vibes-platform-webhooks.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+- aid: vibes-platform:vibes-rcs-business-messaging-api
+  name: Vibes RCS Business Messaging API
+  description: >-
+    Vibes RCS for Business (RBM) API — check a device's RCS capabilities, send RCS agent messages
+    and events, revoke an undelivered message, and manage agent tester devices. Authenticated with
+    OAuth 2.0 client credentials against a Vibes-operated AWS Cognito authorization server, using
+    the scope https://rbm.vibes.com/rbm.agents. The only OAuth-secured surface Vibes ships.
+  humanURL: https://developer-aggregation.vibes.com/reference/rcs-for-business-api
+  baseURL: https://rbm.us.vibes.com/connectCustomers
+  tags:
+  - RCS
+  - Rich Communication Services
+  - Mobile Messaging
+  properties:
+  - type: OpenAPI
+    url: openapi/vibes-platform-rcs-business-messaging-openapi.json
+  - type: OpenAPI
+    url: openapi/vibes-platform-rbm-authentication-openapi.json
+  - type: Overlay
+    url: overlays/vibes-platform-rcs-business-messaging-overlay.yaml
+  - type: OAuthScopes
+    url: scopes/vibes-platform-scopes.yml
+  - type: Documentation
+    url: https://developer-aggregation.vibes.com/reference/rcs-api-overview
+  - type: Reference
+    url: https://developer-aggregation.vibes.com/reference/authentication-1
 - aid: vibes-platform:vibes-platform-acquisition-campaigns-api
   name: Vibes Platform Acquisition Campaigns API
   description: Manage acquisition campaigns for adding new subscribers.
@@ -89,7 +152,7 @@ apis:
   name: Vibes Platform Carrier Lookup API
   description: Retrieve carrier information for mobile numbers.
   humanURL: https://developer-platform.vibes.com/
-  baseURL: https://public-api.vibescm.com
+  baseURL: https://messageapi.vibesapps.com
   tags:
   - Carrier Lookup
   properties:
@@ -145,7 +208,7 @@ apis:
   name: Vibes Platform Inbound Messages API
   description: Manage inbound message callbacks.
   humanURL: https://developer-platform.vibes.com/
-  baseURL: https://public-api.vibescm.com
+  baseURL: https://messageapi.vibesapps.com
   tags:
   - Inbound Messages
   properties:
@@ -173,7 +236,7 @@ apis:
   name: Vibes Platform Messages API
   description: Send SMS and MMS messages.
   humanURL: https://developer-platform.vibes.com/
-  baseURL: https://public-api.vibescm.com
+  baseURL: https://messageapi.vibesapps.com
   tags:
   - Messages
   properties:
@@ -295,22 +358,29 @@ tags:
   - RCS
 kind: contract
 accessModel:
-  pricing: freemium
-  onboarding: self-serve
+  pricing: paid
+  onboarding: sales-assisted
   trial: false
-  try_now: true
+  try_now: false
   public: false
-  label: Freemium · Self-serve signup
+  label: Paid · Sales-assisted onboarding
   confidence: high
   source:
+  - https://www.vibes.com/pricing
   - plans
   - authentication
-  generated: '2026-07-22'
-  method: derived
+  generated: '2026-08-13'
+  method: searched
+  note: >-
+    Corrected from "freemium / self-serve" on 2026-08-13 after reading the published pricing page.
+    Vibes sells four packages — RCS Studio from $149/mo, Platform Professional from $20,000,
+    Platform Enterprise by quote, Vibes Connect by quote. There is no free tier, no trial, and API
+    credentials are issued per company account rather than through self-serve signup. Three of the
+    four packages are quote-only.
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/vibes-platform.png
 access: 3rd-Party
 created: '2024-11-14'
-modified: '2026-05-19'
+modified: '2026-08-13'
 position: Consuming
 description: >-
   Vibes is a mobile engagement platform that provides APIs for SMS messaging, push notifications, RCS for Business, and
@@ -318,8 +388,44 @@ description: >-
   workflows, subscription list management, wallet pass management, and callback notifications for opt-ins and delivery
   status. Vibes operates as a Tier 1 provider with direct carrier connections in the US and Canada.
 common:
+  - type: OAuthScopes
+    url: scopes/vibes-platform-scopes.yml
   - type: AgenticAccess
     url: agentic-access/vibes-platform-agentic-access.yml
+  - type: Packages
+    url: packages/vibes-platform-packages.yml
+  - type: SDKs
+    url: packages/vibes-platform-packages.yml
+  - type: LLMsTxt
+    url: llms/vibes-platform-llms.txt
+  - type: Conventions
+    url: conventions/vibes-platform-conventions.yml
+  - type: Idempotency
+    url: conventions/vibes-platform-conventions.yml
+  - type: RateLimits
+    url: rate-limits/vibes-platform-rate-limits.yml
+  - type: Plans
+    url: plans/vibes-platform-plans-pricing.yml
+  - type: ErrorCatalog
+    url: errors/vibes-platform-problem-types.yml
+  - type: Lifecycle
+    url: lifecycle/vibes-platform-lifecycle.yml
+  - type: ChangeLog
+    url: changelog/vibes-platform-changelog.yml
+  - type: Conformance
+    url: conformance/vibes-platform-conformance.yml
+  - type: Compliance
+    url: conformance/vibes-platform-conformance.yml
+  - type: DataModel
+    url: data-model/vibes-platform-data-model.yml
+  - type: Components
+    url: components/vibes-platform-components.yml
+  - type: Webhooks
+    url: asyncapi/vibes-platform-webhooks.yml
+  - type: MCPServer
+    url: mcp/vibes-platform-mcp.yml
+  - type: AgentSkill
+    url: skills/_index.yml
   - type: TrustCenter
     url: security/vibes-platform-trust-center.yml
   - type: DomainSecurity
@@ -350,6 +456,38 @@ common:
     name: Vibes Platform Integrations
     type: Integrations
     description: Integration partners and connectors for the Vibes platform.
+  - url: https://developer-platform.vibes.com/reference/our-apis
+    name: Vibes Platform API Reference
+    type: APIReference
+    description: Reference index for every Vibes Platform API.
+  - url: https://developer-platform.vibes.com/docs/terminology
+    name: Terminology
+    type: GettingStarted
+    description: Entry point for the Vibes Platform documentation — terminology and core concepts.
+  - url: https://developer-aggregation.vibes.com/docs/support
+    name: Vibes Connect Support
+    type: Support
+    description: Support page for the Vibes Connect aggregation APIs.
+  - url: https://www.vibes.com/resources/blog
+    name: Vibes Blog
+    type: Blog
+    description: Vibes company and product blog.
+  - url: https://www.vibes.com/pricing
+    name: Vibes Pricing
+    type: Pricing
+    description: Published packaging for RCS Studio, Platform Professional, Platform Enterprise and Vibes Connect.
+  - url: https://status.vibes.com
+    name: Vibes Status
+    type: StatusPage
+    description: Atlassian Statuspage covering North America / EU platform, SMS HTTP and SMPP, MMS, Push and 10DLC.
+  - url: https://www.vibes.com/company/privacy-policy
+    name: Vibes Privacy Policy
+    type: PrivacyPolicy
+    description: Company privacy policy.
+  - url: https://github.com/vibes
+    name: Vibes on GitHub
+    type: GitHubOrganization
+    description: Public GitHub organization; hosts the four first-party mobile push SDKs and their sample apps.
 features:
   - Broadcast SMS and MMS messaging
   - Push notification delivery
@@ -370,6 +508,21 @@ integrations:
   - Oracle Eloqua
   - Marketo
 artifacts:
+  - url: openapi/vibes-platform-api-openapi.json
+    type: OpenAPI
+    name: Vibes Platform API OpenAPI (provider-published, 48 paths / 75 operations)
+  - url: openapi/vibes-platform-rcs-business-messaging-openapi.json
+    type: OpenAPI
+    name: Vibes RCS Business Messaging API OpenAPI (provider-published)
+  - url: openapi/vibes-platform-rbm-authentication-openapi.json
+    type: OpenAPI
+    name: Vibes RBM API Authentication OpenAPI (provider-published)
+  - url: llms/vibes-platform-llms.txt
+    type: LLMsTxt
+    name: Vibes Platform llms.txt (verbatim)
+  - url: llms/vibes-platform-connect-llms.txt
+    type: LLMsTxt
+    name: Vibes Connect llms.txt (verbatim)
   - url: openapi/vibes-platform-openapi.yml
     type: OpenAPI
     name: Vibes Platform OpenAPI
@@ -407,3 +560,8 @@ maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
 specificationVersion: '0.19'
+x-enrichment:
+  date: '2026-08-13'
+  status: enriched
+  artifacts_added: 24
+  pass: local-v1
