@@ -1,0 +1,50 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Vibes Connect HTTP Message Acquisition Campaigns Persons API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Persons",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Person",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/mobiledb/persons/:person_key",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "person_key",
+                "value": "",
+                "type": "path",
+                "description": "The internal Vibes person key for the subscriber."
+              }
+            ]
+          },
+          "docs": "Retrieve a subscriber (person) from the mobile contact book by their internal key."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

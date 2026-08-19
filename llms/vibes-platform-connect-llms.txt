@@ -1,0 +1,43 @@
+# Vibes Connect Documentation
+
+> Documentation for Vibes Connect
+
+## Guides
+- [U.S. Compliance Requirements ](https://developer-aggregation.vibes.com/docs/copy-of-us-prohibited-content-categories.md): The CTIA and U.S. carriers have compliance requirements that must be met in order to launch a code or Agent on their network.
+- [U.S. Provisioning Forms](https://developer-aggregation.vibes.com/docs/us-shortcode-provisioning-forms.md): The following forms can be used to submit your provisioning requests to Vibes.
+- [Vibes Connect Compliance Policy](https://developer-aggregation.vibes.com/docs/vibes-compliance-policy.md): This policy applies to all SMS & RCS programs.
+- [Support](https://developer-aggregation.vibes.com/docs/support.md)
+
+## API Reference
+- [Authentication](https://developer-aggregation.vibes.com/reference/authentication.md)
+- [Version Features](https://developer-aggregation.vibes.com/reference/version-31-features.md)
+- [Send SMS](https://developer-aggregation.vibes.com/reference/send-an-sms-message.md): POST https://messageapi.vibesapps.com/MessageApi/mt/messages
+- [Receive SMS](https://developer-aggregation.vibes.com/reference/receiving-messages.md)
+- [Retrieve Info from the API](https://developer-aggregation.vibes.com/reference/retrieve-info-from-the-api.md): GET https://messageapi.vibesapps.com/- /MessageApi/mt/messages/{messageId}
+- [Message Responses](https://developer-aggregation.vibes.com/reference/retrieve-message-responses.md): GET https://messageapi.vibesapps.com/MessageApi/mt/messages/{messageid}/responses
+- [Callbacks](https://developer-aggregation.vibes.com/reference/callbacks.md)
+- [HTTP Response Codes](https://developer-aggregation.vibes.com/reference/http-error-and-status-codes.md)
+- [Setup & Specs](https://developer-aggregation.vibes.com/reference/set-up-specs.md)
+- [Message & Encoding Settings](https://developer-aggregation.vibes.com/reference/encoding-message-settings.md)
+- [Optional Vibes TLVs](https://developer-aggregation.vibes.com/reference/optional-vibes-tlvs.md)
+- [SMPP Response Codes](https://developer-aggregation.vibes.com/reference/response-codes.md)
+- [Executable cURL Samples](https://developer-aggregation.vibes.com/reference/executable-curl-samples.md)
+- [Callbacks](https://developer-aggregation.vibes.com/reference/delivery-receipts-1.md)
+- [Overview](https://developer-aggregation.vibes.com/reference/rcs-api-overview.md)
+- [RCS for Business API](https://developer-aggregation.vibes.com/reference/rcs-for-business-api.md)
+- [Check for RCS capabilities](https://developer-aggregation.vibes.com/reference/get-mobile-device-capabilities.md): Get the Vibes RCS-related capabilities of a user device.
+- [Send an RCS message](https://developer-aggregation.vibes.com/reference/send-agent-message.md): Sends a message from an RBM agent to a mobile device. The message can contain text, rich card, and suggestions. The message can also be revoked between the time that it is sent and the time that it is delivered.<br><br><a href="https://developer-aggregation.vibes.com/reference/rcs-for-business-api#message-payload-examples" target="_blank">See some example RCS message payloads here.</a>
+- [Send an RCS event](https://developer-aggregation.vibes.com/reference/send-agent-event.md): Sends an event from a Vibes customer RBM agent to a user. <br><br> Agent events include read receipts or "typing" notifications. If Vibes RBM can't reach the user, the Vibes RBM platform returns `404 NOT_FOUND`. Unlike agent messages, agent events cannot be revoked after sending.
+- [Revoke an RCS message](https://developer-aggregation.vibes.com/reference/revoke-agent-message.md): Revoke a message that has been sent to a mobile device, if the message has not already been delivered.
+- [Invite an agent tester](https://developer-aggregation.vibes.com/reference/invite-agent-tester.md): Invite a mobile device to become a tester of an agent. The device must have RCS capabilities to become a tester. When a phone number is a registered tester, they are able to receive RCS messages from an agent, even if that agent is not yet launched.
+- [Get the invite status of a tester device](https://developer-aggregation.vibes.com/reference/gettester.md)
+- [Delete a tester device](https://developer-aggregation.vibes.com/reference/deletetester.md)
+- [List the invite statuses of tester devices](https://developer-aggregation.vibes.com/reference/listtesters.md)
+- [Authentication](https://developer-aggregation.vibes.com/reference/authentication-1.md): Our API supports OAuth2 authentication using the Client Credentials flow, enabling secure, machine-to-machine communication. Follow this guide to configure and use OAuth2 for authenticating API requests.
+- [Request access token](https://developer-aggregation.vibes.com/reference/post_oauth2-token.md): Get an OAuth 2.0 access token for authenticated API calls <br><br> The API will respond with a JSON object containing the access token and other relevant information. <br/><br/> To make an authenticated API call, include the access token in the authorization header of your API request: <br/><br/> Example: `Authorization: Bearer [access_token]`
+- [Webhooks](https://developer-aggregation.vibes.com/reference/webhooks.md)
+- [Carrier Disconnect Files](https://developer-aggregation.vibes.com/reference/carrier-disconnect-files.md)
+- [Carrier Codes](https://developer-aggregation.vibes.com/reference/carrier-codes.md)
+- [Delivery Receipt Response Codes](https://developer-aggregation.vibes.com/reference/delivery-receipt-response-codes.md)
+- [10DLC Carrier Matrix](https://developer-aggregation.vibes.com/reference/10dlc-carrier-matrix.md)
+- [Toll-Free Carrier Matrix](https://developer-aggregation.vibes.com/reference/toll-free-carrier-matrix.md)

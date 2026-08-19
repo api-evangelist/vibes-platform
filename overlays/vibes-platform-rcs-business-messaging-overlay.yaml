@@ -1,0 +1,43 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements — Vibes RCS Business Messaging API
+  version: 1.0.0
+  description: >-
+    Non-destructive enhancements on top of the OpenAPI Vibes publishes for its RCS Business
+    Messaging API at developer-aggregation.vibes.com. Two real defects in the published document are
+    corrected here without touching anything else: five of the eight operations carry operationIds
+    containing SPACES ("Get Mobile Device Capabilities", "Send Agent Message", "Send Agent Event",
+    "Revoke Agent Message", "Invite Agent Tester"), which is invalid for code generation and for
+    tool naming — the remaining three (getTester, deleteTester, listTesters) already use camelCase,
+    so the document is internally inconsistent as well. info.version also reads 0.0.0. Generated
+    2026-08-13 by the API Evangelist enrichment pipeline.
+extends: openapi/vibes-platform-rcs-business-messaging-openapi.json
+actions:
+  - target: $.paths['/{connect_customer_key}/capabilities/{msisdn}'].get
+    description: Replace the space-separated operationId with a camelCase identifier.
+    update:
+      operationId: getMobileDeviceCapabilities
+  - target: $.paths['/{connect_customer_key}/agentMessages/{msisdn}'].post
+    description: Replace the space-separated operationId with a camelCase identifier.
+    update:
+      operationId: sendAgentMessage
+  - target: $.paths['/{connect_customer_key}/agentEvents/{msisdn}'].post
+    description: Replace the space-separated operationId with a camelCase identifier.
+    update:
+      operationId: sendAgentEvent
+  - target: $.paths['/{connect_customer_key}/agentMessages/{msisdn}/{messageId}'].delete
+    description: Replace the space-separated operationId with a camelCase identifier.
+    update:
+      operationId: revokeAgentMessage
+  - target: $.paths['/{connect_customer_key}/testers/{msisdn}'].post
+    description: Replace the space-separated operationId with a camelCase identifier.
+    update:
+      operationId: inviteAgentTester
+  - target: $.info
+    description: >-
+      Record that the published document carries info.version 0.0.0 while the surface is in
+      production; annotated rather than renumbered, since only Vibes can assign a real version.
+    update:
+      x-api-evangelist-note: >-
+        Published as version 0.0.0 by the provider. The API is live and documented as
+        "RCS for Business"; the version string in the contract does not reflect that.

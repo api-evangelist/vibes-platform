@@ -1,0 +1,48 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Vibes Connect HTTP Message Acquisition Campaigns Events API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Events",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/events",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit an event that triggers SMS messages and push notifications. Events are used to create event-triggered messages based on customer actions or data changes."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

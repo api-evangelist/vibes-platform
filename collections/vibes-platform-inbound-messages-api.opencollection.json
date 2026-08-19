@@ -1,0 +1,40 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Vibes Connect HTTP Message Acquisition Campaigns Inbound Messages API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Inbound Messages",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Register SMS Callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://messageapi.vibesapps.com/api/v1/callbacks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set up a callback URL to receive inbound SMS messages and delivery receipts."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

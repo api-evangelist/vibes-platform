@@ -1,0 +1,110 @@
+generated: '2026-08-13'
+method: derived
+source: >-
+  openapi/vibes-platform-api-openapi.json (48 paths / 75 operations),
+  enriched from https://developer-platform.vibes.com/reference/technical-details
+provider: Vibes Platform
+providerId: vibes-platform
+format: vendor
+rfc9457: false
+media_type: application/json
+envelope: |
+  {"errors": [
+      {"message": "The MDN field is required", "code": 1},
+      {"message": "The zip code must be numeric", "code": 2}
+    ]
+  }
+envelope_note: >-
+  Vibes does NOT use RFC 9457 application/problem+json. Every 4XX returns application/json with a
+  top-level `errors` ARRAY, so a client must iterate rather than read a single problem object. Each
+  element carries a human `message` and a numeric `code`. Vibes publishes the envelope shape but
+  does NOT publish a code->meaning table anywhere in the developer portal, so the numeric codes
+  cannot be programmatically interpreted from public documentation — only the HTTP status and the
+  English message are actionable.
+status_summary:
+  '400': 3
+  '403': 2
+  '404': 46
+  '409': 4
+  '422': 10
+problem_types:
+  - status: 400
+    title: Invalid mobile number format
+    detail: >-
+      The supplied MDN / mobile number is not in proper mobile number format. On the person-lookup
+      query Vibes adds: "If you are using E.164 format, be sure to include %2B in place of +."
+    remediation: >-
+      URL-encode the leading plus as %2B in query strings. Confirm which API version you are on:
+      X-API-Version 1 rejects E.164 numbers outright, X-API-Version 2 requires them.
+    operations: 3
+  - status: 403
+    title: Broadcast not in a cancellable or editable state
+    detail: >-
+      The status of the broadcast is not `scheduled`; returned when a broadcast cannot be cancelled
+      because it has already been sent.
+    remediation: Read the broadcast first and branch on status; a sent broadcast is terminal.
+    operations: 2
+  - status: 404
+    title: Resource not found
+    detail: >-
+      The dominant error across the API (46 of 75 operations). Vibes names the specific missing
+      identifier per operation — broadcast_id, subscription_list_id, wallet_id, callback_id,
+      event_triggered_message_id, incentive_code, acquisition campaign, person, Google/Apple Wallet
+      template, location selector.
+    remediation: >-
+      Treat 404 as "unknown identifier OR wrong company_key" — company_key is a path segment on 73
+      of 75 operations, so a mismatched account presents identically to a deleted record.
+    operations: 46
+  - status: 409
+    title: Conflict
+    detail: >-
+      Three distinct real conditions share this status: (1) already subscribed — the person tried to
+      subscribe more than once to the same list; (2) attempting to UPDATE an MDN on an existing
+      person record, which Vibes does not allow (an MDN can be removed but not changed); (3)
+      creating a person record with an MDN already associated with another record.
+    remediation: >-
+      Do not treat 409 as retryable. For subscriptions it is idempotent-success in disguise; for
+      MDN changes it is a modelling constraint — remove and re-add rather than update.
+    operations: 4
+  - status: 422
+    title: Unprocessable entity
+    detail: >-
+      Syntactically valid but semantically rejected. Named sub-cases include
+      `MDNHASCONFIRMATIONBLOCK` (the MDN previously replied in a way that blocks confirmation),
+      "no codes are available from the code pool specified", an invalid issuee_id /
+      external_issuee_id, and "the status code of the entity does not allow updates" (for example a
+      cancelled campaign).
+    remediation: >-
+      Read the response body — Vibes states the reason is in the body. `MDNHASCONFIRMATIONBLOCK` and
+      pool exhaustion are business states, not client bugs, and must be surfaced to an operator
+      rather than retried.
+    operations: 10
+  - status: 429
+    title: Too Many Requests
+    detail: >-
+      Returned when the per-second throttle is exceeded (300/s for inbound events, 100/s for all
+      other calls per company_key, 100/s per app_id, 20/s for Google Wallet updates).
+    remediation: >-
+      Back off and retry. No Retry-After or rate-limit headers are published, so the client must
+      choose its own backoff — see rate-limits/vibes-platform-rate-limits.yml.
+    operations: 0
+    note: >-
+      Documented on the Technical Details page but NOT declared as a response on any of the 75
+      operations in the published OpenAPI. A code generator reading only the spec will not handle it.
+named_error_codes:
+  - code: countrynotsupported
+    context: >-
+      Returned by X-API-Version 1 when querying a person by an MDN that is not in E.164 format
+      (for example 2135551234 instead of +12135551234).
+    source: https://developer-platform.vibes.com/reference/versions-compatibility
+  - code: MDNHASCONFIRMATIONBLOCK
+    context: 422 on acquisition participant add — the MDN previously replied in a way that blocks confirmation.
+    source: openapi/vibes-platform-api-openapi.json
+gaps:
+  - >-
+    No numeric error-code reference is published. The envelope promises a `code` on every error and
+    the docs give two examples (1, 2) with no table behind them.
+  - >-
+    5XX responses are not declared on any operation in the published spec.
+  - >-
+    429 is documented in prose but absent from the machine-readable contract.

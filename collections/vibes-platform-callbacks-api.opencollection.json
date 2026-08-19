@@ -1,0 +1,67 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Vibes Connect HTTP Message Acquisition Campaigns Callbacks API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Callbacks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Callbacks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/callbacks",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              }
+            ]
+          },
+          "docs": "Retrieve all registered callback endpoints for the company."
+        },
+        {
+          "info": {
+            "name": "Register Callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/callbacks",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Register a new callback endpoint for opt-in or delivery status notifications."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

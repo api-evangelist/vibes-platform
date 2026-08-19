@@ -1,0 +1,54 @@
+generated: '2026-08-13'
+method: generated
+source: openapi/vibes-platform-api-openapi.json + developer-platform.vibes.com reference pages
+provider: Vibes Platform
+providerId: vibes-platform
+description: >-
+  Packaged Agent Skills for the Vibes Platform API, one per marquee flow. Every step names a real
+  path and method taken from the OpenAPI Vibes publishes; because that spec declares NO operationId
+  on any of its 75 operations, operations are addressed as METHOD + path throughout rather than by
+  an id we would have had to invent.
+skill_count: 4
+skills:
+  - name: vibes-platform-send-broadcast
+    file: skills/vibes-platform-send-broadcast.md
+    summary: Schedule, inspect, amend or cancel an SMS/MMS/push broadcast to a subscription list.
+    consequence: physical
+    human_in_the_loop: required
+    operations: 7
+  - name: vibes-platform-manage-subscriber
+    file: skills/vibes-platform-manage-subscriber.md
+    summary: >-
+      Look up, create, update and unsubscribe a person in the Vibes MobileDB by person_key,
+      external_person_id or MDN.
+    consequence: write
+    human_in_the_loop: recommended
+    operations: 10
+  - name: vibes-platform-register-callbacks
+    file: skills/vibes-platform-register-callbacks.md
+    summary: Register, test, inspect and cancel Vibes callbacks (webhooks) and handle their retry contract.
+    consequence: write
+    human_in_the_loop: optional
+    operations: 6
+  - name: vibes-platform-wallet-campaign
+    file: skills/vibes-platform-wallet-campaign.md
+    summary: >-
+      Stand up a mobile wallet campaign end to end — campaign, Apple and Google pass templates,
+      idempotent bulk store locations, Add-to-Wallet landing page, and holder messaging.
+    consequence: physical
+    human_in_the_loop: required
+    operations: 15
+shared_rules:
+  - Always send X-API-Version:2 — version 1 is the DEFAULT and cannot handle E.164 numbers.
+  - Errors are {"errors":[{"message","code"}]}, an array, not RFC 9457.
+  - 429 carries no Retry-After and no rate-limit headers; choose your own backoff.
+  - Only one operation in the API accepts Idempotency-Key (bulk wallet store locations) — every other write is unsafe to blind-retry.
+  - company_key is a path segment on 73 of 75 operations, so a 404 can mean "wrong tenant" as easily as "not found".
+  - US and EU are separate hosts with separate credentials; there is no failover between them.
+provider_published_skills:
+  searched: true
+  found: false
+  note: >-
+    No provider-published AGENTS.md, skills/ directory or agent instruction file was found on either
+    developer portal. Vibes DOES publish llms.txt on both portals plus a .md twin of every
+    documentation page — real agent-facing surface, captured in llms/.

@@ -1,9 +1,22 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/vibes-connect-openapi.yml, openapi/vibes-platform-openapi.yml
+generated: '2026-08-13'
+method: searched
+docs: https://developer-platform.vibes.com/reference/technical-details
+docs_additional:
+  - https://developer-platform.vibes.com/docs/client-certificate-authentication-for-vibes-apis
+  - https://developer-aggregation.vibes.com/reference/authentication-1
+source: openapi/vibes-platform-acquisition-campaigns-api-openapi.yml, openapi/vibes-platform-api-openapi.json,
+  openapi/vibes-platform-broadcasts-api-openapi.yml, openapi/vibes-platform-callbacks-api-openapi.yml,
+  openapi/vibes-platform-carrier-lookup-api-openapi.yml, openapi/vibes-platform-events-api-openapi.yml,
+  openapi/vibes-platform-inbound-messages-api-openapi.yml, openapi/vibes-platform-messages-api-openapi.yml,
+  openapi/vibes-platform-persons-api-openapi.yml, openapi/vibes-platform-rbm-authentication-openapi.json,
+  openapi/vibes-platform-rcs-business-messaging-openapi.json, openapi/vibes-platform-subscription-lists-api-openapi.yml
+  ...
 summary:
   types:
   - http
+  - oauth2
+  oauth2_flows:
+  - clientCredentials
 schemes:
 - name: basicAuth
   type: http
@@ -12,5 +25,51 @@ schemes:
     string, encode it using Base64, and add the Authorization HTTP header set to "Basic " plus
     the encoded string.
   sources:
-  - openapi/vibes-connect-openapi.yml
-  - openapi/vibes-platform-openapi.yml
+  - openapi/vibes-platform-acquisition-campaigns-api-openapi.yml
+  - openapi/vibes-platform-api-openapi.json
+  - openapi/vibes-platform-broadcasts-api-openapi.yml
+  - openapi/vibes-platform-callbacks-api-openapi.yml
+  - openapi/vibes-platform-carrier-lookup-api-openapi.yml
+  - openapi/vibes-platform-events-api-openapi.yml
+  - openapi/vibes-platform-inbound-messages-api-openapi.yml
+  - openapi/vibes-platform-messages-api-openapi.yml
+  - openapi/vibes-platform-persons-api-openapi.yml
+  - openapi/vibes-platform-rbm-authentication-openapi.json
+  - openapi/vibes-platform-subscription-lists-api-openapi.yml
+  - openapi/vibes-platform-wallet-passes-api-openapi.yml
+- name: OAuth2Auth
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://vibes-rbm-prd.auth.us-west-2.amazoncognito.com/oauth2/token
+    scopes: 1
+  sources:
+  - openapi/vibes-platform-rcs-business-messaging-openapi.json
+docs_findings:
+  - scheme: basicAuth
+    published: true
+    detail: >-
+      Vibes' Technical Details page documents Basic auth construction step by step and warns that
+      usernames must DIFFER between the EU and US instances — credentials are not portable across
+      regions, which the OpenAPI does not say.
+    source: https://developer-platform.vibes.com/reference/technical-details
+  - scheme: clientCertificate
+    type: mutualTLS
+    published: true
+    in_spec: false
+    detail: >-
+      Vibes documents client certificate authentication as an optional additional layer on top of
+      Basic for API calls. It appears in NO securityScheme in any published spec, so a
+      spec-only reader would never learn it exists.
+    source: https://developer-platform.vibes.com/docs/client-certificate-authentication-for-vibes-apis
+  - scheme: OAuth2Auth
+    published: true
+    detail: >-
+      OAuth 2.0 client credentials, documented for the RCS Business Messaging API only. Token is
+      issued by a Vibes-operated AWS Cognito user pool and presented as
+      `Authorization: Bearer [access_token]`.
+    source: https://developer-aggregation.vibes.com/reference/authentication-1
+required_headers_note: >-
+  Authentication alone is not sufficient — X-API-Version must also be sent (see
+  conventions/vibes-platform-conventions.yml). Omitting it silently selects version 1, which cannot
+  handle E.164 phone numbers.

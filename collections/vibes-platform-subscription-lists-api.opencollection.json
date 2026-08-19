@@ -1,0 +1,131 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Vibes Connect HTTP Message Acquisition Campaigns Subscription Lists API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Subscription Lists",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Subscription Lists",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/mobiledb/subscription_lists",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              }
+            ]
+          },
+          "docs": "Retrieve all subscription lists for the company."
+        },
+        {
+          "info": {
+            "name": "Get Subscription List",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/mobiledb/subscription_lists/:subscription_list_id",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "subscription_list_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the subscription list."
+              }
+            ]
+          },
+          "docs": "Retrieve details for a specific subscription list."
+        },
+        {
+          "info": {
+            "name": "Unsubscribe Person",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/mobiledb/persons/:person_key/subscriptions/:subscription_list_id",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "person_key",
+                "value": "",
+                "type": "path",
+                "description": "The internal Vibes person key for the subscriber."
+              },
+              {
+                "name": "subscription_list_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the subscription list."
+              }
+            ]
+          },
+          "docs": "Remove a person from a subscription list by their internal person key."
+        },
+        {
+          "info": {
+            "name": "Unsubscribe Person by External ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/mobiledb/persons/external/:external_person_id/subscriptions/:subscription_list_id",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "external_person_id",
+                "value": "",
+                "type": "path",
+                "description": "The external person identifier for the subscriber."
+              },
+              {
+                "name": "subscription_list_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the subscription list."
+              }
+            ]
+          },
+          "docs": "Remove a person from a subscription list by their external person ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,143 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  openapi/vibes-platform-api-openapi.json, openapi/vibes-platform-rcs-business-messaging-openapi.json,
+  https://developer-platform.vibes.com/reference/technical-details,
+  https://developer-platform.vibes.com/reference/versions-compatibility,
+  https://trust.vibes.com/, https://developer-aggregation.vibes.com/docs/vibes-compliance-policy,
+  https://developer-aggregation.vibes.com/docs/copy-of-us-prohibited-content-categories
+provider: Vibes Platform
+providerId: vibes-platform
+description: >-
+  Which cross-cutting industry standards and conventions the Vibes API surface actually conforms to,
+  asserted only where there is published evidence. `conforms: false` here means "we looked and the
+  evidence is absent", not "not applicable".
+standards:
+  - id: openapi
+    conforms: true
+    version: 3.0.0
+    evidence: >-
+      Vibes publishes a real OpenAPI 3.0.0 document for the Platform API (48 paths, 75 operations,
+      85 component schemas), plus separate documents for the RCS Business Messaging API and its
+      Cognito token endpoint. Saved verbatim in openapi/.
+  - id: oauth2
+    conforms: true
+    profile: client_credentials
+    scope: Vibes RCS Business Messaging API only
+    evidence: >-
+      securitySchemes.OAuth2Auth declares the clientCredentials flow against
+      https://vibes-rbm-prd.auth.us-west-2.amazoncognito.com/oauth2/token with scope
+      https://rbm.vibes.com/rbm.agents. The Platform API itself does NOT use OAuth.
+  - id: oidc
+    conforms: false
+    evidence: >-
+      No openIdConnect security scheme in any spec and no /.well-known/openid-configuration on any
+      of the eight hosts probed (all 404). Vibes does document SSO for the platform UI, but that is
+      operator login, not API auth.
+  - id: rfc9457
+    conforms: false
+    evidence: >-
+      Errors are a vendor envelope — application/json with a top-level `errors` array of
+      {message, code} — not application/problem+json. See errors/vibes-platform-problem-types.yml.
+  - id: rfc8594
+    conforms: false
+    evidence: No Deprecation or Sunset response headers are published, and no operation is marked deprecated.
+  - id: idempotency
+    conforms: partial
+    evidence: >-
+      Idempotency-Key is REQUIRED on POST /companies/{company_key}/campaigns/wallet/{token}/locations/bulk
+      with published replay semantics, and declared on no other operation. Real, but 1 of 75.
+  - id: pagination
+    conforms: partial
+    evidence: >-
+      page / page_size query parameters on the wallet store-locations collection only. Every other
+      collection endpoint publishes no paging contract.
+  - id: rate-limiting
+    conforms: partial
+    evidence: >-
+      Limits and the 429 status are published in prose; no RateLimit-* / X-RateLimit-* / Retry-After
+      headers are documented or declared in the spec, and 429 is not declared as a response on any
+      operation.
+  - id: mutual-tls
+    conforms: true
+    evidence: >-
+      Vibes documents client certificate authentication as an optional additional layer for API
+      calls.
+    docs: https://developer-platform.vibes.com/docs/client-certificate-authentication-for-vibes-apis
+  - id: e164
+    conforms: true
+    evidence: >-
+      X-API-Version 2 accepts and returns phone numbers in E.164 across the Acquisition Campaign,
+      Person, Subscription List and Event APIs. Version 1 explicitly does not.
+    docs: https://developer-platform.vibes.com/reference/versions-compatibility
+  - id: json-api
+    conforms: false
+    evidence: Plain JSON; no JSON:API document structure, type/attributes envelope or content type.
+  - id: odata
+    conforms: false
+    evidence: No OData query surface.
+  - id: scim
+    conforms: false
+    evidence: >-
+      Person and subscription management is a proprietary model (person_key / external_person_id /
+      MDN), not SCIM.
+  - id: fhir
+    conforms: false
+    evidence: Not a healthcare API.
+  - id: fapi
+    conforms: false
+    evidence: Not a financial-grade API.
+  - id: psd2
+    conforms: false
+    evidence: Not a payments API.
+  - id: asyncapi
+    conforms: false
+    evidence: >-
+      No AsyncAPI document, despite a substantial documented webhook surface (20 callback event
+      types). See asyncapi/vibes-platform-webhooks.yml.
+  - id: mcp
+    conforms: false
+    evidence: No MCP server published; no /.well-known/mcp.json on any host (all 404 or SPA/SOAP catch-all).
+  - id: a2a
+    conforms: false
+    evidence: >-
+      No agent card at /.well-known/agent-card.json or the legacy /.well-known/agent.json on any of
+      the eight hosts probed.
+  - id: llms-txt
+    conforms: true
+    evidence: >-
+      Both developer portals serve a real llms.txt (developer-platform.vibes.com, 19,497 bytes;
+      developer-aggregation.vibes.com, 5,753 bytes) and every documentation page has a .md twin.
+      This is the strongest agent-readiness signal on the estate.
+
+compliance:
+  published: true
+  trust_center: https://trust.vibes.com/
+  certifications:
+    - name: SOC 2
+      evidence: Named on trust.vibes.com.
+    - name: GDPR
+      evidence: Named on trust.vibes.com.
+  regulatory_programs:
+    - name: TCPA
+      evidence: >-
+        Vibes ties message-redaction guidance directly to TCPA provability and advises against
+        redaction where TCPA compliance may need to be demonstrated later.
+      source: https://developer-platform.vibes.com/reference/technical-details
+    - name: CTIA / US carrier compliance
+      evidence: >-
+        "The CTIA and U.S. carriers have compliance requirements that must be met in order to launch
+        a code or Agent on their network."
+      source: https://developer-aggregation.vibes.com/docs/copy-of-us-prohibited-content-categories
+    - name: Vibes Connect Compliance Policy
+      evidence: A published policy applying to all SMS and RCS programs.
+      source: https://developer-aggregation.vibes.com/docs/vibes-compliance-policy
+    - name: 10DLC
+      evidence: >-
+        Published 10DLC and toll-free carrier matrices; 10DLC is a tracked component on the status
+        page.
+      source: https://developer-aggregation.vibes.com/reference/10dlc-carrier-matrix
+    - name: Consumer Privacy Act (CCPA/CPRA) requests
+      evidence: >-
+        Documented CPA request handling and API-driven CPR nullification of MobileDB records.
+      source: https://developer-platform.vibes.com/docs/cpa-requests

@@ -1,0 +1,128 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://developer-platform.vibes.com/docs/change-log-2 (iOS),
+  https://developer-platform.vibes.com/docs/change-logs (Android),
+  https://developer-platform.vibes.com/docs/change-log-1 (React Native),
+  https://developer-platform.vibes.com/docs/change-log (Expo)
+provider: Vibes Platform
+providerId: vibes-platform
+scope: sdk
+api_changelog: false
+description: >-
+  IMPORTANT SCOPE NOTE — Vibes publishes NO changelog for the REST API. Everything below is an SDK
+  changelog. Four separate "Change log" pages exist in the developer portal, one per mobile push
+  SDK, all titled identically and distinguishable only by URL suffix. Only the Expo changelog
+  carries dates; the iOS, Android and React Native ones are version-ordered with no dates at all,
+  so "recent" can only be established for Expo.
+scheme: semver
+changelogs:
+  - name: Expo SDK (vibes-react-native-expo)
+    url: https://developer-platform.vibes.com/docs/change-log
+    dated: true
+    page_updated: '2026-03-30'
+    current_version: 0.4.0
+    registry_version: 0.4.3
+    registry_published: '2026-07-02'
+    registry_note: >-
+      npm is AHEAD of the published changelog — 0.4.3 shipped 2026-07-02 but the changelog page
+      stops at 0.4.0 (2026-02-23) and was last updated 2026-03-30.
+    entries:
+      - version: 0.4.0
+        date: '2026-02-23'
+        breaking: false
+        highlights: Upgraded Expo to 52.0.49.
+      - version: 0.3.26
+        date: '2026-02-17'
+        breaking: false
+        highlights: Added prebuild logs for Android.
+      - version: 0.3.24
+        date: '2026-01-28'
+        breaking: false
+        highlights: Fix for missing credentials error on Android.
+      - version: 0.3.22
+        date: '2025-12-19'
+        breaking: false
+        highlights: Added notification received and opened events for deep linking.
+      - version: 0.3.21
+        date: '2025-12-12'
+        breaking: false
+        highlights: Added inboxCustomData to fetchInboxMessage / fetchInboxMessages results.
+      - version: 0.3.20
+        date: '2025-12-10'
+        breaking: false
+        highlights: Added mainImage and iconImage to inbox message results.
+      - version: 0.3.18
+        date: '2025-11-24'
+        breaking: false
+        highlights: Fixed Android EAS build .aar error; updated the Android SDK AAR.
+      - version: 0.3.17
+        date: '2025-09-22'
+        breaking: false
+        highlights: iOS plugin resilience against AppDelegate conflicts from other plugins; extra push-token logging.
+      - version: 0.3.16
+        date: '2025-08-29'
+        breaking: false
+        highlights: Native iOS delegate optimisation, dependency and build-process cleanup.
+  - name: iOS Push SDK (VibesPush)
+    url: https://developer-platform.vibes.com/docs/change-log-2
+    dated: false
+    page_updated: '2026-06-15'
+    current_version: 4.9.0
+    entries:
+      - version: 4.9.0
+        date: null
+        breaking: false
+        highlights: SDK updated to support Swift 6.
+      - version: 4.8.2
+        date: null
+        breaking: true
+        highlights: Minimum deployment target raised to iOS 13.
+      - version: 4.8.1
+        date: null
+        breaking: false
+        highlights: SDK now tracks a new event when a push message is received on the device.
+      - version: 4.7.0
+        date: null
+        breaking: false
+        highlights: onInboxFetched event support.
+      - version: 4.6.0
+        date: null
+        breaking: false
+        highlights: Click, add, detail and purchase ecommerce tracking functions.
+    note: >-
+      CocoaPods confirms 4.9.0 published 2025-02-05, so the top of this changelog is roughly 18
+      months old even though the page itself was edited 2026-06-15.
+  - name: Android Push SDK (com.vibes.vibes:vibes)
+    url: https://developer-platform.vibes.com/docs/change-logs
+    dated: false
+    page_updated: null
+    current_version: 4.12.1
+    entries: []
+    note: >-
+      Version-ordered with no dates. 4.12.1 is the version pinned in Vibes' own install doc and the
+      latest git tag on github.com/vibes/push-sdk-android (2025-06-02).
+  - name: React Native SDK (vibes-react-native)
+    url: https://developer-platform.vibes.com/docs/change-log-1
+    dated: false
+    page_updated: '2026-05-12'
+    current_version: 1.1.7
+    registry_version: 1.1.8
+    registry_published: '2026-07-02'
+    entries:
+      - version: 1.1.7
+        date: null
+        breaking: false
+        highlights: Support for React Native 0.77.3.
+      - version: 1.1.6
+        date: null
+        breaking: false
+        highlights: Support for React Native 0.74.5.
+      - version: 1.1.5
+        date: null
+        breaking: false
+        highlights: Support for Android API 34.
+gaps:
+  - No REST API changelog exists — API changes are not announced anywhere public.
+  - Three of the four SDK changelogs carry no dates, so decay cannot be read from the page itself.
+  - Two of the four are already behind their own npm releases.

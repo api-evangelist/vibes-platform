@@ -1,0 +1,132 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://registry.npmjs.org/, https://trunk.cocoapods.org/api/v1/pods/VibesPush,
+  https://github.com/vibes, https://developer-platform.vibes.com/docs/installing-the-android-push-notifications-sdk,
+  https://developer-platform.vibes.com/docs/react-native, https://developer-platform.vibes.com/docs/expo,
+  https://developer-platform.vibes.com/docs/cordova-support
+provider: Vibes Platform
+providerId: vibes-platform
+description: >-
+  First-party Vibes client SDKs. Every entry below was read from the registry metadata endpoint
+  or, for the GitHub Packages Maven artifact (which has no anonymous metadata endpoint), from the
+  version pinned in Vibes' own installation docs cross-checked against the git tag on
+  github.com/vibes/push-sdk-android. Vibes ships MOBILE PUSH SDKs only — there is no first-party
+  server-side SDK for the Vibes Platform REST API in any registry (npm, PyPI, RubyGems, Packagist,
+  crates.io, NuGet, Maven Central, pkg.go.dev were all checked and none carries a Vibes server client).
+package_count: 5
+official_count: 5
+packages:
+  - name: vibes-react-native
+    registry: npm
+    url: https://www.npmjs.com/package/vibes-react-native
+    language: JavaScript/TypeScript
+    official: true
+    version: 1.1.8
+    published: '2026-07-02'
+    repository: https://github.com/vibes/vibes-react-native
+    description: The React Native plugin for the Vibes Mobile SDKs.
+    docs: https://developer-platform.vibes.com/docs/react-native
+    covers: push-notifications
+    note: Wraps the native Android/iOS push SDKs; does not cover the Vibes Platform REST API.
+  - name: vibes-react-native-expo
+    registry: npm
+    url: https://www.npmjs.com/package/vibes-react-native-expo
+    language: JavaScript/TypeScript
+    official: true
+    version: 0.4.3
+    published: '2026-07-02'
+    repository: https://github.com/vibes/vibes-react-native-expo
+    description: Expo module for Vibes Android & iOS SDK integration.
+    docs: https://developer-platform.vibes.com/docs/expo
+    covers: push-notifications
+  - name: vibes-cordova
+    registry: npm
+    url: https://www.npmjs.com/package/vibes-cordova
+    language: JavaScript
+    official: true
+    version: 1.3.0
+    published: '2022-12-20'
+    repository: https://github.com/vibes/vibes-cordova
+    description: The cordova plugin for the Vibes Mobile SDKs.
+    docs: https://developer-platform.vibes.com/docs/cordova-support
+    covers: push-notifications
+    note: >-
+      Last published 2022-12-20 and the source repo was last pushed 2022-11-30 — over three years
+      stale against a platform whose other SDKs shipped in 2026. Still linked as current from the
+      Cordova Support doc page.
+  - name: VibesPush
+    registry: cocoapods
+    url: https://cocoapods.org/pods/VibesPush
+    language: Swift/Objective-C
+    official: true
+    version: 4.9.0
+    published: '2025-02-05'
+    repository: https://github.com/vibes/push-sdk-ios
+    description: Vibes Push SDK for iOS.
+    docs: https://developer-platform.vibes.com/docs/integration-v4-objective-c
+    covers: push-notifications
+    note: >-
+      Version and date read from trunk.cocoapods.org/api/v1/pods/VibesPush (19 published versions).
+      Matches git tag 4.9.0 on github.com/vibes/push-sdk-ios (commit 2025-02-03).
+  - name: com.vibes.vibes:vibes
+    registry: github-packages-maven
+    url: https://maven.pkg.github.com/vibes/android-sdk-repository
+    language: Java/Kotlin
+    official: true
+    version: 4.12.1
+    published: '2025-06-02'
+    repository: https://github.com/vibes/push-sdk-android
+    description: Vibes Push SDK for Android.
+    docs: https://developer-platform.vibes.com/docs/installing-the-android-push-notifications-sdk
+    covers: push-notifications
+    note: >-
+      Not on Maven Central — distributed through a private-shaped GitHub Packages Maven repo
+      (maven.pkg.github.com/vibes/android-sdk-repository), which has no anonymous metadata endpoint,
+      so `version` is the coordinate pinned verbatim in Vibes' own install doc
+      ("implementation com.vibes.vibes:vibes:4.12.1") and `published` is the committer date of the
+      matching 4.12.1 tag on github.com/vibes/push-sdk-android. Consumers must authenticate to
+      GitHub Packages to resolve it.
+third_party:
+  - name: vibes
+    registry: rubygems
+    url: https://rubygems.org/gems/vibes
+    language: Ruby
+    official: false
+    version: 0.0.0
+    published: '2012-04-06'
+    author: Randy Burgess
+    description: >-
+      "A gem to utilize the Vibes Media APIs, such as Legacy, MessageAPI, and Catapult" —
+      a community client, not published by Vibes. Recorded here only so a reader who finds it
+      does not mistake it for a first-party SDK: it is at 0.0.0, last published 2012-04-06,
+      and predates every API surface documented today.
+absent_registries:
+  - registry: pypi
+    checked: '2026-08-13'
+    endpoint: https://pypi.org/pypi/vibes/json
+    result: >-
+      `vibes` exists but is unrelated (EnstaRobotics, "VIsualizer for Intervals and Boxes").
+      No first-party Vibes package.
+  - registry: maven-central
+    checked: '2026-08-13'
+    endpoint: 'https://search.maven.org/solrsearch/select?q=a:vibes'
+    result: >-
+      One match, be.unamur.info:vibes — unrelated. The Vibes Android SDK ships through
+      GitHub Packages instead of Maven Central.
+  - registry: nuget
+    checked: '2026-08-13'
+    endpoint: 'https://azuresearch-usnc.nuget.org/query?q=vibes+push'
+    result: zero results
+  - registry: packagist
+    checked: '2026-08-13'
+    endpoint: https://repo.packagist.org/p2/vibes/vibes.json
+    result: 404 — no vibes/* vendor namespace
+  - registry: crates.io
+    checked: '2026-08-13'
+    endpoint: 'https://crates.io/api/v1/crates?q=vibes'
+    result: no Vibes-published crate (matches are unrelated "vibe-*" projects)
+  - registry: pkg.go.dev
+    checked: '2026-08-13'
+    endpoint: https://proxy.golang.org/github.com/vibes/push-sdk-android/@v/list
+    result: empty version list — no Go module published

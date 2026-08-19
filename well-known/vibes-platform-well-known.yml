@@ -1,0 +1,192 @@
+generated: '2026-08-13'
+method: probed
+source: live GET of /.well-known/* on every apis.yml baseURL host, every OpenAPI servers[] host, and both docs hosts
+provider: Vibes Platform
+providerId: vibes-platform
+result: none
+summary: >-
+  No .well-known document is served anywhere on the Vibes estate. Eight hosts x five paths were
+  probed on 2026-08-13 and not one returned a real document. NO WellKnown or SecurityTxt pointer is
+  emitted in apis.yml as a result — this file records a verified absence, not a presence.
+  Two failure modes are worth flagging for whoever reads this next:
+  messageapi-mms.vibesapps.com answers HTTP 200 to EVERY path with the same 642-byte SOAP fault
+  envelope (a catch-all, not a document), and developer-rbm.vibes.com does not complete a TLS
+  connection at all.
+hosts_probed:
+  - www.vibes.com
+  - developer-platform.vibes.com
+  - developer-aggregation.vibes.com
+  - developer-rbm.vibes.com
+  - public-api.vibescm.com
+  - public-api.eu.vibes.com
+  - messageapi.vibesapps.com
+  - messageapi-mms.vibesapps.com
+probes:
+  - path: /.well-known/security.txt
+    host: www.vibes.com
+    status: 404
+    file: null
+    note: HTML body "Invalid .well-known request"
+  - path: /.well-known/openid-configuration
+    host: www.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    host: www.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    host: www.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    host: www.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/security.txt
+    host: developer-platform.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    host: developer-platform.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    host: developer-platform.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    host: developer-platform.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    host: developer-platform.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/security.txt
+    host: developer-aggregation.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    host: developer-aggregation.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    host: developer-aggregation.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    host: developer-aggregation.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    host: developer-aggregation.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/security.txt
+    host: developer-rbm.vibes.com
+    status: 0
+    file: null
+    note: TLS connection failed — host does not answer HTTPS
+  - path: /.well-known/security.txt
+    host: public-api.vibescm.com
+    status: 404
+    file: null
+    note: 'Rails JSON 404: ActionController::RoutingError'
+  - path: /.well-known/openid-configuration
+    host: public-api.vibescm.com
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    host: public-api.vibescm.com
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    host: public-api.vibescm.com
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    host: public-api.vibescm.com
+    status: 404
+    file: null
+  - path: /.well-known/security.txt
+    host: public-api.eu.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    host: public-api.eu.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    host: public-api.eu.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    host: public-api.eu.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    host: public-api.eu.vibes.com
+    status: 404
+    file: null
+  - path: /.well-known/security.txt
+    host: messageapi.vibesapps.com
+    status: 404
+    file: null
+    note: 'XML body: error code 1024 "Resource not found"'
+  - path: /.well-known/openid-configuration
+    host: messageapi.vibesapps.com
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    host: messageapi.vibesapps.com
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    host: messageapi.vibesapps.com
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    host: messageapi.vibesapps.com
+    status: 404
+    file: null
+  - path: /.well-known/security.txt
+    host: messageapi-mms.vibesapps.com
+    status: 200
+    file: null
+    document: false
+    note: >-
+      NOT A HIT. This host returns 200 with a 642-byte SOAP fault envelope for every path probed,
+      including /openapi.json and /llms.txt. A catch-all, not a served document.
+  - path: /.well-known/openid-configuration
+    host: messageapi-mms.vibesapps.com
+    status: 200
+    file: null
+    document: false
+    note: same SOAP catch-all
+  - path: /.well-known/oauth-authorization-server
+    host: messageapi-mms.vibesapps.com
+    status: 200
+    file: null
+    document: false
+    note: same SOAP catch-all
+  - path: /.well-known/api-catalog
+    host: messageapi-mms.vibesapps.com
+    status: 200
+    file: null
+    document: false
+    note: same SOAP catch-all
+  - path: /.well-known/ai-plugin.json
+    host: messageapi-mms.vibesapps.com
+    status: 200
+    file: null
+    document: false
+    note: same SOAP catch-all
+oauth_metadata:
+  note: >-
+    The Vibes RCS Business Messaging API does use OAuth 2.0 client-credentials, but its authorization
+    server is an AWS Cognito user pool
+    (https://vibes-rbm-prd.auth.us-west-2.amazoncognito.com/oauth2/token) rather than a Vibes host,
+    and no /.well-known/oauth-authorization-server document is advertised on any vibes.com host.
+    The token endpoint and scope are captured in scopes/vibes-platform-scopes.yml and
+    openapi/vibes-platform-rbm-authentication-openapi.json instead.

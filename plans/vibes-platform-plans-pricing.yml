@@ -3,161 +3,88 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
 provider: Vibes Platform
 providerId: vibes-platform
+generated: '2026-08-13'
+method: searched
+source: https://www.vibes.com/pricing
+docs: https://www.vibes.com/pricing
 created: '2026-05-04'
-modified: '2026-05-04'
+modified: '2026-08-13'
 tags:
   - Mobile Marketing
   - Mobile Messaging
-  - Push Notifications
   - SMS
   - MMS
-  - Broadcast Messaging
-  - Acquisition Campaigns
-  - Subscription Management
-  - Wallet Passes
   - RCS
-description: Machine-readable plans and pricing scaffold for this API provider. Conforms to the API Commons
-  Plans schema. Tier limits and prices are scaffold defaults; replace with provider-published values.
+  - Pricing
+description: >-
+  Vibes' published packaging, read from www.vibes.com/pricing on 2026-08-13. This replaces the
+  2026-05-04 scaffold that invented a free/pro/enterprise ladder Vibes does not sell. Vibes prices
+  the PLATFORM, not the API: there is no metered API price list, no per-call rate card, and no
+  free or trial tier. Only one of the four packages carries a self-serve number; the rest are quotes.
+plan_count: 4
+currency: USD
+free_tier: false
+trial: false
+self_serve: partial
+metered_api_pricing: false
 plans:
-  - id: vibes-platform-free
-    name: Free
-    type: freemium
-    description: Free entry tier for the Vibes Platform API surface. Intended for evaluation, prototyping,
-      and low-volume integrations. Real limits and pricing must be reconciled with the provider's published
-      plan documentation.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota across all included endpoints
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 1000
-        timeFrame: month
-        geo: global
-        domains:
-          - https://public-api.vibescm.com
-          - https://messageapi.vibesapps.com
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the free tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 10
-        timeFrame: minute
-        geo: global
-        domains:
-          - https://public-api.vibescm.com
-          - https://messageapi.vibesapps.com
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-    elements:
-      - name: Public Documentation
-      - name: Community Support
-      - name: Sandbox Access
-      - name: Vibes Platform API
-      - name: Vibes Connect API
-  - id: vibes-platform-pro
-    name: Professional
-    type: paid
-    description: Production tier for Vibes Platform. Provides higher quotas, priority support, and access
-      to the broader API portfolio. Pricing placeholder; align with the provider's pricing page.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 100000
-        timeFrame: month
-        geo: global
-        domains:
-          - https://public-api.vibescm.com
-          - https://messageapi.vibesapps.com
-        unit: 1
-        price: TBD
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the professional tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 100
-        timeFrame: minute
-        geo: global
-        domains:
-          - https://public-api.vibescm.com
-          - https://messageapi.vibesapps.com
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Overage
-        description: Per-request price after monthly quota is exceeded
-        name: overage
-        type: metered
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: global
-        domains:
-          - https://public-api.vibescm.com
-          - https://messageapi.vibesapps.com
-        unit: 1000
-        price: TBD
-        userMultiplied: false
-    elements:
-      - name: All Production Endpoints
-      - name: Email Support
-      - name: SLA Targets
-      - name: Webhook Subscriptions
-      - name: Vibes Platform API
-      - name: Vibes Connect API
-  - id: vibes-platform-enterprise
-    name: Enterprise
-    type: enterprise
-    description: Custom-negotiated tier for Vibes Platform. Includes dedicated capacity, contractual SLAs,
-      security review, data residency options, and named technical account management.
-    entries:
-      - label: API Requests
-        description: Negotiated request volume; -1 indicates uncapped subject to fair use
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: configurable
-        domains:
-          - https://public-api.vibescm.com
-          - https://messageapi.vibesapps.com
-        unit: 1
-        price: custom
-        userMultiplied: false
-      - label: Rate Limit
-        description: Negotiated burst and steady-state rate
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 1000
-        timeFrame: minute
-        geo: configurable
-        domains:
-          - https://public-api.vibescm.com
-          - https://messageapi.vibesapps.com
-        unit: 1
-        price: custom
-        userMultiplied: false
-    elements:
-      - name: Unlimited / Negotiated Volume
-      - name: 24/7 Dedicated Support
-      - name: Contractual SLA
-      - name: Security & Compliance Review
-      - name: Dedicated Account Manager
-      - name: Custom Data Residency
-      - name: Vibes Platform API
-      - name: Vibes Connect API
-maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+  - id: rcs-studio
+    name: RCS Studio
+    price: 149
+    price_qualifier: starting at
+    currency: USD
+    period: month
+    included: >-
+      RCS agent provisioning, carrier approvals, compliance handling, carrier delivery, and branded
+      interactive RCS flows.
+    quota: not published
+    overage: not published
+    limits: not published
+  - id: platform-professional
+    name: Platform Professional
+    price: 20000
+    price_qualifier: starting at
+    currency: USD
+    period: not stated on the page (presented alongside annual packaging)
+    included: >-
+      All channels (SMS, MMS, RCS, Wallet, Push), unlimited seats, dedicated success manager, 24/7
+      support, technical account manager access, four consulting engagements, a la carte integrations.
+    quota: unlimited seats; message volume not published
+    overage: >-
+      "$0 per-message fees beyond carrier charges" — Vibes charges no markup per message; carrier
+      pass-through applies.
+    limits: not published
+  - id: platform-enterprise
+    name: Platform Enterprise
+    price: null
+    price_qualifier: Get a Quote
+    currency: USD
+    period: null
+    included: >-
+      Included integrations to existing systems, all channels, unlimited seats, dedicated success
+      manager, 24/7 support, technical account manager, professional services package.
+    quota: not published
+    overage: $0 per-message fees beyond carrier charges
+    limits: not published
+  - id: vibes-connect
+    name: Vibes Connect (Tier 1 Aggregation)
+    price: null
+    price_qualifier: Get a Quote
+    currency: USD
+    period: month
+    billing: volume-based
+    included: >-
+      Direct carrier connections, geo-redundant delivery, low-code APIs, a unified hub for short
+      codes / toll-free / RCS / 10DLC, and a dedicated success manager.
+    quota: not published
+    overage: not published
+    limits: not published
+notes:
+  - >-
+    No plan on this page is tied to an API quota. The API rate limits Vibes enforces
+    (see rate-limits/vibes-platform-rate-limits.yml) are per company_key and per app_id and are the
+    same on every package — pricing and throttling are decoupled here.
+  - >-
+    There is no free tier and no trial. The apis.yml accessModel currently reads
+    "freemium / self-serve" with method: derived; the published pricing does not support that and it
+    was corrected to paid / sales-assisted in this pass.

@@ -1,0 +1,181 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://developer-platform.vibes.com/reference/callbacks,
+  https://developer-platform.vibes.com/reference/acquisition-campaign-callbacks,
+  https://developer-platform.vibes.com/reference/event-triggered-callbacks,
+  https://developer-platform.vibes.com/reference/person-callbacks,
+  https://developer-platform.vibes.com/reference/push-device-callbacks,
+  https://developer-platform.vibes.com/reference/subscription-callbacks,
+  https://developer-platform.vibes.com/reference/subscription-list-callbacks,
+  https://developer-platform.vibes.com/reference/unmatched-message-callbacks,
+  https://developer-platform.vibes.com/reference/wallet-callbacks
+provider: Vibes Platform
+providerId: vibes-platform
+asyncapi_published: false
+asyncapi_note: >-
+  Vibes publishes no AsyncAPI document. It DOES publish a complete, structured webhook surface —
+  Vibes calls them "callbacks" — with named event types, documented bodies, a registration API and
+  a retry contract. That is captured here as a webhook catalog rather than fabricated into an
+  AsyncAPI we would be authoring on the provider's behalf.
+transport: https
+direction: vibes-to-subscriber
+delivery: at-least-once
+name: Vibes Platform Callbacks
+docs: https://developer-platform.vibes.com/reference/callbacks
+
+registration:
+  style: api
+  api: Callback API
+  operations:
+    - POST /companies/{company_key}/config/callbacks/
+    - GET /companies/{company_key}/config/callbacks/
+    - GET /companies/{company_key}/config/callbacks/{callback_id}
+    - PUT /companies/{company_key}/config/callbacks/{callback_id}
+    - DELETE /companies/{company_key}/config/callbacks/{callback_id}
+    - POST /companies/{company_key}/config/callback_events/test
+  spec: openapi/vibes-platform-api-openapi.json
+  limits:
+    max_destination_urls: 50
+    registrations_per_type: 1 per callback type per company account
+    person_callbacks: >-
+      One registration per mobile database rather than per company, because person callbacks relate
+      to the whole mobile database.
+  fan_out: >-
+    The same callback can be sent to multiple destinations by registering it more than once with
+    different destination URLs.
+  test_trigger:
+    supported: true
+    operation: POST /companies/{company_key}/config/callback_events/test
+    note: Vibes ships a first-class endpoint for firing a test callback event at your endpoint.
+
+security:
+  signature: not published
+  note: >-
+    No webhook signature, shared secret or HMAC header is documented. The only published integrity
+    control is source-IP allowlisting.
+  source_ip_allowlist:
+    documented: true
+    us:
+      - 35.155.139.143
+      - 52.32.61.199
+      - 35.161.244.84
+      - 18.205.120.48
+      - 52.22.43.57
+      - 18.232.9.131
+    eu:
+      - 34.243.232.57
+      - 52.48.241.82
+      - 34.249.188.130
+      - 54.247.36.51
+      - 34.253.250.65
+      - 54.217.181.160
+
+retry_contract:
+  '2XX': Accepted and processed — no retry.
+  '4XX': >-
+    Permanent, event-specific failure. NOT retried; the event goes straight to a failure queue and
+    the customer is notified.
+  '3XX/5XX': >-
+    Transient. Retried on the configured retry scheme, then queued as a failure. Repeated failures
+    can put the destination URL into a "downed" state that suspends further delivery attempts for
+    short periods.
+  duplicates: >-
+    Vibes states an event may be delivered more than once in error scenarios or on timeout, and
+    that every receiving endpoint MUST tolerate this without conflict.
+  performance_guidance: >-
+    Keep callback handlers minimal and do heavy back-end work asynchronously; long-held callback
+    connections risk rate limiting and timeouts.
+
+envelope:
+  routing_metadata: HTTP headers
+  payload: HTTP body
+  note: >-
+    General callback metadata (type, routing information) travels in the HTTP HEADERS; the body
+    carries only the event-specific data.
+
+event_count: 20
+events:
+  - group: Acquisition Campaign
+    docs: https://developer-platform.vibes.com/reference/acquisition-campaign-callbacks
+    types:
+      - event_type: ack_participant_added
+        title: Acquisition Participant Added
+      - event_type: ack_participant_changed
+        title: Acquisition Participant Changed
+      - event_type: company_participant_added
+        title: Company Participant Added
+      - event_type: company_participant_changed
+        title: Company Participant Changed
+  - group: Event-Triggered
+    docs: https://developer-platform.vibes.com/reference/event-triggered-callbacks
+    types:
+      - event_type: event_processed
+        title: Event processed
+      - event_type: day_of_delivery
+        title: Day-of delivery
+      - event_type: order_shipped
+        title: Order shipped (example custom event)
+      - event_type: et127_no_incentive_codes
+        title: Event-triggered failure — no incentive codes available
+  - group: Person
+    docs: https://developer-platform.vibes.com/reference/person-callbacks
+    types:
+      - event_type: person_added
+        title: Person Added
+      - event_type: person_updated
+        title: Person Updated
+  - group: Push Device
+    docs: https://developer-platform.vibes.com/reference/push-device-callbacks
+    types:
+      - event_type: device_added
+        title: Device Added
+      - event_type: device_updated
+        title: Device Updated
+      - event_type: device_removed
+        title: Device Removed
+  - group: Subscription
+    docs: https://developer-platform.vibes.com/reference/subscription-callbacks
+    types:
+      - event_type: subscription_added
+        title: Subscription Added
+      - event_type: subscription_removed
+        title: Subscription Removed
+        note: Carries an `opt_out_reason` enumeration.
+  - group: Subscription List
+    docs: https://developer-platform.vibes.com/reference/subscription-list-callbacks
+    types:
+      - event_type: subscription_list_added
+        title: Subscription List Added
+      - event_type: subscription_list_updated
+        title: Subscription List Updated
+  - group: Unmatched Message
+    docs: https://developer-platform.vibes.com/reference/unmatched-message-callbacks
+    types:
+      - event_type: unmatched_message_received
+        title: Unmatched Message Received
+  - group: Wallet
+    docs: https://developer-platform.vibes.com/reference/wallet-callbacks
+    types:
+      - event_type: wallet_item_install
+        title: Wallet Item Added
+      - event_type: wallet_item_remove
+        title: Wallet Item Removed
+
+request_schemas_in_spec:
+  note: >-
+    The published OpenAPI models the callback REGISTRATION bodies per type
+    (callbackRequest-Ack, callbackRequest-Event, callbackRequest-Person, callbackRequest-Push,
+    callbackRequest-Sub, callbackRequest-SubList, callbackRequest-Unmatched, callbackRequest-Wallet,
+    plus the matching testcallbackRequest-* variants). It does NOT model the callback PAYLOADS Vibes
+    sends — those exist only as JSON examples on the documentation pages.
+
+other_event_surfaces:
+  - name: Vibes Connect delivery receipts
+    docs: https://developer-aggregation.vibes.com/reference/delivery-receipts-1
+    note: Carrier and handset delivery receipts on the Vibes Connect aggregation API.
+  - name: Vibes Connect webhooks
+    docs: https://developer-aggregation.vibes.com/reference/webhooks
+  - name: Carrier disconnect files
+    docs: https://developer-aggregation.vibes.com/reference/carrier-disconnect-files
+    note: File-based, not webhook-based.

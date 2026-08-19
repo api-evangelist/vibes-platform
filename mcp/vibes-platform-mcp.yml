@@ -1,0 +1,134 @@
+generated: '2026-08-13'
+method: derived
+status: candidate
+source: openapi/vibes-platform-api-openapi.json
+provider: Vibes Platform
+providerId: vibes-platform
+description: >-
+  Vibes publishes NO Model Context Protocol server. This file is a DERIVED CANDIDATE tool surface,
+  computed from the operations in Vibes' own published OpenAPI so the shape of an agent-facing
+  Vibes is legible — it is not something a client can connect to today.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: derived
+search_evidence:
+  - probe: GET /.well-known/mcp.json on www.vibes.com, developer-platform.vibes.com, developer-aggregation.vibes.com, public-api.vibescm.com, public-api.eu.vibes.com, messageapi.vibesapps.com
+    result: 404 on every host (messageapi-mms.vibesapps.com returns a 200 SOAP catch-all, not a document)
+    checked: '2026-08-13'
+  - probe: developer portal llms.txt (both hosts, fetched verbatim)
+    result: no MCP server, tool list, or agent endpoint mentioned in either index
+    checked: '2026-08-13'
+  - probe: github.com/vibes public repositories
+    result: >-
+      36 public repos, none MCP-related. The active ones are the four mobile push SDKs and their
+      sample apps.
+    checked: '2026-08-13'
+authentication_if_built:
+  scheme: HTTP Basic (per company account), optionally with client certificate
+  note: >-
+    A Vibes MCP server would inherit Basic auth and a mandatory company_key path segment on 73 of
+    75 operations, so tenancy would have to be bound at server configuration time rather than
+    passed per tool call.
+candidate_tools:
+  - name: list_broadcasts
+    rest: GET /companies/{company_key}/mobiledb/broadcasts
+    consequence: read
+  - name: get_broadcast
+    rest: GET /companies/{company_key}/mobiledb/broadcasts/{broadcast_id}
+    consequence: read
+  - name: create_broadcast
+    rest: POST /companies/{company_key}/mobiledb/broadcasts/
+    consequence: physical
+    note: Sends messages to real phones. Not a reversible write.
+  - name: update_broadcast
+    rest: PUT /companies/{company_key}/mobiledb/broadcasts/{broadcast_id}
+    consequence: write
+  - name: cancel_broadcast
+    rest: DELETE /companies/{company_key}/mobiledb/broadcasts/{broadcast_id}
+    consequence: write
+  - name: get_person
+    rest: GET /companies/{company_key}/mobiledb/persons/{person_key}
+    consequence: read
+  - name: find_person_by_mdn
+    rest: GET /companies/{company_key}/mobiledb/persons
+    consequence: read
+  - name: get_person_by_external_id
+    rest: GET /companies/{company_key}/mobiledb/persons/external/{external_person_id}
+    consequence: read
+  - name: add_person
+    rest: POST /companies/{company_key}/mobiledb/persons/
+    consequence: write
+  - name: update_person
+    rest: PUT /companies/{company_key}/mobiledb/persons/{person_key}
+    consequence: write
+  - name: list_subscription_lists
+    rest: GET /companies/{company_key}/mobiledb/subscription_lists/
+    consequence: read
+  - name: get_subscription_list
+    rest: GET /companies/{company_key}/mobiledb/subscription_lists/{subscription_list_id}
+    consequence: read
+  - name: search_subscribers
+    rest: GET /companies/{company_key}/mobiledb/subscription_lists/{subscription_list_id}/subscribers
+    consequence: read
+  - name: get_person_subscriptions
+    rest: GET /companies/{company_key}/mobiledb/persons/{person_key}/subscriptions
+    consequence: read
+  - name: unsubscribe_person
+    rest: DELETE /companies/{company_key}/mobiledb/persons/{person_key}/subscriptions/{subscription_list_id}
+    consequence: write
+  - name: list_acquisition_campaigns
+    rest: GET /companies/{company_key}/campaigns/acquisition
+    consequence: read
+  - name: add_acquisition_participant
+    rest: POST /companies/{company_key}/campaigns/acquisition/{acquisition_id}/participants
+    consequence: physical
+    note: Triggers an opt-in message to a real phone number.
+  - name: create_event
+    rest: POST /companies/{company_key}/events
+    consequence: physical
+    note: Can trigger an event-triggered send.
+  - name: list_event_triggered_campaigns
+    rest: GET /companies/{company_key}/mobiledb/event_triggered_messages
+    consequence: read
+  - name: issue_incentive_code
+    rest: POST /companies/{company_key}/incentives/pools/{issuance_pool_id}/issuances
+    consequence: write
+  - name: redeem_incentive_code
+    rest: POST /companies/{company_key}/incentives/codes/{incentive_code}/redemptions
+    consequence: write
+  - name: list_wallet_campaigns
+    rest: GET /companies/{company_key}/campaigns/wallet
+    consequence: read
+  - name: get_wallet_items
+    rest: GET /companies/{company_key}/campaigns/wallet/{wallet_id}/items
+    consequence: read
+  - name: create_wallet_message
+    rest: POST /companies/{company_key}/campaigns/wallet/{wallet_id}/messages
+    consequence: physical
+    note: Pushes to wallet pass holders.
+  - name: list_callbacks
+    rest: GET /companies/{company_key}/config/callbacks/
+    consequence: read
+  - name: register_callback
+    rest: POST /companies/{company_key}/config/callbacks/
+    consequence: write
+  - name: test_callback_event
+    rest: POST /companies/{company_key}/config/callback_events/test
+    consequence: write
+  - name: list_source_codes
+    rest: GET /companies/{company_key}/sourcecodes
+    consequence: read
+candidate_tool_count: 28
+total_operations: 75
+inputschema_note: >-
+  Tools are addressed by METHOD + path because the published Vibes OpenAPI declares NO operationId
+  on any of its 75 operations. Any real MCP server built from this spec would have to invent tool
+  names, which is exactly the coupling problem operationIds exist to prevent.
+agent_readiness_note: >-
+  Six of the candidate tools have PHYSICAL consequence — they put a message on a real handset and
+  cannot be undone. Only one operation in the whole API accepts an Idempotency-Key, and it is not
+  one of these six. Any agent deployment would need human-in-the-loop on send.

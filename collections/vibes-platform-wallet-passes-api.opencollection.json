@@ -1,0 +1,67 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Vibes Connect HTTP Message Acquisition Campaigns Wallet Passes API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Wallet Passes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Wallet Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/wallet_items",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              }
+            ]
+          },
+          "docs": "Retrieve all wallet passes (Apple Wallet and Google Pay) for the company."
+        },
+        {
+          "info": {
+            "name": "Create Wallet Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/wallet_items",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new mobile wallet pass for a subscriber."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

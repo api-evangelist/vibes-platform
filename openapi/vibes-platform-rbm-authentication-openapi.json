@@ -1,0 +1,138 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Vibes RBM API Authentication",
+    "description": "RCS Business Messaging API authentication",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://vibes-rbm-prd.auth.us-west-2.amazoncognito.com",
+      "description": "Production"
+    }
+  ],
+  "security": [
+    {
+      "basicAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authentication"
+    }
+  ],
+  "paths": {
+    "/oauth2/token": {
+      "post": {
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Request Access token",
+        "description": "Get an OAuth 2.0 access token for authenticated API calls <br><br> The API will respond with a JSON object containing the access token and other relevant information. <br/><br/> To make an authenticated API call, include the access token in the authorization header of your API request: <br/><br/> Example: `Authorization: Bearer [access_token]`",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Client Id or Client Secret.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Empty"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "grant_type": {
+                    "type": "string",
+                    "description": "OAuth 2.0 credential grant type. Must be \"client_credentials\"",
+                    "examples": [
+                      "client_credentials"
+                    ]
+                  },
+                  "client_id": {
+                    "type": "string",
+                    "description": "Alphanumeric string identifying your agent. To get your client_id, speak to your Vibes business rep.",
+                    "examples": [
+                      "1example2345678"
+                    ]
+                  },
+                  "client_secret": {
+                    "type": "string",
+                    "description": "Your application's client secret"
+                  },
+                  "scope": {
+                    "type": "string",
+                    "description": "The permissions required for this API. Must be \"https://rbm.vibes.com/rbm.agents\"",
+                    "examples": [
+                      "https://rbm.vibes.com/rbm.agents"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Empty": {
+        "type": "object",
+        "description": "Empty message.",
+        "id": "Empty",
+        "properties": {}
+      },
+      "TokenResponse": {
+        "type": "object",
+        "description": "Object containing an OAuth 2.0 access token and related data",
+        "id": "TokenResponse",
+        "properties": {
+          "access_token": {
+            "description": "The alphanumeric token to be used in the \"Bearer\" authorization header.",
+            "type": "string"
+          },
+          "expires_in": {
+            "description": "The time in seconds before token validity expires.",
+            "type": "integer"
+          },
+          "token_type": {
+            "description": "The type of token returned by the service. Defaults to \"Bearer\".",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Vibes Connect HTTP Message Acquisition Campaigns API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Acquisition Campaigns",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Acquisition Campaigns",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/campaigns/acquisition",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              }
+            ]
+          },
+          "docs": "Retrieve a list of acquisition campaigns for the company."
+        },
+        {
+          "info": {
+            "name": "Get Acquisition Campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/campaigns/acquisition/:campaign_id",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the acquisition campaign."
+              }
+            ]
+          },
+          "docs": "Retrieve metadata for a specific acquisition campaign."
+        },
+        {
+          "info": {
+            "name": "List Pending Participants",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/campaigns/acquisition/:campaign_id/participants",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the acquisition campaign."
+              }
+            ]
+          },
+          "docs": "Search for pending participants in an acquisition campaign."
+        },
+        {
+          "info": {
+            "name": "Add Participant",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/campaigns/acquisition/:campaign_id/participants",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the acquisition campaign."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a person to an acquisition campaign."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

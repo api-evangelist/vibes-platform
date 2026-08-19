@@ -1,0 +1,139 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Vibes Connect HTTP Message Acquisition Campaigns Broadcasts API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Broadcasts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Broadcasts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/broadcasts",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter broadcasts by status."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page."
+              }
+            ]
+          },
+          "docs": "Retrieve a list of broadcasts (message sends) for the company."
+        },
+        {
+          "info": {
+            "name": "Create Broadcast",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/broadcasts",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new broadcast (message send). When creating a broadcast, you create a template for the message which will be filled in with personalization if applicable."
+        },
+        {
+          "info": {
+            "name": "Get Broadcast",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/broadcasts/:broadcast_id",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "broadcast_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the broadcast."
+              }
+            ]
+          },
+          "docs": "Retrieve metadata and status for a specific broadcast."
+        },
+        {
+          "info": {
+            "name": "Update Broadcast",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://messageapi.vibesapps.com/companies/:company_key/broadcasts/:broadcast_id",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "Your Vibes company identifier."
+              },
+              {
+                "name": "broadcast_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the broadcast."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing broadcast."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

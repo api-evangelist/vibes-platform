@@ -1,0 +1,15 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/vibes-platform-rcs-business-messaging-openapi.json
+schemes:
+- name: OAuth2Auth
+  source: openapi/vibes-platform-rcs-business-messaging-openapi.json
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://vibes-rbm-prd.auth.us-west-2.amazoncognito.com/oauth2/token
+scopes:
+- scope: https://rbm.vibes.com/rbm.agents
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/vibes-platform-rcs-business-messaging-openapi.json

@@ -1,0 +1,266 @@
+generated: '2026-08-13'
+method: derived
+source: >-
+  openapi/vibes-platform-api-openapi.json (85 component schemas, 48 paths),
+  enriched from https://developer-platform.vibes.com/reference/first-class-fields and
+  https://developer-platform.vibes.com/docs/person-data
+provider: Vibes Platform
+providerId: vibes-platform
+description: >-
+  Entity-relationship graph for the Vibes Platform API, derived from the published OpenAPI's schema
+  and path structure. The model has one root that everything hangs off — the Company — and one
+  identity spine — the Person, which the whole product exists to reach.
+root_entity: Company
+tenancy:
+  key: company_key
+  style: path segment
+  note: >-
+    company_key is a path parameter on 73 of 75 operations. There is no account switching by header
+    or token claim; the tenant is in the URL. The two exceptions are the mobile-app device routes,
+    which are keyed by app_id instead.
+id_conventions:
+  - suffix: _key
+    meaning: Vibes-issued opaque primary identifier (company_key, person_key, subscription_list_id pairs with it)
+  - suffix: _id
+    meaning: Resource identifier, either Vibes-issued or caller-supplied (external_person_id, app_id, wallet_id)
+  - prefix: external_
+    meaning: >-
+      The caller's own identifier for the same object. Vibes deliberately exposes twin routes —
+      /persons/{person_key} and /persons/external/{external_person_id} — so an integrator never has
+      to store a Vibes key.
+  - name: mdn
+    meaning: >-
+      Mobile Directory Number, the phone number. Functionally the natural key for a Person and
+      immutable once set (attempting to change it returns 409).
+
+entities:
+  - name: Company
+    identifier: company_key
+    description: The tenant. Owns every campaign, list, callback and wallet program.
+    schema: null
+  - name: Person
+    identifier: person_key
+    alternate_identifiers: [external_person_id, mdn]
+    schema: personResponse
+    description: >-
+      A subscriber record in the Vibes MobileDB. Carries a mobile_phone object (mdn + carrier_code),
+      an external_person_id, and first-class + custom fields.
+    paths:
+      - /companies/{company_key}/mobiledb/persons
+      - /companies/{company_key}/mobiledb/persons/{person_key}
+      - /companies/{company_key}/mobiledb/persons/external/{external_person_id}
+  - name: PushDevice
+    identifier: vibes_device_id
+    schema: pushDeviceResponse
+    description: A registered mobile app install, optionally associated to a Person.
+    paths:
+      - /mobile_apps/{app_id}/devices/{vibes_device_id}
+      - /companies/{company_key}/mobiledb/persons/{person_key}/push_devices
+  - name: SubscriptionList
+    identifier: subscription_list_id
+    schema: subscriptionListResponse
+    description: A named audience a Person can be subscribed to.
+  - name: Subscription
+    identifier: null
+    schema: subscriptionResponse
+    description: >-
+      The membership join between Person and SubscriptionList. Has no identifier of its own — it is
+      addressed as the pair (person, list).
+  - name: AcquisitionCampaign
+    identifier: acquisition_id
+    schema: acquisitionResponse
+    description: An opt-in flow that adds new participants to a subscription list.
+  - name: AcquisitionParticipant
+    identifier: person_id
+    schema: acquisitionParticipantResponse
+    description: A pending or confirmed participant in an acquisition campaign.
+  - name: Broadcast
+    identifier: broadcast_id
+    schema: broadcastResponse
+    description: A scheduled or sent message send against a subscription list.
+  - name: Event
+    identifier: event_id
+    schema: eventResponse
+    description: An inbound signal that can trigger messaging.
+  - name: EventTriggeredCampaign
+    identifier: event_triggered_message_id
+    schema: eventTriggeredResponse
+    description: The rule binding an inbound event type to an SMS, MMS or push send.
+  - name: IncentivePool
+    identifier: incentive_pool_id
+    schema: incentivePoolResponse
+    description: A pool of redeemable codes.
+  - name: IncentiveCode
+    identifier: incentive_code
+    schema: incentiveCodeResponse
+    description: A single code drawn from a pool.
+  - name: IncentiveCodeIssuance
+    identifier: null
+    schema: incentiveCodeIssuanceResponse
+    description: The act of issuing a code to an issuee (issuee_id / external_issuee_id).
+  - name: IncentiveCodeRedemption
+    identifier: null
+    schema: null
+    description: The act of redeeming an issued code.
+  - name: WalletCampaign
+    identifier: wallet_id
+    alternate_identifiers: [token]
+    schema: walletCampaignResponse
+    description: >-
+      A mobile wallet program. `type` (offer / loyalty / event_ticket) is set at creation and is
+      immutable. Note the model addresses a wallet campaign by wallet_id on some routes and by
+      `token` on others — templates, locations and the location selector all use {token}.
+  - name: WalletItem
+    identifier: wallet_item_id
+    schema: walletItemResponse
+    description: A per-recipient pass issued from a wallet campaign.
+  - name: WalletMessage
+    identifier: wallet_message_id
+    schema: walletMessageResponse
+    description: A push-style message to holders of a wallet campaign's passes.
+  - name: AndroidWalletTemplate
+    identifier: null
+    schema: androidTemplateResponse
+    description: The single Google Wallet pass template for a wallet campaign.
+  - name: iOSWalletTemplate
+    identifier: null
+    schema: iosTemplateResponse
+    description: The single Apple Wallet (passbook) pass template for a wallet campaign.
+  - name: WalletLocation
+    identifier: id
+    schema: walletLocationResponse
+    description: A store location attached to a wallet campaign's passes.
+  - name: LocationSelector
+    identifier: null
+    schema: locationSelectorResponse
+    description: The branded "Add to Wallet" landing page for a wallet campaign.
+  - name: Callback
+    identifier: callback_id
+    schema: callbackResponse
+    description: A registered webhook destination for one callback event type.
+  - name: SourceCode
+    identifier: source_code
+    schema: sourceCodeResponse
+    description: An active short code / source code the company sends from.
+
+relationships:
+  - from: Company
+    to: Person
+    type: has_many
+    via: company_key
+  - from: Company
+    to: SubscriptionList
+    type: has_many
+    via: company_key
+  - from: Company
+    to: AcquisitionCampaign
+    type: has_many
+    via: company_key
+  - from: Company
+    to: Broadcast
+    type: has_many
+    via: company_key
+  - from: Company
+    to: WalletCampaign
+    type: has_many
+    via: company_key
+  - from: Company
+    to: Callback
+    type: has_many
+    via: company_key
+  - from: Company
+    to: SourceCode
+    type: has_many
+    via: company_key
+  - from: Company
+    to: IncentivePool
+    type: has_many
+    via: company_key
+  - from: Person
+    to: Subscription
+    type: has_many
+    via: person_key
+  - from: SubscriptionList
+    to: Subscription
+    type: has_many
+    via: subscription_list_id
+  - from: Person
+    to: PushDevice
+    type: has_many
+    via: person_key
+  - from: PushDevice
+    to: Person
+    type: belongs_to
+    via: assign (POST /mobile_apps/{app_id}/devices/{vibes_device_id}/assign)
+  - from: AcquisitionCampaign
+    to: AcquisitionParticipant
+    type: has_many
+    via: acquisition_id
+  - from: AcquisitionParticipant
+    to: Person
+    type: belongs_to
+    via: person_id / person_key
+  - from: SubscriptionList
+    to: AcquisitionCampaign
+    type: has_many
+    via: /subscription_lists/{subscription_list_id}/acquisition_campaigns/
+  - from: EventTriggeredCampaign
+    to: Event
+    type: has_many
+    via: event_type
+  - from: IncentivePool
+    to: IncentiveCode
+    type: has_many
+    via: incentive_pool_id
+  - from: IncentiveCode
+    to: IncentiveCodeIssuance
+    type: has_many
+    via: incentive_code
+  - from: IncentiveCode
+    to: IncentiveCodeRedemption
+    type: has_many
+    via: incentive_code
+  - from: WalletCampaign
+    to: WalletItem
+    type: has_many
+    via: wallet_id
+  - from: WalletCampaign
+    to: WalletMessage
+    type: has_many
+    via: wallet_id
+  - from: WalletCampaign
+    to: AndroidWalletTemplate
+    type: has_one
+    via: token
+  - from: WalletCampaign
+    to: iOSWalletTemplate
+    type: has_one
+    via: token
+  - from: WalletCampaign
+    to: LocationSelector
+    type: has_one
+    via: token
+  - from: WalletCampaign
+    to: WalletLocation
+    type: has_many
+    via: token
+  - from: Broadcast
+    to: SubscriptionList
+    type: belongs_to
+    via: list_id
+  - from: Broadcast
+    to: SourceCode
+    type: belongs_to
+    via: source_short_code
+
+notes:
+  - >-
+    The dual-addressing pattern (person_key vs external_person_id) doubles the operation count on
+    the Person and Subscription APIs and is the model's defining feature: Vibes is designed so the
+    customer's CRM stays the system of record.
+  - >-
+    WalletCampaign is addressed inconsistently — {wallet_id} on campaign/item/message routes,
+    {token} on template/location/selector routes. Both appear in the same published spec.
+  - >-
+    MDN is effectively immutable: creating a person with an MDN already in use, or trying to update
+    an MDN, both return 409.

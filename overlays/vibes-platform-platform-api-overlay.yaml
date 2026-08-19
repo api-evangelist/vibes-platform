@@ -1,0 +1,323 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements — Vibes Platform API
+  version: 1.0.0
+  description: 'Non-destructive enhancements applied on top of the OpenAPI Vibes publishes at developer-platform.vibes.com.
+    Two gaps are addressed: (1) the published spec declares no operationId on any of its 75 operations,
+    so every operation here is given a stable id derived from Vibes'' own summary text; (2) the 429 response
+    Vibes documents in prose is absent from every operation in the machine-readable contract. Nothing
+    in the original spec is removed or contradicted. Generated 2026-08-13 by the API Evangelist enrichment
+    pipeline.'
+extends: openapi/vibes-platform-api-openapi.json
+actions:
+- target: $.paths['/companies/{company_key}/campaigns/acquisition'].get
+  description: Add an operationId (getAcquisitionCampaigns); the published spec declares none.
+  update:
+    operationId: getAcquisitionCampaigns
+- target: $.paths['/companies/{company_key}/campaigns/acquisition/{acquisition_id}'].get
+  description: Add an operationId (getAnAcquisitionCampaign); the published spec declares none.
+  update:
+    operationId: getAnAcquisitionCampaign
+- target: $.paths['/companies/{company_key}/campaigns/acquisition/{acquisition_id}/participants'].get
+  description: Add an operationId (searchForPendingParticipants); the published spec declares none.
+  update:
+    operationId: searchForPendingParticipants
+- target: $.paths['/companies/{company_key}/campaigns/acquisition/{acquisition_id}/participants'].post
+  description: Add an operationId (addAParticipant); the published spec declares none.
+  update:
+    operationId: addAParticipant
+- target: $.paths['/companies/{company_key}/mobiledb/broadcasts/'].post
+  description: Add an operationId (createABroadcast); the published spec declares none.
+  update:
+    operationId: createABroadcast
+- target: $.paths['/companies/{company_key}/mobiledb/broadcasts'].get
+  description: Add an operationId (getBroadcasts); the published spec declares none.
+  update:
+    operationId: getBroadcasts
+- target: $.paths['/companies/{company_key}/mobiledb/broadcasts/{broadcast_id}'].get
+  description: Add an operationId (getABroadcast); the published spec declares none.
+  update:
+    operationId: getABroadcast
+- target: $.paths['/companies/{company_key}/mobiledb/broadcasts/{broadcast_id}'].put
+  description: Add an operationId (updateABroadcast); the published spec declares none.
+  update:
+    operationId: updateABroadcast
+- target: $.paths['/companies/{company_key}/mobiledb/broadcasts/{broadcast_id}'].delete
+  description: Add an operationId (cancelABroadcast); the published spec declares none.
+  update:
+    operationId: cancelABroadcast
+- target: $.paths['/companies/{company_key}/config/callbacks/'].post
+  description: Add an operationId (registerForANewCallbackType); the published spec declares none.
+  update:
+    operationId: registerForANewCallbackType
+- target: $.paths['/companies/{company_key}/config/callbacks/'].get
+  description: Add an operationId (listRegisteredCallbacks); the published spec declares none.
+  update:
+    operationId: listRegisteredCallbacks
+- target: $.paths['/companies/{company_key}/config/callbacks/{callback_id}'].get
+  description: Add an operationId (getACallback); the published spec declares none.
+  update:
+    operationId: getACallback
+- target: $.paths['/companies/{company_key}/config/callbacks/{callback_id}'].put
+  description: Add an operationId (updateACallback); the published spec declares none.
+  update:
+    operationId: updateACallback
+- target: $.paths['/companies/{company_key}/config/callbacks/{callback_id}'].delete
+  description: Add an operationId (cancelACallback); the published spec declares none.
+  update:
+    operationId: cancelACallback
+- target: $.paths['/companies/{company_key}/config/callback_events/test'].post
+  description: Add an operationId (createATestCallbackEvent); the published spec declares none.
+  update:
+    operationId: createATestCallbackEvent
+- target: $.paths['/companies/{company_key}/events'].post
+  description: Add an operationId (createAnEvent); the published spec declares none.
+  update:
+    operationId: createAnEvent
+- target: $.paths['/companies/{company_key}/mobiledb/event_triggered_messages'].post
+  description: Add an operationId (createAnEventTriggeredCampaign); the published spec declares none.
+  update:
+    operationId: createAnEventTriggeredCampaign
+- target: $.paths['/companies/{company_key}/mobiledb/event_triggered_messages'].get
+  description: Add an operationId (getEventTriggeredCampaigns); the published spec declares none.
+  update:
+    operationId: getEventTriggeredCampaigns
+- target: $.paths['/companies/{company_key}/mobiledb/event_triggered_messages/{event_triggered_message_id}'].get
+  description: Add an operationId (getEventTriggeredCampaignInfo); the published spec declares none.
+  update:
+    operationId: getEventTriggeredCampaignInfo
+- target: $.paths['/companies/{company_key}/mobiledb/event_triggered_messages/{event_triggered_message_id}'].put
+  description: Add an operationId (updateAnEventTriggeredCampaign); the published spec declares none.
+  update:
+    operationId: updateAnEventTriggeredCampaign
+- target: $.paths['/companies/{company_key}/mobiledb/event_triggered_messages/{event_triggered_message_id}'].delete
+  description: Add an operationId (cancelAnEventTriggeredCampaign); the published spec declares none.
+  update:
+    operationId: cancelAnEventTriggeredCampaign
+- target: $.paths['/companies/{company_key}/incentives/pools/{issuance_pool_id}/issuances'].post
+  description: Add an operationId (issueAnIncentiveCode); the published spec declares none.
+  update:
+    operationId: issueAnIncentiveCode
+- target: $.paths['/companies/{company_key}/incentives/codes/{incentive_code}'].get
+  description: Add an operationId (getIncentiveCode); the published spec declares none.
+  update:
+    operationId: getIncentiveCode
+- target: $.paths['/companies/{company_key}/incentives/codes/{incentive_code}/issuances'].get
+  description: Add an operationId (getIssuancesForACode); the published spec declares none.
+  update:
+    operationId: getIssuancesForACode
+- target: $.paths['/companies/{company_key}/incentives/codes/{incentive_code}/redemptions'].post
+  description: Add an operationId (redeemAnIncentiveCode); the published spec declares none.
+  update:
+    operationId: redeemAnIncentiveCode
+- target: $.paths['/companies/{company_key}/incentives/codes/{incentive_code}/redemptions'].get
+  description: Add an operationId (getRedemptionsForACode); the published spec declares none.
+  update:
+    operationId: getRedemptionsForACode
+- target: $.paths['/companies/{company_key}/incentives/pools'].get
+  description: Add an operationId (getIncentivePools); the published spec declares none.
+  update:
+    operationId: getIncentivePools
+- target: $.paths['/companies/{company_key}/incentives/pools'].post
+  description: Add an operationId (createANewCodePool); the published spec declares none.
+  update:
+    operationId: createANewCodePool
+- target: $.paths['/companies/{company_key}/incentives/pools/{incentive_pool_id}'].put
+  description: Add an operationId (updateAnExistingPool); the published spec declares none.
+  update:
+    operationId: updateAnExistingPool
+- target: $.paths['/companies/{company_key}/incentives/pools/{incentive_pool_id}'].get
+  description: Add an operationId (getCodePoolInfo); the published spec declares none.
+  update:
+    operationId: getCodePoolInfo
+- target: $.paths['/companies/{company_key}/mobiledb/persons/{person_key}'].get
+  description: Add an operationId (getPersonByPersonKey); the published spec declares none.
+  update:
+    operationId: getPersonByPersonKey
+- target: $.paths['/companies/{company_key}/mobiledb/persons/{person_key}'].put
+  description: Add an operationId (updatePersonByPersonKey); the published spec declares none.
+  update:
+    operationId: updatePersonByPersonKey
+- target: $.paths['/companies/{company_key}/mobiledb/persons/external/{external_person_id}'].get
+  description: Add an operationId (getPersonByExternalPersonId); the published spec declares none.
+  update:
+    operationId: getPersonByExternalPersonId
+- target: $.paths['/companies/{company_key}/mobiledb/persons/external/{external_person_id}'].put
+  description: Add an operationId (updatePersonByExternalPersonId); the published spec declares none.
+  update:
+    operationId: updatePersonByExternalPersonId
+- target: $.paths['/companies/{company_key}/mobiledb/persons'].get
+  description: Add an operationId (findPersonByMdn); the published spec declares none.
+  update:
+    operationId: findPersonByMdn
+- target: $.paths['/companies/{company_key}/mobiledb/persons/'].post
+  description: Add an operationId (addAPerson); the published spec declares none.
+  update:
+    operationId: addAPerson
+- target: $.paths['/companies/{company_key}/mobiledb/persons/{person_key}/push_devices'].get
+  description: Add an operationId (getPushDeviceInfoByPersonKey); the published spec declares none.
+  update:
+    operationId: getPushDeviceInfoByPersonKey
+- target: $.paths['/companies/{company_key}/mobiledb/persons/external/{external_person_id}/push_devices'].get
+  description: Add an operationId (getPushDeviceInfoByExternalPersonId); the published spec declares none.
+  update:
+    operationId: getPushDeviceInfoByExternalPersonId
+- target: $.paths['/mobile_apps/{app_id}/devices/{vibes_device_id}'].get
+  description: Add an operationId (getPushDeviceInfoByVibesDeviceId); the published spec declares none.
+  update:
+    operationId: getPushDeviceInfoByVibesDeviceId
+- target: $.paths['/mobile_apps/{app_id}/devices/{vibes_device_id}/assign'].post
+  description: Add an operationId (associateDeviceWithPersonRecord); the published spec declares none.
+  update:
+    operationId: associateDeviceWithPersonRecord
+- target: $.paths['/companies/{company_key}/sourcecodes'].get
+  description: Add an operationId (getYourActiveSourceCodes); the published spec declares none.
+  update:
+    operationId: getYourActiveSourceCodes
+- target: $.paths['/companies/{company_key}/mobiledb/persons/{person_key}/subscriptions'].get
+  description: Add an operationId (getSubscriptionsForAPersonKey); the published spec declares none.
+  update:
+    operationId: getSubscriptionsForAPersonKey
+- target: $.paths['/companies/{company_key}/mobiledb/persons/external/{external_person_id}/subscriptions'].get
+  description: Add an operationId (getSubscriptionsForExternalPersonId); the published spec declares none.
+  update:
+    operationId: getSubscriptionsForExternalPersonId
+- target: $.paths['/companies/{company_key}/mobiledb/persons/{person_key}/subscriptions/{subscription_list_id}'].get
+  description: Add an operationId (getSubscriptionStatusForListByPersonKey); the published spec declares
+    none.
+  update:
+    operationId: getSubscriptionStatusForListByPersonKey
+- target: $.paths['/companies/{company_key}/mobiledb/persons/{person_key}/subscriptions/{subscription_list_id}'].delete
+  description: Add an operationId (unsubscribePersonByPersonKey); the published spec declares none.
+  update:
+    operationId: unsubscribePersonByPersonKey
+- target: $.paths['/companies/{company_key}/mobiledb/persons/external/{external_person_id}/subscriptions/{subscription_list_id}'].get
+  description: Add an operationId (getSubscriptionStatusForListByExternalPersonId); the published spec
+    declares none.
+  update:
+    operationId: getSubscriptionStatusForListByExternalPersonId
+- target: $.paths['/companies/{company_key}/mobiledb/persons/external/{external_person_id}/subscriptions/{subscription_list_id}'].delete
+  description: Add an operationId (unsubscribePersonByExternalPersonId); the published spec declares none.
+  update:
+    operationId: unsubscribePersonByExternalPersonId
+- target: $.paths['/companies/{company_key}/mobiledb/subscription_lists/{subscription_list_id}/subscribers'].get
+  description: Add an operationId (searchForSubscriber); the published spec declares none.
+  update:
+    operationId: searchForSubscriber
+- target: $.paths['/companies/{company_key}/mobiledb/subscription_lists/'].get
+  description: Add an operationId (getSubscriptionLists); the published spec declares none.
+  update:
+    operationId: getSubscriptionLists
+- target: $.paths['/companies/{company_key}/mobiledb/subscription_lists/{subscription_list_id}'].get
+  description: Add an operationId (getSubscriptionListInfo); the published spec declares none.
+  update:
+    operationId: getSubscriptionListInfo
+- target: $.paths['/companies/{company_key}/mobiledb/subscription_lists/{subscription_list_id}/acquisition_campaigns/'].get
+  description: Add an operationId (getAcquisitionCampaignsForSubscriptionList); the published spec declares
+    none.
+  update:
+    operationId: getAcquisitionCampaignsForSubscriptionList
+- target: $.paths['/companies/{company_key}/campaigns/wallet'].get
+  description: Add an operationId (getWalletCampaigns); the published spec declares none.
+  update:
+    operationId: getWalletCampaigns
+- target: $.paths['/companies/{company_key}/campaigns/wallet'].post
+  description: Add an operationId (createAWalletCampaign); the published spec declares none.
+  update:
+    operationId: createAWalletCampaign
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{wallet_id}'].get
+  description: Add an operationId (getAWalletCampaign); the published spec declares none.
+  update:
+    operationId: getAWalletCampaign
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{wallet_id}'].put
+  description: Add an operationId (updateAWalletCampaign); the published spec declares none.
+  update:
+    operationId: updateAWalletCampaign
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{wallet_id}/items'].get
+  description: Add an operationId (getWalletItems); the published spec declares none.
+  update:
+    operationId: getWalletItems
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{wallet_id}/items/{wallet_item_id}'].get
+  description: Add an operationId (getAWalletItem); the published spec declares none.
+  update:
+    operationId: getAWalletItem
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{wallet_id}/items/{wallet_item_id}'].put
+  description: Add an operationId (updateAWalletItem); the published spec declares none.
+  update:
+    operationId: updateAWalletItem
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{wallet_id}/messages'].post
+  description: Add an operationId (createAWalletMessage); the published spec declares none.
+  update:
+    operationId: createAWalletMessage
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{wallet_id}/messages'].get
+  description: Add an operationId (getWalletMessages); the published spec declares none.
+  update:
+    operationId: getWalletMessages
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{wallet_id}/messages/{wallet_message_id}'].get
+  description: Add an operationId (getAWalletMessage); the published spec declares none.
+  update:
+    operationId: getAWalletMessage
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{token}/wallet_template'].get
+  description: Add an operationId (getTheGoogleWalletTemplate); the published spec declares none.
+  update:
+    operationId: getTheGoogleWalletTemplate
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{token}/wallet_template'].post
+  description: Add an operationId (createTheGoogleWalletTemplate); the published spec declares none.
+  update:
+    operationId: createTheGoogleWalletTemplate
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{token}/wallet_template'].put
+  description: Add an operationId (updateTheGoogleWalletTemplate); the published spec declares none.
+  update:
+    operationId: updateTheGoogleWalletTemplate
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{token}/passbook_template'].get
+  description: Add an operationId (getTheAppleWalletTemplate); the published spec declares none.
+  update:
+    operationId: getTheAppleWalletTemplate
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{token}/passbook_template'].post
+  description: Add an operationId (createTheAppleWalletTemplate); the published spec declares none.
+  update:
+    operationId: createTheAppleWalletTemplate
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{token}/passbook_template'].put
+  description: Add an operationId (updateTheAppleWalletTemplate); the published spec declares none.
+  update:
+    operationId: updateTheAppleWalletTemplate
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{token}/location_selector'].get
+  description: Add an operationId (getTheLocationSelector); the published spec declares none.
+  update:
+    operationId: getTheLocationSelector
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{token}/location_selector'].post
+  description: Add an operationId (createTheLocationSelector); the published spec declares none.
+  update:
+    operationId: createTheLocationSelector
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{token}/location_selector'].put
+  description: Add an operationId (updateTheLocationSelector); the published spec declares none.
+  update:
+    operationId: updateTheLocationSelector
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{token}/location_selector'].delete
+  description: Add an operationId (deleteTheLocationSelector); the published spec declares none.
+  update:
+    operationId: deleteTheLocationSelector
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{token}/locations'].get
+  description: Add an operationId (getStoreLocations); the published spec declares none.
+  update:
+    operationId: getStoreLocations
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{token}/locations/bulk'].post
+  description: Add an operationId (bulkCreateStoreLocations); the published spec declares none.
+  update:
+    operationId: bulkCreateStoreLocations
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{token}/locations/{id}'].delete
+  description: Add an operationId (deleteAStoreLocation); the published spec declares none.
+  update:
+    operationId: deleteAStoreLocation
+- target: $.paths['/companies/{company_key}/campaigns/wallet/{token}/locations/delete_all'].delete
+  description: Add an operationId (deleteAllStoreLocations); the published spec declares none.
+  update:
+    operationId: deleteAllStoreLocations
+- target: $.paths.*.*.responses
+  description: Declare the 429 Too Many Requests response Vibes documents on its Technical Details page
+    but omits from every operation in the published spec.
+  update:
+    '429':
+      description: 'Too Many Requests. The per-second throttle was exceeded (300/s inbound events, 100/s
+        other calls per company_key, 100/s per app_id, 20/s Google Wallet updates). No Retry-After or
+        rate-limit headers are returned; back off on a client-chosen schedule. Source: https://developer-platform.vibes.com/reference/technical-details'

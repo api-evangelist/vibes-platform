@@ -1,0 +1,103 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://developer-platform.vibes.com/reference/versions-compatibility,
+  https://status.vibes.com/api/v2/summary.json,
+  https://developer-platform.vibes.com/docs/change-log-2,
+  https://developer-platform.vibes.com/docs/change-log,
+  openapi/vibes-platform-api-openapi.json
+provider: Vibes Platform
+providerId: vibes-platform
+description: >-
+  Versioning, deprecation, status and support posture for the Vibes API surface, read from the
+  provider's own pages on 2026-08-13.
+
+versioning:
+  scheme: header
+  header: X-API-Version
+  current_version: '2'
+  default_version: '1'
+  versions:
+    - version: '1'
+      status: active
+      default: true
+      note: No E.164 support; cannot be used for international sends.
+    - version: '2'
+      status: current
+      default: false
+      note: Adds E.164 international phone number support.
+  docs: https://developer-platform.vibes.com/reference/versions-compatibility
+  spec_version: '1.0.0'
+  spec_version_note: >-
+    info.version in the published OpenAPI reads 1.0.0 and is unrelated to the X-API-Version 1/2
+    axis the API actually versions on — the machine-readable contract carries no signal of which
+    header version it describes.
+
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: 0
+  note: >-
+    Vibes publishes NO deprecation policy, no notice window, no Sunset or Deprecation response
+    headers (RFC 8594), and marks no operation `deprecated: true` in the published OpenAPI. What it
+    does publish instead is forward-compatibility GUIDANCE — bind only fields you use, follow the
+    REST URLs returned in payloads rather than hard-coding them, avoid strict binding/codegen that
+    throws on unknown fields, and test with unknown elements present — plus a stated intent that a
+    breaking change would produce a NEW header version rather than mutate an existing one. That is
+    a compatibility contract, not a deprecation contract: a consumer has no published way to learn
+    that something is going away or when.
+  breaking_change_mechanism: >-
+    "there may be times where improvements are so extensive that the changes cannot be made forward
+    compatible. In those cases, a new version of the APIs will be defined."
+  source: https://developer-platform.vibes.com/reference/versions-compatibility
+
+status_page:
+  published: true
+  url: https://status.vibes.com
+  provider: Atlassian Statuspage
+  machine_readable: true
+  api: https://status.vibes.com/api/v2/summary.json
+  rss: https://status.vibes.com/history.rss
+  page_id: ws1lrr86rcn4
+  components_observed: 20+
+  component_examples:
+    - North America Messaging
+    - North America Platform
+    - EU Platform
+    - API
+    - SMS HTTP
+    - SMS SMPP
+    - MMS
+    - Push
+    - 10DLC
+    - International Messaging
+  observed:
+    fetched: '2026-08-13'
+    indicator: none
+    description: All Systems Operational
+  note: >-
+    Components are broken out by REGION and by CHANNEL (SMS/MMS/Push/10DLC, HTTP vs SMPP), which
+    matches how the API is actually deployed — a consumer can watch the specific surface it depends
+    on rather than one global light.
+
+sla:
+  published: false
+  note: >-
+    No SLA, uptime commitment or credit schedule is published on the developer portal or the
+    pricing page. The Platform Professional and Enterprise packages advertise 24/7 support and a
+    technical account manager, but no numeric availability target.
+
+changelog:
+  api_changelog_published: false
+  note: >-
+    There is no dated changelog for the REST API itself. The four "Change log" pages in the docs are
+    all SDK changelogs (iOS, Android, React Native, Expo). See
+    changelog/vibes-platform-changelog.yml.
+  cross_ref: changelog/vibes-platform-changelog.yml
+
+support:
+  docs: https://developer-aggregation.vibes.com/docs/support
+  callback_failure_notification: >-
+    Customers can configure automated email notification when a callback fails to deliver.

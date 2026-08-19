@@ -1,0 +1,74 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://developer-platform.vibes.com/docs/acquisition-pop-up,
+  https://developer-platform.vibes.com/docs/adding-the-vibes-acquisition-pop-up-to-your-site,
+  https://developer-platform.vibes.com/docs/web-form-subscriber-managment,
+  https://developer-platform.vibes.com/docs/smartlink-basics,
+  https://developer-platform.vibes.com/docs/implementing-vibes-tags
+provider: Vibes Platform
+providerId: vibes-platform
+description: >-
+  Client-side / embeddable surfaces Vibes ships for a customer's own website — distinct from the
+  mobile SDKs in packages/ and from the REST API. All of them are hosted, account-provisioned
+  artifacts rather than published libraries: there is no npm package, no component registry entry,
+  and no version a consumer can pin.
+component_count: 4
+families:
+  - name: Acquisition Pop-Up
+    kind: hosted-widget
+    loader: '<script src="https://cdn.vibes.com/{brand}/widget.js" async></script>'
+    distribution: cdn
+    registry: cdn
+    version: null
+    version_note: >-
+      UNPINNED. The loader URL carries no version segment and Vibes states it will "provide the
+      exact CDN link for your account and widget version" — the version lives in a per-account URL
+      a consumer receives privately, not in anything published. A site owner embedding this script
+      cannot tell what code they are shipping to their visitors, and neither can we.
+    docs: https://developer-platform.vibes.com/docs/adding-the-vibes-acquisition-pop-up-to-your-site
+    description: >-
+      A single JavaScript file, hosted on Vibes' CDN, that renders and auto-initialises an SMS
+      opt-in pop-up on the customer's pages. Deployable through a tag manager as a Custom HTML tag.
+    config: server-side, per account
+  - name: Web Form Subscriber Management
+    kind: hosted-form
+    distribution: hosted
+    version: null
+    docs: https://developer-platform.vibes.com/docs/web-form-subscriber-managment
+    description: Web-form flow for adding and managing subscribers from a customer's own site.
+  - name: SmartLink
+    kind: hosted-link
+    distribution: hosted
+    version: null
+    docs: https://developer-platform.vibes.com/docs/smartlink-basics
+    description: >-
+      Vibes-hosted short/smart links used inside messages, with click tracking that feeds the URL
+      Click extract.
+    related: https://developer-platform.vibes.com/docs/creating-a-custom-short-domain
+  - name: Vibes Tags
+    kind: tracking-script
+    distribution: script
+    version: null
+    docs: https://developer-platform.vibes.com/docs/implementing-vibes-tags
+    description: >-
+      Site tags for attributing campaign activity; installed on customer pages and attached to a
+      campaign.
+    related: https://developer-platform.vibes.com/docs/add-tag-tracking-to-your-campaign
+  - name: Add to Wallet location selector
+    kind: hosted-page
+    distribution: hosted
+    version: null
+    api_managed: true
+    operations:
+      - GET /companies/{company_key}/campaigns/wallet/{token}/location_selector
+      - POST /companies/{company_key}/campaigns/wallet/{token}/location_selector
+      - PUT /companies/{company_key}/campaigns/wallet/{token}/location_selector
+      - DELETE /companies/{company_key}/campaigns/wallet/{token}/location_selector
+    description: >-
+      A branded, Vibes-hosted "Add to Wallet" landing page. Unlike the others it IS fully
+      API-managed — it is created, configured and deleted through the Platform API.
+    docs: https://developer-platform.vibes.com/reference/get_companies-company-key-campaigns-wallet-token-location-selector
+note: >-
+  component_count above counts the four customer-site embeds; the wallet location selector is
+  listed separately because it is API-managed rather than embedded.
