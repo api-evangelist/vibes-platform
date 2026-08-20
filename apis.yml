@@ -182,6 +182,8 @@ apis:
   humanURL: https://developer-platform.vibes.com/
   baseURL: https://public-api.vibescm.com
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -238,6 +240,8 @@ apis:
   humanURL: https://developer-platform.vibes.com/
   baseURL: https://messageapi.vibesapps.com
   tags:
+  - Message
+  tags_raw:
   - Messages
   properties:
   - type: OpenAPI
