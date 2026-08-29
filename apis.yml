@@ -924,6 +924,9 @@ description: >-
   workflows, subscription list management, wallet pass management, and callback notifications for opt-ins and delivery
   status. Vibes operates as a Tier 1 provider with direct carrier connections in the US and Canada.
 common:
+  - type: CapabilityMap
+    url: capabilities/vibes-platform-capability-edges.yml
+    name: Vibes Platform Business Capability Map
   - type: Overlay
     url: overlays/vibes-platform-platform-api-overlay.yaml
   - type: Overlay

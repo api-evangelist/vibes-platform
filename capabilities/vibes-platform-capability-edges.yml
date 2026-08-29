@@ -1,0 +1,56 @@
+slug: vibes-platform
+provider: Vibes Platform
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Telecommunications
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 4
+edges:
+- tag: Event-Triggered Campaign API
+  spec_file: vibes-platform-event-triggered-campaign-api-api-openapi.yml
+  capability_id: BC-400.60
+  capability_id_l1: BC-400
+  capability_name: Digital Marketing Management
+  confidence: 0.75
+  evidence: POST /companies/{company_key}/mobiledb/event_triggered_messages    Create an event-triggered
+    campaign
+  reason: Full CRUD over event-triggered SMS/MMS/push campaigns with filter schemas is marketing automation
+    / lifecycle messaging, i.e. digital marketing management; some ambiguity between digital marketing
+    and demand generation sub-capabilities.
+- tag: Person API
+  spec_file: vibes-platform-person-api-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.75
+  evidence: GET /companies/{company_key}/mobiledb/persons/{person_key}    Get person by person_key ...
+    Find person by MDN
+  reason: Create, read and update of person profiles keyed by internal key, external_person_id and MDN
+    is customer profile/master record management in the marketing database.
+- tag: Incentive Code API
+  spec_file: vibes-platform-incentive-code-api-api-openapi.yml
+  capability_id: BC-440.30
+  capability_id_l1: BC-440
+  capability_name: Discount & Promotion Management
+  confidence: 0.7
+  evidence: POST /companies/{company_key}/incentives/pools/{issuance_pool_id}/issuances    Issue an incentive
+    code ... POST .../redemptions    Redeem an incentive code
+  reason: Issuance and redemption of incentive (coupon/offer) codes is promotional offer administration,
+    matching Discount & Promotion Management; loyalty programme management is a plausible alternative
+    reading hence 0.7.
+- tag: Incentive Pool API
+  spec_file: vibes-platform-incentive-pool-api-api-openapi.yml
+  capability_id: BC-440.30
+  capability_id_l1: BC-440
+  capability_name: Discount & Promotion Management
+  confidence: 0.7
+  evidence: POST /companies/{company_key}/incentives/pools    Create a new code pool
+  reason: Creating and maintaining pools of incentive/promo codes underpins promotional offers, so Discount
+    & Promotion Management; could alternatively be read as loyalty programme tooling.
