@@ -1,0 +1,383 @@
+openapi: 3.2.0
+info:
+  title: Vibes Platform iOS Wallet Templates API
+  version: 1.0.0
+  description: 'Define the design and content of the Apple Wallet (iOS) pass for a wallet campaign. Each campaign has a single Apple Wallet (passbook) template whose fields map to PassKit pass concepts. See the Apple Wallet Passes reference for field semantics: https://developer.apple.com/documentation/WalletPasses'
+servers:
+- url: https://public-api.vibescm.com
+  description: North America
+- url: https://public-api.eu.vibes.com/
+  description: EMEA
+security:
+- basicAuth: []
+tags:
+- name: iOS Wallet Templates API
+  description: 'Define the design and content of the Apple Wallet (iOS) pass for a wallet campaign. Each campaign has a single Apple Wallet (passbook) template whose fields map to PassKit pass concepts. See the Apple Wallet Passes reference for field semantics: https://developer.apple.com/documentation/WalletPasses'
+paths:
+  /companies/{company_key}/campaigns/wallet/{token}/passbook_template:
+    get:
+      tags:
+      - iOS Wallet Templates API
+      summary: Get the Apple Wallet template
+      description: Retrieve the Apple Wallet (iOS) pass template for a wallet campaign. Each campaign has a single Apple Wallet template.
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: token
+        in: path
+        schema:
+          type: string
+          description: The `token` is the SmartLink token (`wallet_id`) for the campaign.
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/iosTemplateResponse'
+        '404':
+          description: The campaign or its Apple Wallet template cannot be found.
+    post:
+      tags:
+      - iOS Wallet Templates API
+      summary: Create the Apple Wallet template
+      description: Create the Apple Wallet (iOS) pass template for a wallet campaign. Field semantics follow Apple Wallet Passes (https://developer.apple.com/documentation/WalletPasses). Many text fields accept Liquid personalization tags that are replaced per recipient.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/iosTemplateRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: token
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The `token` is the SmartLink token (`wallet_id`) for the campaign.<br><div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a real wallet token, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a wallet template being created.</div></div>
+      responses:
+        '201':
+          description: The Apple Wallet template was created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/iosTemplateResponse'
+    put:
+      tags:
+      - iOS Wallet Templates API
+      summary: Update the Apple Wallet template
+      description: Update the Apple Wallet (iOS) pass template for a wallet campaign.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/iosTemplateRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: token
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The `token` is the SmartLink token (`wallet_id`) for the campaign.<br><div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a real wallet token, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a wallet template being updated.</div></div>
+      responses:
+        '200':
+          description: The Apple Wallet template was updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/iosTemplateResponse'
+        '404':
+          description: The campaign or its Apple Wallet template cannot be found.
+components:
+  schemas:
+    appleWalletTemplateBody:
+      type: object
+      description: Design and content of an Apple Wallet (iOS) pass — a card with a front and a back whose fields map to fixed regions on the card. Field semantics follow Apple Wallet Passes (https://developer.apple.com/documentation/WalletPasses). Many text fields accept Liquid personalization tags that are replaced per recipient.
+      properties:
+        organization_name:
+          type: string
+          description: Organization name shown next to the lock-screen notification. Falls back to the signing certificate's value if not set.
+        pass_description:
+          type: string
+          description: Short accessibility (VoiceOver) description of the pass. Required by Apple Wallet; defaults to the card type if left blank.
+        logo_text:
+          type: string
+          description: Text rendered beside the logo at the top of the pass.
+        nfc_message:
+          type: string
+          description: Payload delivered when the pass is tapped on an NFC terminal (tap-to-interact).
+        app_id:
+          type: string
+          description: Optional iOS App Store identifier (for example `id123456` or `123456`). When set, the pass links to the associated app and surfaces an open-app affordance.
+        thank_you_url:
+          type: string
+          description: Optional URL opened after the pass is installed.
+        thank_you_message:
+          type: string
+          description: Optional message shown after the pass is installed. Ignored when `thank_you_url` is set.
+        sharing_prohibited:
+          type: boolean
+          description: When `true`, hides the pass's share button.
+        colors:
+          type: object
+          description: Pass colors as hex values, for example `#ff0000`. All three are required.
+          properties:
+            background:
+              type: string
+              description: Card fill color.
+            foreground:
+              type: string
+              description: Color of the field values.
+            label:
+              type: string
+              description: Color of the field labels.
+        barcode:
+          type: object
+          description: The scannable code shown on the pass.
+          properties:
+            type:
+              type: string
+              description: Barcode format — one of `PKBarcodeFormatQR`, `PKBarcodeFormatPDF417`, `PKBarcodeFormatAztec`, or `PKBarcodeFormatCode128` (Apple's format identifiers).
+            code:
+              type: string
+              description: Barcode content (ASCII only).
+            description:
+              type: string
+              description: Human-readable text shown alongside the barcode.
+        images:
+          type: object
+          description: Images shown on the pass, keyed by role. Each role occupies a fixed slot on the card. `logo` and `icon` are required; the others are optional.
+          properties:
+            logo:
+              type: object
+              description: Brand logo, shown at the top-left of the pass. Required.
+              properties:
+                url:
+                  type: string
+                  description: Public URL of the logo image.
+            icon:
+              type: object
+              description: Small icon used on the lock screen and in notifications. Required.
+              properties:
+                url:
+                  type: string
+                  description: Public URL of the icon image.
+            strip:
+              type: object
+              description: Wide banner image shown behind the primary fields.
+              properties:
+                url:
+                  type: string
+                  description: Public URL of the strip image.
+            preview_strip:
+              type: object
+              description: Strip image shown in the "Add to Wallet" preview before the pass is installed.
+              properties:
+                url:
+                  type: string
+                  description: Public URL of the preview strip image.
+            background_image:
+              type: object
+              description: Full-card background image. Event ticket passes only.
+              properties:
+                url:
+                  type: string
+                  description: Public URL of the background image.
+            thumbnail:
+              type: object
+              description: Small square image shown to the right of the primary fields. Event ticket passes only.
+              properties:
+                url:
+                  type: string
+                  description: Public URL of the thumbnail image.
+        strip_images:
+          type: array
+          description: Per-recipient alternates of the strip banner. They share the single strip slot — only one is shown per pass, chosen at issue time by matching the recipient's `IMAGE_CODE` personalization token against `image_code`. If none matches, the default `strip` image is shown. Each `image_code` must be unique within the array.
+          items:
+            type: object
+            properties:
+              image_code:
+                type: string
+                description: Unique code used to select this image for a recipient.
+              url:
+                type: string
+                description: Public URL of the strip image.
+        fields:
+          type: object
+          description: The pass's text content, grouped into Apple Wallet's five fixed regions. Each region holds an array of label/value entries.
+          properties:
+            header:
+              type: array
+              description: Top edge of the pass, beside the logo. Stays visible when the pass is stacked/collapsed in Wallet — best for the one value seen at a glance (balance, gate, points).
+              items:
+                $ref: '#/components/schemas/passbookField'
+            primary:
+              type: array
+              description: The largest, most prominent text on the front, over the strip image — the headline value (the offer, the seat, the reward).
+              items:
+                $ref: '#/components/schemas/passbookField'
+            secondary:
+              type: array
+              description: A smaller row beneath the primary fields — supporting details such as expiration or cardholder name.
+              items:
+                $ref: '#/components/schemas/passbookField'
+            auxiliary:
+              type: array
+              description: A further, smallest row beneath the secondary fields — extra details such as member level or location.
+              items:
+                $ref: '#/components/schemas/passbookField'
+            back:
+              type: array
+              description: The reverse side, reached by tapping the info button on the pass — long-form content such as terms, contact info, and fine print.
+              items:
+                $ref: '#/components/schemas/passbookField'
+        trackers:
+          type: array
+          description: Tracking-pixel definitions. Each renders a 1x1 image beacon that fires on a pass lifecycle event for analytics.
+          items:
+            type: object
+            properties:
+              action:
+                type: string
+                description: Lifecycle event that fires the tracker. One of `view`, `add`, or `remove`.
+              tag:
+                type: string
+                description: Beacon URL requested when the action occurs.
+        personalization_options:
+          type: object
+          description: Configures the Apple Wallet sign-up form a user fills in when adding the pass, to enrol them in a rewards program. Applies to loyalty (store-card) passes only. Returned only when configured; the `api` username and password are masked in responses.
+          properties:
+            description:
+              type: string
+              description: Text shown on the enrollment screen.
+            terms_and_conditions:
+              type: string
+              description: Terms the user must accept to enroll.
+            required_personalization_fields:
+              type: array
+              description: Personal details collected during enrollment, for example `given_name`, `family_name`, `full_name`, `email_address`, `phone_number`, `postal_code`.
+              items:
+                type: string
+            api:
+              type: object
+              description: Loyalty backend the enrollment form is submitted to.
+              properties:
+                base_url:
+                  type: string
+                  description: Base URL of the loyalty backend.
+                username:
+                  type: string
+                  description: Username for the loyalty backend (HTTP Basic). Masked in responses.
+                password:
+                  type: string
+                  description: Password for the loyalty backend (HTTP Basic). Masked in responses.
+    iosTemplateResponse:
+      allOf:
+      - type: object
+        properties:
+          id:
+            type: string
+            description: Unique identifier of the Apple Wallet template.
+          active:
+            type: boolean
+            description: Whether the template is active.
+          created_at:
+            type: string
+            description: When the template was created, in ISO-8601 format.
+          updated_at:
+            type: string
+            description: When the template was last updated, in ISO-8601 format.
+      - $ref: '#/components/schemas/appleWalletTemplateBody'
+    iosTemplateRequest:
+      example:
+        passbook_template:
+          organization_name: Example Co
+          pass_description: Spring Sale offer
+          logo_text: Spring Sale
+          colors:
+            background: '#ff0000'
+            foreground: '#ffffff'
+            label: '#cccccc'
+          barcode:
+            type: PKBarcodeFormatQR
+            code: '{{ token }}'
+            description: Scan at checkout
+          images:
+            logo:
+              url: https://cdn.example.com/logo.png
+            icon:
+              url: https://cdn.example.com/icon.png
+          fields:
+            primary:
+            - label: Discount
+              value: 20% off
+      type: object
+      required:
+      - passbook_template
+      properties:
+        passbook_template:
+          required:
+          - pass_description
+          - colors
+          - images
+          allOf:
+          - $ref: '#/components/schemas/appleWalletTemplateBody'
+    passbookField:
+      type: object
+      description: A single label/value entry within an Apple Wallet pass field region.
+      properties:
+        label:
+          type: string
+          description: Small caption shown above the value (rendered in the label color).
+        value:
+          type: string
+          description: Field content (rendered in the foreground color).
+        change_message:
+          type: string
+          description: Notification text shown when this field changes on an installed pass. Must contain the `%@` placeholder for the new value.
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

@@ -1,0 +1,463 @@
+openapi: 3.2.0
+info:
+  title: Vibes Platform Android Wallet Templates API
+  version: 1.0.0
+  description: 'Define the design and content of the Google Wallet (Android) pass for a wallet campaign. Each campaign has a single Google Wallet template whose fields map to Google Wallet pass concepts. See the Google Wallet reference for field semantics: https://developers.google.com/wallet/generic'
+servers:
+- url: https://public-api.vibescm.com
+  description: North America
+- url: https://public-api.eu.vibes.com/
+  description: EMEA
+security:
+- basicAuth: []
+tags:
+- name: Android Wallet Templates API
+  description: 'Define the design and content of the Google Wallet (Android) pass for a wallet campaign. Each campaign has a single Google Wallet template whose fields map to Google Wallet pass concepts. See the Google Wallet reference for field semantics: https://developers.google.com/wallet/generic'
+paths:
+  /companies/{company_key}/campaigns/wallet/{token}/wallet_template:
+    get:
+      tags:
+      - Android Wallet Templates API
+      summary: Get the Google Wallet template
+      description: Retrieve the Google Wallet (Android) pass template for a wallet campaign. Each campaign has a single Google Wallet template.
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: token
+        in: path
+        schema:
+          type: string
+          description: The `token` is the SmartLink token (`wallet_id`) for the campaign.
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/androidTemplateResponse'
+        '404':
+          description: The campaign or its Google Wallet template cannot be found.
+    post:
+      tags:
+      - Android Wallet Templates API
+      summary: Create the Google Wallet template
+      description: Create the Google Wallet (Android) pass template for a wallet campaign. Field semantics follow Google Wallet generic passes (https://developers.google.com/wallet/generic). Many text fields accept Liquid personalization tags that are replaced per recipient.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/androidTemplateRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: token
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The `token` is the SmartLink token (`wallet_id`) for the campaign.<br><div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a real wallet token, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a wallet template being created.</div></div>
+      responses:
+        '201':
+          description: The Google Wallet template was created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/androidTemplateResponse'
+    put:
+      tags:
+      - Android Wallet Templates API
+      summary: Update the Google Wallet template
+      description: Update the Google Wallet (Android) pass template for a wallet campaign.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/androidTemplateRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: token
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The `token` is the SmartLink token (`wallet_id`) for the campaign.<br><div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a real wallet token, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a wallet template being updated.</div></div>
+      responses:
+        '200':
+          description: The Google Wallet template was updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/androidTemplateResponse'
+        '404':
+          description: The campaign or its Google Wallet template cannot be found.
+components:
+  schemas:
+    androidTemplateResponse:
+      allOf:
+      - type: object
+        properties:
+          id:
+            type: string
+            description: Unique identifier of the Google Wallet template.
+          active:
+            type: boolean
+            description: Whether the template is active.
+          created_at:
+            type: string
+            description: When the template was created, in ISO-8601 format.
+          updated_at:
+            type: string
+            description: When the template was last updated, in ISO-8601 format.
+      - $ref: '#/components/schemas/googleWalletTemplateBody'
+    androidTemplateRequest:
+      example:
+        wallet_template:
+          title: Spring Sale
+          issuer: Example Co
+          provider: Example Store
+          background_color: '#1a73e8'
+          logo:
+            url: https://cdn.example.com/logo.png
+          barcode:
+            type: QR_CODE
+            value: '{{ token }}'
+            alternate_text: '12345'
+      type: object
+      required:
+      - wallet_template
+      properties:
+        wallet_template:
+          required:
+          - title
+          - issuer
+          - logo
+          - barcode
+          allOf:
+          - $ref: '#/components/schemas/googleWalletTemplateBody'
+    googleWalletTemplateBody:
+      type: object
+      description: Design and content of a Google Wallet (Android) pass. Google models three pass kinds — Offer, Loyalty, and Event Ticket — that share a common frame; field semantics follow Google Wallet generic passes (https://developers.google.com/wallet/generic). Many text fields accept Liquid personalization tags that are replaced per recipient. Fields noted as "loyalty only" or "event ticket only" apply only to campaigns of that type.
+      properties:
+        title:
+          type: string
+          description: The pass headline.
+        issuer:
+          type: string
+          description: Organization that issues the pass.
+        provider:
+          type: string
+          description: Merchant shown on the card. Required for offer passes.
+        description:
+          type: string
+          description: Free-text offer description shown on the pass. Offer passes only.
+        background_color:
+          type: string
+          description: Color that fills the card, as a hex value (for example `#1a73e8`).
+        nfc_message:
+          type: string
+          description: Payload delivered when the pass is tapped on an NFC terminal (smart tap).
+        enable_expiration_notification:
+          type: boolean
+          description: When `true`, sends the pass holder a push notification before the offer expires. Offer passes only.
+        logo:
+          type: object
+          description: Small circular logo shown on the pass.
+          properties:
+            url:
+              type: string
+              description: Public URL of the logo image.
+        hero_image:
+          type: object
+          description: Large featured image shown on the pass.
+          properties:
+            url:
+              type: string
+              description: Public URL of the hero image.
+        strip_image:
+          type: object
+          description: Wide banner image shown on the pass.
+          properties:
+            url:
+              type: string
+              description: Public URL of the strip image.
+        strip_images:
+          type: array
+          description: Per-recipient alternates of the `strip_image` banner. They share the single strip slot — only one is shown per pass, chosen at issue time by matching the recipient's `IMAGE_CODE` personalization token against `image_code`. If none matches, the default `strip_image` is shown. Each `image_code` must be unique within the array.
+          items:
+            type: object
+            properties:
+              image_code:
+                type: string
+                description: Unique code used to select this image for a recipient.
+              url:
+                type: string
+                description: Public URL of the strip image.
+        barcode:
+          type: object
+          description: The scannable code shown on the pass.
+          properties:
+            type:
+              type: string
+              description: Barcode format — one of `QR_CODE`, `PDF_417`, `AZTEC`, `CODE_128`, `TEXT_ONLY`, or `None` (lowercase variants `qrCode`, `pdf417`, `aztec`, `code128`, `textOnly` are also accepted).
+            label:
+              type: string
+              description: Caption shown beneath the barcode.
+            value:
+              type: string
+              description: Barcode content (ASCII only). Required unless `type` is `None`.
+            alternate_text:
+              type: string
+              description: Human-readable text shown alongside the barcode.
+        loyalty_points:
+          type: object
+          description: Points balance shown on the pass. Loyalty passes only.
+          properties:
+            label:
+              type: string
+              description: Caption for the points balance.
+            balance:
+              type: string
+              description: Points balance value. Required when a label is present.
+        secondary_loyalty_points:
+          type: object
+          description: Secondary points balance shown on the pass. Loyalty passes only.
+          properties:
+            label:
+              type: string
+              description: Caption for the secondary points balance.
+            balance:
+              type: string
+              description: Secondary points balance value. Required when a label is present.
+        account:
+          type: object
+          description: Account details shown on the pass. Loyalty passes only.
+          properties:
+            name:
+              type: string
+              description: Account holder name.
+            name_label:
+              type: string
+              description: Caption for the account holder name.
+            id:
+              type: string
+              description: Account identifier.
+            id_label:
+              type: string
+              description: Caption for the account identifier.
+        rewards_tier:
+          type: object
+          description: Rewards tier shown on the pass. Loyalty passes only.
+          properties:
+            label:
+              type: string
+              description: Caption for the rewards tier.
+            name:
+              type: string
+              description: Rewards tier name.
+        text_area:
+          type: array
+          description: Free-text modules shown on the pass.
+          items:
+            type: object
+            properties:
+              header:
+                type: string
+                description: Module heading. Supply both header and body, or leave both blank.
+              body:
+                type: string
+                description: Module body text.
+        subinfo:
+          type: array
+          description: Info-module rows (heading/body pairs) shown on the pass.
+          items:
+            type: object
+            properties:
+              header:
+                type: string
+                description: Row heading. Supply both header and body, or leave both blank.
+              body:
+                type: string
+                description: Row body text.
+        messages:
+          type: array
+          description: Push-style announcements shown on the pass. Loyalty and event ticket passes only.
+          items:
+            type: object
+            properties:
+              header:
+                type: string
+                description: Message heading.
+              body:
+                type: string
+                description: Message body text.
+        links:
+          type: array
+          description: Links module shown on the pass.
+          items:
+            type: object
+            properties:
+              description:
+                type: string
+                description: Link label. Required when a URI is present.
+              uri:
+                type: string
+                description: Link target URL.
+        help:
+          type: object
+          description: Help link shown on the pass. Event ticket passes only.
+          properties:
+            uri:
+              type: string
+              description: Help link target URL.
+            description:
+              type: string
+              description: Help link label.
+        homepage:
+          type: object
+          description: Homepage link shown on the pass. Event ticket passes only.
+          properties:
+            uri:
+              type: string
+              description: Homepage URL.
+            description:
+              type: string
+              description: Homepage link label.
+        trackers:
+          type: array
+          description: Tracking-pixel definitions. Each renders a 1x1 image beacon that fires on a pass lifecycle event for analytics.
+          items:
+            type: object
+            properties:
+              action:
+                type: string
+                description: Lifecycle event that fires the tracker. One of `view`, `add`, or `remove`.
+              tag:
+                type: string
+                description: Beacon URL requested when the action occurs.
+        event_id:
+          type: string
+          description: Identifier that groups tickets for the same event (max 64 characters). Event ticket passes only.
+        ticket_holder_name:
+          type: string
+          description: Name of the ticket holder. Event ticket passes only.
+        ticket_number:
+          type: string
+          description: Ticket number. Event ticket passes only.
+        ticket_type:
+          type: string
+          description: Ticket type. Event ticket passes only.
+        venue:
+          type: object
+          description: Event venue shown on the pass. Event ticket passes only.
+          properties:
+            name:
+              type: string
+              description: Venue name. Required when a venue is present.
+            address:
+              type: string
+              description: Venue address. Required when a venue is present.
+        event_info:
+          type: object
+          description: Event timing shown on the pass. Event ticket passes only.
+          properties:
+            doors_open_time:
+              type: string
+              description: When doors open.
+            doors_open_label:
+              type: string
+              description: Caption for the doors-open time.
+            start_time:
+              type: string
+              description: Event start time.
+            end_time:
+              type: string
+              description: Event end time.
+        seat_info:
+          type: object
+          description: Seat assignment shown on the pass. Event ticket passes only. Supply each value together with its matching label.
+          properties:
+            section:
+              type: string
+              description: Seat section.
+            section_label:
+              type: string
+              description: Caption for the section.
+            row:
+              type: string
+              description: Seat row.
+            row_label:
+              type: string
+              description: Caption for the row.
+            seat:
+              type: string
+              description: Seat number.
+            seat_label:
+              type: string
+              description: Caption for the seat.
+            gate:
+              type: string
+              description: Entry gate.
+            gate_label:
+              type: string
+              description: Caption for the gate.
+        reservation_info:
+          type: object
+          description: Reservation confirmation shown on the pass. Event ticket passes only.
+          properties:
+            confirmation_code:
+              type: string
+              description: Reservation confirmation code.
+            confirmation_code_label:
+              type: string
+              description: Caption for the confirmation code.
+        grouping_info:
+          type: object
+          description: Controls how related passes are grouped together on the device. Event ticket passes only.
+          properties:
+            sort_index:
+              type: integer
+              description: Position of this pass within its group.
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

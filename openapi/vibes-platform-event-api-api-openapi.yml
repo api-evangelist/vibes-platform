@@ -1,0 +1,93 @@
+openapi: 3.2.0
+info:
+  title: Vibes Platform Event API
+  version: 1.0.0
+servers:
+- url: https://public-api.vibescm.com
+  description: North America
+- url: https://public-api.eu.vibes.com/
+  description: EMEA
+security:
+- basicAuth: []
+tags:
+- name: Event API
+paths:
+  /companies/{company_key}/events:
+    post:
+      tags:
+      - Event API
+      summary: Create an event
+      parameters:
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> Please note that the <b>"Try It"</b> feature to the right will send an actual API call to our system, which may result in a new event being created.</div></div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/eventRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eventResponse'
+        '202':
+          description: Returned if the event has been successfully submitted but will not necessarily result in a message. To track whether or not your message was sent and received by the end user, we recommend registering for <a href="https://developer-platform.vibes.com/reference/event-triggered-callbacks">Event-Triggered Callbacks</a>.
+components:
+  schemas:
+    eventResponse:
+      type: object
+      properties:
+        event_id:
+          type: string
+          description: Unique identifier for the event triggered.
+    eventRequest:
+      type: object
+      properties:
+        event_id:
+          type: string
+          description: Optional user-defined event id.
+        event_type:
+          type: string
+          description: Used to identify a linked API triggered campaign in the platform.
+        event_data:
+          type: object
+          description: <b>Note:</b> Use <i>one:</i> mdn, person_id/person_key, external_person_id, or vibes_device_id.
+          properties:
+            mdn:
+              type: string
+              description: Mobile Directory Number.
+            person_id:
+              type: string
+              description: A unique Vibes-asigned identifier for each person record. <b>Note:</b> You may use either `person_id` or `person_key` as the value in this key/value pair.
+            external_person_id:
+              type: string
+              description: A unique person identifier assigned by the brand and associted with a Vibes person records.
+            vibes_device_id:
+              type: string
+              description: Identifies a push-enabled device associated with a Vibes person record.
+          additionalProperties:
+            type: string
+      required:
+      - event_type
+      - event_data
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

@@ -1,0 +1,243 @@
+openapi: 3.2.0
+info:
+  title: Vibes Platform Incentive Pool API
+  version: 1.0.0
+servers:
+- url: https://public-api.vibescm.com
+  description: North America
+- url: https://public-api.eu.vibes.com/
+  description: EMEA
+security:
+- basicAuth: []
+tags:
+- name: Incentive Pool API
+paths:
+  /companies/{company_key}/incentives/pools:
+    get:
+      tags:
+      - Incentive Pool API
+      summary: Get incentive pools
+      parameters:
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/incentivePoolsResponse'
+    post:
+      tags:
+      - Incentive Pool API
+      summary: Create a new code pool
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/incentivePoolRequest'
+      parameters:
+      - name: X-API-VERSION
+        in: header
+        schema:
+          type: string
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> Please note that the <b>"Try It"</b> feature to the right will send an actual API call to our system, which may result in a new code pool being created.</div></div>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/incentivePoolResponse'
+  /companies/{company_key}/incentives/pools/{incentive_pool_id}:
+    put:
+      tags:
+      - Incentive Pool API
+      summary: Update an existing pool
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/incentivePoolRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: incentive_pool_id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a live incentive_pool_id, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in changes being made to the live code pool.</div></div>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/incentivePoolResponse'
+    get:
+      tags:
+      - Incentive Pool API
+      summary: Get code pool info
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: incentive_pool_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/incentivePoolResponse'
+components:
+  schemas:
+    incentivePoolRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name given to the incentive pool.
+        issuance_allowed:
+          type: boolean
+          description: Indicates whether codes are currently allowed to be issued from this code pool.
+        redemption_allowed:
+          type: boolean
+          description: Indicates whether codes from this code pool are currently allowed to be redeemed.
+        incentive_codes:
+          type: object
+          properties:
+            low_threshold:
+              type: integer
+              description: The number of remaining incentive codes where a notification is sent.
+            max_characters:
+              type: integer
+              description: The maximum number of characters allowed in an incentive code in this pool.
+          required:
+          - low_threshold
+          - max_characters
+        distribution:
+          type: object
+          properties:
+            method:
+              type: string
+              description: The method of distribution.
+              enum:
+              - unique
+              - multi
+        notification_email_address:
+          type: string
+          description: The email address for all notifications.
+      required:
+      - name
+      - issuance_allowed
+      - redemption_allowed
+      - incentive_codes
+      - distribution
+      - notification_email_address
+    incentivePoolResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Vibes unique identifier for each incentive pool.
+        name:
+          type: string
+          description: The name of the incentive pool.
+        issuance_allowed:
+          type: boolean
+          description: Indicates whether codes are currently allowed to be issued from this code pool.
+        redemption_allowed:
+          type: boolean
+          description: Indicates whether codes from this code pool are currently allowed to be redeemed.
+        incentive_codes:
+          type: object
+          properties:
+            total:
+              type: integer
+              description: Total number of incentive codes in the pool.
+            issued:
+              type: integer
+              description: Total number of incentive codes from the pool that have been issued.
+            remaining:
+              type: integer
+              description: Number of incentive codes in the pool that are still available to be issued.
+            low_threshold:
+              type: integer
+              description: Set a number at which you'd like to be notified to add more codes to your pool.
+            max_charachters:
+              type: integer
+              description: The maximum number of characters allowed in an incentive code in this pool.
+        distribution:
+          type: object
+          properties:
+            method:
+              type: string
+              description: The method of distribution (unique|multi).
+        notification_email_address:
+          type: string
+          description: The email address you'd like notifications about this code pool to be send to.
+        created_at:
+          type: string
+          description: The date this pool was created in ISO-8601 format.
+        updated_at:
+          type: string
+          description: The date this pool was last updated in ISO-8601 format.
+        url:
+          type: string
+    incentivePoolsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/incentivePoolResponse'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

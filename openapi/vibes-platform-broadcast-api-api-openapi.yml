@@ -1,0 +1,379 @@
+openapi: 3.2.0
+info:
+  title: Vibes Platform Broadcast API
+  version: 1.0.0
+servers:
+- url: https://public-api.vibescm.com
+  description: North America
+- url: https://public-api.eu.vibes.com/
+  description: EMEA
+security:
+- basicAuth: []
+tags:
+- name: Broadcast API
+paths:
+  /companies/{company_key}/mobiledb/broadcasts/:
+    post:
+      tags:
+      - Broadcast API
+      summary: Create a broadcast
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/broadcastRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> Please note that the <b>"Try It"</b> feature to the right will send an actual API call to our system, which may result in a new broadcast being created.</div></div>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/broadcastResponse'
+        '201':
+          description: Broadcast has been created.
+  /companies/{company_key}/mobiledb/broadcasts:
+    get:
+      tags:
+      - Broadcast API
+      summary: Get broadcasts
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+          - scheduled
+          - sent
+          - canceled
+          - in_progress
+          - failed
+          - paused
+          - deleted
+        example: scheduled
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/broadcastsResponse'
+  /companies/{company_key}/mobiledb/broadcasts/{broadcast_id}:
+    get:
+      tags:
+      - Broadcast API
+      summary: Get a broadcast
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: broadcast_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/broadcastResponse'
+        '404':
+          description: The broadcast cannot be found or the `broadcast_id` is invalid.
+    put:
+      tags:
+      - Broadcast API
+      summary: Update a broadcast
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/broadcastRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: broadcast_id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a live broadcast_id, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in changes being made to the live broadcast.</div></div>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/broadcastResponse'
+        '403':
+          description: The status of the broadcast is not scheduled.
+        '404':
+          description: The `broadcast_id` cannot be found.
+    delete:
+      tags:
+      - Broadcast API
+      summary: Cancel a broadcast
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: broadcast_id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a live broadcast_id, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in the live broadcast being canceled.</div></div>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/broadcastResponse'
+        '403':
+          description: Returned if the broadcast cannot be canceled because it has already been sent.
+        '404':
+          description: The `broadcast_id` cannot be found.
+components:
+  schemas:
+    broadcastRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the campaign.
+        send_scheduled_date:
+          type: string
+          description: The date and time the campaign is scheduled to send in ISO-8601 format.
+          example: '2017-02-16T17:30:00Z'
+        send_schedule:
+          type: object
+          description: <b>Optional</b>. Include if you would like to schedule the message to be sent by time zone.
+          properties:
+            method:
+              type: string
+              description: To send by timezone, use by_time_zone. Defaults to by_date.
+              example: by_time_zone
+            send_date:
+              type: string
+              example: yyyy-mm-dd
+            send_time:
+              type: string
+              description: Use a 24-hour clock in HH:MM format.
+              example: '17:30'
+            field_name:
+              type: string
+              description: If you are sending the broadcast by time zone, use this field to indicate the name of the custom field used to collect users’ time zones.
+            default_time_zone:
+              type: string
+              description: Use the zone's IANA Time Zone Database identifier. See a list of TZ identifiers <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target=”_blank”>here</a>.
+              example: America/Chicago
+        targeting:
+          type: object
+          properties:
+            message_template:
+              type: string
+              description: Text of your message, including custom fields or incentive tags.
+            short_url_base:
+              type: string
+              description: Base URL to use when shortening URLs, if a <a href="https://developer-platform.vibes.com/docs/creating-a-custom-short-domain" target="_blank">custom short domain</a> is being used.
+              example: https://vbs.cm/
+            shorten_urls:
+              type: boolean
+              description: Should URLs be shortened?
+            channel:
+              type: string
+              description: Message channel for broadcast.
+              enum:
+              - SMS
+              - Push
+            source_short_code:
+              type: object
+              description: Code the broadcast will be delivered on (if SMS or MMS).
+              properties:
+                short_code:
+                  type: string
+                country_code:
+                  type: string
+                  example: 1
+                source_type:
+                  type: string
+                  description: SC for short or long numeric codes; ANC for alphanumeric codes.
+                  example: SC
+            source_lists:
+              type: array
+              description: Insert ids of the subscription lists being targeted in this broadcast.
+              items:
+                type: string
+                description: IDs of lists included in the broadcast.
+            filters:
+              type: array
+              description: Filters used to target recipients.
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Name of filter
+                  selector:
+                    type: string
+                  value:
+                    type: array
+                    description: Add each value in its own string
+                    items:
+                      type: string
+          required:
+          - source_lists
+          - message_template
+      required:
+      - name
+      - send_scheduled_date
+    broadcastsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/broadcastResponse'
+    broadcastResponse:
+      type: object
+      properties:
+        broadcast_id:
+          type: string
+          description: Vibes unique identifier for the broadcast.
+        status:
+          type: string
+          description: The status of the broadcast.
+          enum:
+          - scheduled
+          - in_progress
+          - sent
+          - canceled
+          - deleted
+          - paused
+          - failed
+        name:
+          type: string
+          description: The name of the campaign.
+        send_scheduled_date:
+          type: string
+          description: The date the campaign is scheduled to send.
+        created_by:
+          type: string
+          description: The user that created the campaign.
+        created_by_application:
+          type: string
+          description: The application that created the campaign, if applicable.
+        targeting:
+          type: object
+          properties:
+            message_template:
+              type: string
+              description: Body of the broadcast message.
+            short_url_base:
+              type: string
+              description: Base URL to use when shortening URLs.
+            shorten_urls:
+              type: boolean
+              description: Should URLs be shortened?
+            channel:
+              type: string
+              description: Message channel for broadcast.
+            source_short_code:
+              type: string
+              description: Short code the broadcast will be delviered on (if SMS or MMS).
+            source_lists:
+              type: array
+              items:
+                type: string
+                description: IDs of lists included in the broadcast.
+            filters:
+              type: array
+              description: Any filters used to target recipients.
+              items:
+                type: object
+            delivery:
+              type: object
+              properties:
+                send_start_date:
+                  type: string
+                  description: Date the broadcast started.
+                enqueue_completed_date:
+                  type: string
+                  description: Date the final message was queued for delivery.
+                recipient_count:
+                  type: integer
+                  description: Number of recipients.
+            url:
+              type: string
+              description: Unique resource URL for the Broadcast Campaign.
+            created_at:
+              type: string
+              description: Date that the broadcast campaign was created in ISO-8601 format.
+            updated_at:
+              type: string
+              description: Date that the broadcast campaign was last updated in ISO-8601 format.
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

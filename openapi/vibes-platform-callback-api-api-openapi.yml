@@ -1,0 +1,1011 @@
+openapi: 3.2.0
+info:
+  title: Vibes Platform Callback API
+  version: 1.0.0
+servers:
+- url: https://public-api.vibescm.com
+  description: North America
+- url: https://public-api.eu.vibes.com/
+  description: EMEA
+security:
+- basicAuth: []
+tags:
+- name: Callback API
+paths:
+  /companies/{company_key}/config/callbacks/:
+    post:
+      tags:
+      - Callback API
+      summary: Register for a new callback type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/callbackRequest-Ack'
+              - $ref: '#/components/schemas/callbackRequest-Event'
+              - $ref: '#/components/schemas/callbackRequest-Person'
+              - $ref: '#/components/schemas/callbackRequest-Push'
+              - $ref: '#/components/schemas/callbackRequest-Sub'
+              - $ref: '#/components/schemas/callbackRequest-SubList'
+              - $ref: '#/components/schemas/callbackRequest-Unmatched'
+              - $ref: '#/components/schemas/callbackRequest-Wallet'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> Please note that the <b>"Try It"</b> feature to the right will send an actual API call to our system, which may result in your company being registered for a new callback.</div></div>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/callbackResponse'
+        '201':
+          description: Callback has been successfully registered.
+    get:
+      tags:
+      - Callback API
+      summary: List registered callbacks
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/callbacksResponse'
+  /companies/{company_key}/config/callbacks/{callback_id}:
+    get:
+      tags:
+      - Callback API
+      summary: Get a callback
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: callback_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/callbackResponse'
+        '404':
+          description: The `callback_id` is not recognized.
+    put:
+      tags:
+      - Callback API
+      summary: Update a callback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/callbackRequest-Ack'
+              - $ref: '#/components/schemas/callbackRequest-Event'
+              - $ref: '#/components/schemas/callbackRequest-Person'
+              - $ref: '#/components/schemas/callbackRequest-Push'
+              - $ref: '#/components/schemas/callbackRequest-Sub'
+              - $ref: '#/components/schemas/callbackRequest-SubList'
+              - $ref: '#/components/schemas/callbackRequest-Unmatched'
+              - $ref: '#/components/schemas/callbackRequest-Wallet'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> Please note that the <b>"Try It"</b> feature to the right will send an actual API call to our system, which may result in your company being registered for a new callback.</div></div>
+      - name: callback_id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The id for the callback you are updating.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/callbackResponse'
+        '201':
+          description: Callback has been successfully updated.
+    delete:
+      tags:
+      - Callback API
+      summary: Cancel a callback
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: callback_id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> Please note that the <b>"Try It"</b> feature to the right will send an actual API call to our system, which may result in a callback being cancelled.</div></div>
+      responses:
+        '200':
+          description: Callback was successfully cancelled. Your endpoint will no longer receive this callback.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/callbackResponse'
+        '404':
+          description: The `callback_id` cannot be found.
+  /companies/{company_key}/config/callback_events/test:
+    post:
+      tags:
+      - Callback API
+      summary: Create a test callback event
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/testcallbackRequest-Ack'
+              - $ref: '#/components/schemas/testcallbackRequest-Event'
+              - $ref: '#/components/schemas/testcallbackRequest-Person'
+              - $ref: '#/components/schemas/testcallbackRequest-Push'
+              - $ref: '#/components/schemas/testcallbackRequest-Sub'
+              - $ref: '#/components/schemas/testcallbackRequest-SubList'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> Please note that the <b>"Try It"</b> feature to the right will send an actual API call to our system, which may result in your company being registered for a new callback.</div></div>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/testCallbackResponse'
+        '201':
+          description: The callback was queued for send.
+        '404':
+          description: An active callback does not exist.
+components:
+  schemas:
+    testCallbackResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: confirmation of test callback type requested.
+        event_id:
+          type: string
+          description: System defined event_id for the callback.
+    callbackResponse:
+      type: object
+      properties:
+        callback_id:
+          type: string
+          description: Vibes unique identifier for each callback record.
+        callback_type:
+          type: string
+          description: Callback type to trigger this callback.
+        ack_participant_changed:
+          type: object
+          description: Present for Acquisition Changed callback.
+          properties:
+            campaign_id:
+              type: string
+              description: Vibes unique identifier for an acquisition campaign.
+        ack_participant_added:
+          type: object
+          description: Present for Acquisition Added callback.
+          properties:
+            campaign_id:
+              type: string
+              description: Vibes unique identifier for an acquisition campaign.
+        subscription_added:
+          type: object
+          description: Present for Subscription Added callback.
+          properties:
+            list_id:
+              type: string
+              description: Vibes unique identifier for a subscription list.
+        subscription_removed:
+          type: object
+          description: Present for Subscription Removed callback.
+          properties:
+            list_id:
+              type: string
+              description: Vibes unique identifier for a subscription list.
+        unmatched_message_received:
+          type: object
+          description: Present for Unmatched Message callback.
+          properties:
+            source_code:
+              type: string
+              description: The short code, long code, or alpha code you want to receive unmatched message events for.
+            country_code:
+              type: string
+              description: The country code for the source code you want to receive unmatched message events for.
+        wallet_item_install:
+          type: object
+          description: Present for Wallet Item Install callback.
+          properties:
+            campaign_token:
+              type: string
+              description: The campaign token for the wallet campaign.
+        wallet_item_remove:
+          type: object
+          description: Present for Wallet Item Removed callback.
+          properties:
+            campaign_token:
+              type: string
+              description: The campaign token for the wallet campaign.
+        device_added:
+          type: object
+          description: Present for Push Device Added callback.
+          properties:
+            app_id:
+              type: string
+              description: Your push application id.
+        device_removed:
+          type: object
+          description: Present for Push Device Removed callback.
+          properties:
+            app_id:
+              type: string
+              description: Your push application id.
+        device_updated:
+          type: object
+          description: Present for Push Device Updated callback.
+          properties:
+            app_id:
+              type: string
+              description: Your push application id.
+        event_processed:
+          type: object
+          description: Present for event-triggered callback if you only want to recieve callbacks for a single event.
+          properties:
+            event_type:
+              type: string
+            callbacks_to_send:
+              type: string
+              description: Choose which callbacks you'd like to receive. Default is all.
+              enum:
+              - all
+              - only_failures
+              - routing
+              - carrier_dlr
+              - handset_dlr
+        destination:
+          type: object
+          properties:
+            url:
+              type: string
+              description: External URL to submit the callback data.
+            method:
+              type: string
+              description: Method to submit the data to the destination URL.
+              enum:
+              - POST
+              - PUT
+            content_type:
+              type: string
+              description: Content type to set when submitting the data to the destination URL.
+              enum:
+              - application/json
+              - text/json
+        start_date:
+          type: string
+          description: The date the campaign is starting in ISO-8601 format.
+        end_date:
+          type: string
+          description: The date the Campaign is ending in ISO-8601 format.
+        url:
+          type: string
+          description: Unique resource URL for the callback.
+        created_date:
+          type: string
+          description: The date the campaign was created in ISO-8601 format.
+        updated_date:
+          type: string
+          description: The date the campaign was last updated in ISO-8601 format.
+    testcallbackRequest-Sub:
+      type: object
+      title: Subscription Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback you'd like to receive the test callback for.
+          enum:
+          - subscription_added
+          - subscription_removed
+        subscription:
+          type: object
+          properties:
+            person:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: person_id for the subscriber.
+            subscription_list:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: subscription_list_id for list for which a subscriber is being added or removed.
+              required:
+              - id
+          required:
+          - subscription_list
+      required:
+      - callback_type
+    testcallbackRequest-Event:
+      type: object
+      title: Event-Triggered Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback you'd like to receive the test callback for.
+          enum:
+          - event_processed
+        event_processed:
+          type: object
+          properties:
+            event_id:
+              type: string
+              description: event_id for your test event.
+            event_data:
+              type: object
+              description: Enter any event_data that will be passed along in your test callback.
+      required:
+      - callback_type
+    testcallbackRequest-Person:
+      type: object
+      title: Person Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback you'd like to receive the test callback for.
+          enum:
+          - person_added
+          - person_updated
+        person:
+          type: object
+          properties:
+            person_id:
+              type: string
+              description: person_id for person being added or updated.
+            external_person_id:
+              type: string
+              description: external_person_id for person being added or updated.
+            mobile:
+              type: object
+              properties:
+                mdn:
+                  type: string
+                  description: Mobile phone number of person being added or updated.
+                carrier_code:
+                  type: string
+                  description: <a href="https://developer-aggregation.vibes.com/reference/carrier-codes">Carrier code</a> for person's mobile phone carrier.
+            custom_fields:
+              type: object
+              description: Any custom fields being added or updated for the person.
+      required:
+      - callback_type
+    testcallbackRequest-SubList:
+      type: object
+      title: Subscription List Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback you'd like to receive the test callback for.
+          enum:
+          - subscription_list_added
+          - subscription_list_updated
+        subscription_list:
+          type: object
+          properties:
+            id:
+              type: string
+              description: subscription_list_id for the list that is being added or updated.
+            name:
+              type: string
+              description: Name of subscription list being added or updated.
+      required:
+      - callback_type
+    testcallbackRequest-Ack:
+      type: object
+      title: Acquisition Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback you'd like to receive the test callback for.
+          enum:
+          - ack_participant_added
+          - ack_participant_changed
+          - company_participant_added
+          - company_participant_changed
+        participant:
+          type: object
+          properties:
+            id:
+              type: string
+              description: person_id of person who is being added or removed from this acquisition campaign.
+            mobile_phone:
+              type: object
+              properties:
+                mdn:
+                  type: string
+                  description: Mobile phone number for person who is being added or removed from this acquisition campaign.
+            acquisition_campaign:
+              type: object
+              properties:
+                api_key:
+                  type: string
+                  description: This is the <b>acquisition_id</b> of the campaign a person is being added to. If using ack_participant_added or ack_participant_changed, api_key is required.
+                description:
+                  type: string
+                  description: The value here will be returned in the callback. This is optional.
+                keyword:
+                  type: string
+                  description: The value here will be returned in the callback. This is optional.
+            subscription_list:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: The subscription_list_id of the list the participant is being added to.
+      required:
+      - callback_type
+    callbackRequest-SubList:
+      type: object
+      title: Subscription List Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback to register.
+          enum:
+          - subscription_list_added
+          - subscription_list_updated
+        destination:
+          type: object
+          properties:
+            url:
+              type: string
+              description: External URL to submit the callback data.
+            method:
+              type: string
+              description: Method to submit the data to the destination URL.
+              enum:
+              - POST
+              - PUT
+              default: POST
+            content_type:
+              type: string
+              description: Content type to set when submitting the data to the destination URL.
+              enum:
+              - application/json
+              - text/json
+              default: application/json
+          required:
+          - url
+        start_date:
+          type: string
+          description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
+          example: yyyy-mm-dd
+        end_date:
+          type: string
+          description: Date you’d like to stop receiving this callback in ISO-8601 format. Leave blank for no end date.
+          example: yyyy-mm-dd
+      required:
+      - callback_type
+      - destination
+    callbackRequest-Wallet:
+      type: object
+      title: Wallet Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback to register.
+          enum:
+          - wallet_item_install
+          - wallet_item_remove
+        destination:
+          type: object
+          properties:
+            url:
+              type: string
+              description: External URL to submit the callback data.
+            method:
+              type: string
+              description: Method to submit the data to the destination URL.
+              enum:
+              - POST
+              - PUT
+              default: POST
+            content_type:
+              type: string
+              description: Content type to set when submitting the data to the destination URL.
+              enum:
+              - application/json
+              - text/json
+              default: application/json
+          required:
+          - url
+        wallet_item_install:
+          type: object
+          description: Required for Wallet Item Install callback.
+          properties:
+            campaign_token:
+              type: string
+              description: The campaign token for the wallet campaign.
+        wallet_item_remove:
+          type: object
+          description: Required for Wallet Item Remove callback.
+          properties:
+            campaign_token:
+              type: string
+              description: The campaign token for the wallet campaign.
+        start_date:
+          type: string
+          description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
+          example: yyyy-mm-dd
+        end_date:
+          type: string
+          description: Date you’d like to stop receiving this callback in ISO-8601 format. Leave blank for no end date.
+          example: yyyy-mm-dd
+      required:
+      - callback_type
+      - destination
+    callbackRequest-Unmatched:
+      type: object
+      title: Unmatched Message Callback
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback to register.
+          enum:
+          - unmatched_message_received
+        destination:
+          type: object
+          properties:
+            url:
+              type: string
+              description: External URL to submit the callback data.
+            method:
+              type: string
+              description: Method to submit the data to the destination URL.
+              enum:
+              - POST
+              - PUT
+              default: POST
+            content_type:
+              type: string
+              description: Content type to set when submitting the data to the destination URL.
+              enum:
+              - application/json
+              - text/json
+              default: application/json
+          required:
+          - url
+        unmatched_message_received:
+          type: object
+          description: Required for Unmatched Message callback.
+          properties:
+            source_code:
+              type: string
+              description: The short code, long code, or alpha code you want to receive unmatched message events for.
+            country_code:
+              type: string
+              description: The country code for the source code you want to receive unmatched message events for.
+          required:
+          - source_code
+        start_date:
+          type: string
+          description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
+          example: yyyy-mm-dd
+        end_date:
+          type: string
+          description: Date you’d like to stop receiving this callback in ISO-8601 format. Leave blank for no end date.
+          example: yyyy-mm-dd
+      required:
+      - callback_type
+      - destination
+      - unmatched_message_received
+    callbacksResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/callbackResponse'
+    callbackRequest-Person:
+      type: object
+      title: Person Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback to register.
+          enum:
+          - person_added
+          - person_updated
+        destination:
+          type: object
+          properties:
+            url:
+              type: string
+              description: External URL to submit the callback data.
+            method:
+              type: string
+              description: Method to submit the data to the destination URL.
+              enum:
+              - POST
+              - PUT
+              default: POST
+            content_type:
+              type: string
+              description: Content type to set when submitting the data to the destination URL.
+              enum:
+              - application/json
+              - text/json
+              default: application/json
+          required:
+          - url
+        start_date:
+          type: string
+          description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
+          example: yyyy-mm-dd
+        end_date:
+          type: string
+          description: Date you’d like to stop receiving this callback in ISO-8601 format. Leave blank for no end date.
+          example: yyyy-mm-dd
+      required:
+      - callback_type
+      - destination
+    callbackRequest-Event:
+      type: object
+      title: Event-Triggered Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback to register.
+          enum:
+          - event_processed
+        destination:
+          type: object
+          properties:
+            url:
+              type: string
+              description: External URL to submit the callback data.
+            method:
+              type: string
+              description: Method to submit the data to the destination URL.
+              enum:
+              - POST
+              - PUT
+              default: POST
+            content_type:
+              type: string
+              description: Content type to set when submitting the data to the destination URL.
+              enum:
+              - application/json
+              - text/json
+              default: application/json
+          required:
+          - url
+        event_processed:
+          type: object
+          properties:
+            event_type:
+              type: string
+              description: The name of the event that you would like to receive callbacks for.
+            callbacks_to_send:
+              type: string
+              description: Choose which callbacks you'd like to receive. Default is all.
+              enum:
+              - all
+              - only_failures
+              - routing
+              - carrier_dlr
+              - handset_dlr
+        start_date:
+          type: string
+          description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
+          example: yyyy-mm-dd
+        end_date:
+          type: string
+          description: Date you’d like to stop receiving this callback in ISO-8601 format. Leave blank for no end date.
+          example: yyyy-mm-dd
+      required:
+      - event_processed
+      - callback_type
+      - destination
+    callbackRequest-Push:
+      type: object
+      title: Push Device Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback to register.
+          enum:
+          - device_added
+          - device_removed
+          - device_updated
+        destination:
+          type: object
+          properties:
+            url:
+              type: string
+              description: External URL to submit the callback data.
+            method:
+              type: string
+              description: Method to submit the data to the destination URL.
+              enum:
+              - POST
+              - PUT
+              default: POST
+            content_type:
+              type: string
+              description: Content type to set when submitting the data to the destination URL.
+              enum:
+              - application/json
+              - text/json
+              default: application/json
+          required:
+          - url
+        device_added:
+          type: object
+          description: Required for Push Device Added callback.
+          properties:
+            app_id:
+              type: string
+              description: Your push application id.
+        device_removed:
+          type: object
+          description: Required for Push Device Removed callback.
+          properties:
+            app_id:
+              type: string
+              description: Your push application id.
+        device_updated:
+          type: object
+          description: Required for Push Device Updated callback.
+          properties:
+            app_id:
+              type: string
+              description: Your push application id.
+        start_date:
+          type: string
+          description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
+          example: yyyy-mm-dd
+        end_date:
+          type: string
+          description: Date you’d like to stop receiving this callback in ISO-8601 format. Leave blank for no end date.
+          example: yyyy-mm-dd
+      required:
+      - callback_type
+      - destination
+    testcallbackRequest-Push:
+      type: object
+      title: Push Device Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback you'd like to receive the test callback for.
+          enum:
+          - device_added
+          - device_removed
+          - device_updated
+        person:
+          type: object
+          properties:
+            person_id:
+              type: string
+              description: person_id for the person associated with the push device being added/updated/removed.
+            external_person_id:
+              type: string
+              description: external_person_id for the person associated with the push device being added/updated/removed.
+        push_device:
+          type: object
+          properties:
+            app_id:
+              type: string
+              description: Your app id.
+            vibes_device_id:
+              type: string
+            push_token:
+              type: string
+            device_os:
+              type: string
+      required:
+      - callback_type
+    callbackRequest-Sub:
+      type: object
+      title: Subscription Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback to register.
+          enum:
+          - subscription_added
+          - subscription_removed
+        destination:
+          type: object
+          properties:
+            url:
+              type: string
+              description: External URL to submit the callback data.
+            method:
+              type: string
+              description: Method to submit the data to the destination URL.
+              enum:
+              - POST
+              - PUT
+              default: POST
+            content_type:
+              type: string
+              description: Content type to set when submitting the data to the destination URL.
+              enum:
+              - application/json
+              - text/json
+              default: application/json
+          required:
+          - url
+        subscription_added:
+          type: object
+          description: Required for Subscription Added callback.
+          properties:
+            list_id:
+              type: string
+              description: Vibes unique identifier for a subscription list.
+        subscription_removed:
+          type: object
+          description: Required for Subscription Removed callback.
+          properties:
+            list_id:
+              type: string
+              description: Vibes unique identifier for a subscription list.
+        start_date:
+          type: string
+          description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
+          example: yyyy-mm-dd
+        end_date:
+          type: string
+          description: Date you’d like to stop receiving this callback in ISO-8601 format. Leave blank for no end date.
+          example: yyyy-mm-dd
+      required:
+      - callback_type
+      - destination
+    callbackRequest-Ack:
+      type: object
+      title: Acquisition Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback to register.
+          enum:
+          - ack_participant_added
+          - ack_participant_changed
+          - company_participant_added
+          - company_participant_changed
+        destination:
+          type: object
+          properties:
+            url:
+              type: string
+              description: External URL to submit the callback data.
+            method:
+              type: string
+              description: Method to submit the data to the destination URL.
+              enum:
+              - POST
+              - PUT
+              default: POST
+            content_type:
+              type: string
+              description: Content type to set when submitting the data to the destination URL.
+              enum:
+              - application/json
+              - text/json
+              default: application/json
+          required:
+          - url
+        ack_participant_changed:
+          type: object
+          description: Required for Acquisition Changed callback.
+          properties:
+            campaign_id:
+              type: string
+              description: Vibes unique identifier for an acquisition campaign.
+        ack_participant_added:
+          type: object
+          description: Required for Acquisition Added callback.
+          properties:
+            campaign_id:
+              type: string
+              description: Vibes unique identifier for an acquisition campaign.
+        start_date:
+          type: string
+          description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
+          example: yyyy-mm-dd
+        end_date:
+          type: string
+          description: Date you’d like to stop receiving this callback in ISO-8601 format. Leave blank for no end date.
+          example: yyyy-mm-dd
+      required:
+      - callback_type
+      - destination
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

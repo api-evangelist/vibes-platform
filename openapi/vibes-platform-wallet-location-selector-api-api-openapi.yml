@@ -1,0 +1,249 @@
+openapi: 3.2.0
+info:
+  title: Vibes Platform Wallet Location Selector API
+  version: 1.0.0
+  description: Configure the branded "Add to Wallet" landing page shown to end users for a wallet campaign, including its image, heading, colors, and language.
+servers:
+- url: https://public-api.vibescm.com
+  description: North America
+- url: https://public-api.eu.vibes.com/
+  description: EMEA
+security:
+- basicAuth: []
+tags:
+- name: Wallet Location Selector API
+  description: Configure the branded "Add to Wallet" landing page shown to end users for a wallet campaign, including its image, heading, colors, and language.
+paths:
+  /companies/{company_key}/campaigns/wallet/{token}/location_selector:
+    get:
+      tags:
+      - Wallet Location Selector API
+      summary: Get the location selector
+      description: Retrieve the branded "Add to Wallet" landing page configuration for a wallet campaign.
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: token
+        in: path
+        schema:
+          type: string
+          description: The `token` is the SmartLink token (`wallet_id`) for the campaign.
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/locationSelectorResponse'
+        '404':
+          description: The campaign or its location selector cannot be found.
+    post:
+      tags:
+      - Wallet Location Selector API
+      summary: Create the location selector
+      description: Create the branded "Add to Wallet" landing page for a wallet campaign.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/locationSelectorRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: token
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The `token` is the SmartLink token (`wallet_id`) for the campaign.<br><div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> Using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a location selector being created.</div></div>
+      responses:
+        '201':
+          description: The location selector was created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/locationSelectorResponse'
+    put:
+      tags:
+      - Wallet Location Selector API
+      summary: Update the location selector
+      description: Update the branded "Add to Wallet" landing page for a wallet campaign.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/locationSelectorRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: token
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The `token` is the SmartLink token (`wallet_id`) for the campaign.<br><div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> Using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a location selector being updated.</div></div>
+      responses:
+        '200':
+          description: The location selector was updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/locationSelectorResponse'
+        '404':
+          description: The campaign or its location selector cannot be found.
+    delete:
+      tags:
+      - Wallet Location Selector API
+      summary: Delete the location selector
+      description: Remove the location selector from a wallet campaign.
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: token
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The `token` is the SmartLink token (`wallet_id`) for the campaign.<br><div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> Using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a location selector being deleted.</div></div>
+      responses:
+        '204':
+          description: The location selector was deleted.
+        '404':
+          description: The campaign or its location selector cannot be found.
+components:
+  schemas:
+    locationSelectorBody:
+      type: object
+      description: Branding for the "Add to Wallet" landing page a customer sees before the pass is generated — the page where they pick their store location (drawn from the campaign's locations) and tap to install.
+      properties:
+        image:
+          type: object
+          description: Image shown on the landing page (max 2 MB).
+          properties:
+            url:
+              type: string
+              description: Public URL of the image.
+        header:
+          type: object
+          description: Landing page heading.
+          properties:
+            title:
+              type: string
+              description: Page title.
+            tagline:
+              type: string
+              description: Page subtitle.
+        colors:
+          type: object
+          description: Landing page colors as hex values.
+          properties:
+            background:
+              type: string
+              description: Page background color.
+            foreground:
+              type: string
+              description: Text color.
+            label:
+              type: string
+              description: Label color.
+        fontsize:
+          type: integer
+          description: Font size used for the page text.
+        include_zipcode:
+          type: boolean
+          description: When set to `true`, you may bypass the location selector by passing the end user’s zip code as a URL param (ex. `?zipcode=99999`). If no zip code is passed, the user will still see the location selector.
+        add_to_wallet_language:
+          type: string
+          enum:
+          - en-US
+          - es-ES
+          - es-419
+          - fr-FR
+          description: Locale of the "Add to Wallet" button. One of `en-US` (English), `es-ES` (Spanish - Spain), `es-419` (Spanish - Latin America), or `fr-FR` (French).
+    locationSelectorResponse:
+      allOf:
+      - type: object
+        properties:
+          token:
+            type: string
+            description: Public token of the location selector.
+          url:
+            type: string
+            description: Public landing page URL.
+          created_at:
+            type: string
+            description: When the location selector was created, in ISO-8601 format.
+          updated_at:
+            type: string
+            description: When the location selector was last updated, in ISO-8601 format.
+      - $ref: '#/components/schemas/locationSelectorBody'
+    locationSelectorRequest:
+      example:
+        location_selector:
+          header:
+            title: Add your pass
+            tagline: Tap below to save it to your wallet
+          colors:
+            background: '#ffffff'
+            foreground: '#000000'
+            label: '#888888'
+          include_zipcode: true
+          add_to_wallet_language: en-US
+      type: object
+      required:
+      - location_selector
+      properties:
+        location_selector:
+          allOf:
+          - $ref: '#/components/schemas/locationSelectorBody'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

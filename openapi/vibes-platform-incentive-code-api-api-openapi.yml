@@ -1,0 +1,305 @@
+openapi: 3.2.0
+info:
+  title: Vibes Platform Incentive Code API
+  version: 1.0.0
+servers:
+- url: https://public-api.vibescm.com
+  description: North America
+- url: https://public-api.eu.vibes.com/
+  description: EMEA
+security:
+- basicAuth: []
+tags:
+- name: Incentive Code API
+paths:
+  /companies/{company_key}/incentives/pools/{issuance_pool_id}/issuances:
+    post:
+      tags:
+      - Incentive Code API
+      summary: Issue an incentive code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/incentiveCodeIssuanceRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: issuance_pool_id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a live issuance_pool_id, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a code being issued.</div></div>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/incentiveCodeIssuanceResponse'
+        '422':
+          description: No codes are available from the code pool specified.
+  /companies/{company_key}/incentives/codes/{incentive_code}:
+    get:
+      tags:
+      - Incentive Code API
+      summary: Get incentive code
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: incentive_code
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/incentiveCodeResponse'
+  /companies/{company_key}/incentives/codes/{incentive_code}/issuances:
+    get:
+      tags:
+      - Incentive Code API
+      summary: Get issuances for a code
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: incentive_code
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/incentiveCodeIssuancesResponse'
+  /companies/{company_key}/incentives/codes/{incentive_code}/redemptions:
+    post:
+      tags:
+      - Incentive Code API
+      summary: Redeem an incentive code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/incentiveCodeIssuanceRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: incentive_code
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a real incentive_code, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a code being redeemed.</div></div>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/incentiveCodeIssuancesResponse'
+        '422':
+          description: Returned in the following cases:<br> <ul> <li>When using an invalid issuee_id or external_issuee_id.</li> <li>When using a "unique" pool type, and the code has already been redeemed.</li </ul>
+    get:
+      tags:
+      - Incentive Code API
+      summary: Get redemptions for a code
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: incentive_code
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/incentiveCodeIssuancesResponse'
+components:
+  schemas:
+    incentiveCodeIssuancesResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/incentiveCodeIssuanceResponse'
+    incentiveCodeIssuanceResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Vibes unique identifier for each issuance.
+        external_issuee_id:
+          type: string
+          description: Unique external issuee ID.
+        issuee_id:
+          type: string
+          description: Vibes generated issuee ID.
+        referring_application:
+          type: string
+          description: Application issuing the code.
+        referring_application_ref_id:
+          type: string
+          description: Application reference ID (campaign ID).
+        incentive_code:
+          type: object
+          description: An object describing this Issuance's Incentive Code.
+          properties:
+            code:
+              type: string
+              description: The incentive code.
+            url:
+              type: string
+              description: The incentive code's resource URL.
+        incentive_pool:
+          type: object
+          description: An object describing this issuance's Pool.
+          properties:
+            id:
+              type: integer
+              description: The unique identifier for the pool.
+            url:
+              type: integer
+              description: The URL to access the incentive pool resource.
+        created_at:
+          type: string
+          description: The date this issuance was created, in the ISO-8601 format.
+        updated_at:
+          type: string
+          description: The date this issuance was last updated, in the ISO-8601 format.
+    incentiveCodeIssuanceRequest:
+      type: object
+      properties:
+        external_issuee_id:
+          type: string
+          description: Unique external issuee ID.
+        code:
+          type: string
+          description: If provided, this specific code is issued.
+        referring_application:
+          type: string
+          description: Application issuing the code. Required in pools requiring a campaign_registration.
+        referring_application_ref_id:
+          type: string
+          description: Application reference ID. Required in pools requiring a campaign_registration.
+    incentiveCodeResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The incentive code.
+        active:
+          type: boolean
+          description: Whether issuance of the incentive code is currently allowed.
+        issuances:
+          type: object
+          properties:
+            total:
+              type: integer
+              description: The total number of times this code has been issued.
+            unique:
+              type: integer
+              description: The number of unique times this code has been issued.
+        redemptions:
+          type: object
+          properties:
+            total:
+              type: integer
+              description: The total number of times this code has been redeemed.
+            unique:
+              type: integer
+              description: The number of unique times this code has been redeemed.
+        created_at:
+          type: string
+          description: The date this code was created, in the ISO-8601 format.
+        updated_at:
+          type: string
+          description: The date this code was last updated, in the ISO-8601 format.
+        url:
+          type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

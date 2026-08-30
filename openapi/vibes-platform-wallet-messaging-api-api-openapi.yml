@@ -1,0 +1,344 @@
+openapi: 3.2.0
+info:
+  title: Vibes Platform Wallet Messaging API
+  version: 1.0.0
+  description: Send push-style messages to the holders of a wallet campaign's passes and review messages that have already been sent. Messages can be targeted to specific recipients with filters (for example, by token value or group code).
+servers:
+- url: https://public-api.vibescm.com
+  description: North America
+- url: https://public-api.eu.vibes.com/
+  description: EMEA
+security:
+- basicAuth: []
+tags:
+- name: Wallet Messaging API
+  description: Send push-style messages to the holders of a wallet campaign's passes and review messages that have already been sent. Messages can be targeted to specific recipients with filters (for example, by token value or group code).
+paths:
+  /companies/{company_key}/campaigns/wallet/{wallet_id}/messages:
+    post:
+      tags:
+      - Wallet Messaging API
+      summary: Create a wallet message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/walletMessageRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: wallet_id
+        in: path
+        schema:
+          type: string
+          description: The `wallet_id` is the SmartLink token for a campaign.
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a real wallet_id, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a wallet message being created and sent.</div></div>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/walletMessageResponse'
+        '404':
+          description: The specified wallet_id does not exist.
+    get:
+      tags:
+      - Wallet Messaging API
+      summary: Get wallet messages
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: wallet_id
+        in: path
+        schema:
+          type: string
+          description: The `wallet_id` is the SmartLink token for a campaign.
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/walletMessagesResponse'
+        '404':
+          description: The specified `wallet_id` does not exist.
+  /companies/{company_key}/campaigns/wallet/{wallet_id}/messages/{wallet_message_id}:
+    get:
+      tags:
+      - Wallet Messaging API
+      summary: Get a wallet message
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: wallet_id
+        in: path
+        schema:
+          type: string
+          description: The `wallet_id` is the SmartLink token for a campaign.
+        required: true
+      - name: wallet_message_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/walletMessageResponse'
+        '404':
+          description: The specific campaign or wallet message does not exist.
+components:
+  schemas:
+    wallet-filters:
+      type: object
+      title: Filter by another field.
+      properties:
+        name:
+          type: string
+          enum:
+          - group_code
+          - provider
+          - expiration_date
+        selector:
+          type: string
+          enum:
+          - starts_with
+          - between
+          - '='
+          - <
+          - <=
+          - '>'
+          - '>='
+          - before
+          - after
+          - between
+          - 'on'
+        value:
+          type: string
+    wallet-filters-any:
+      type: object
+      title: Filter by another field using selector "any".
+      properties:
+        name:
+          type: string
+          enum:
+          - group_code
+          - provider
+          - expiration_date
+        selector:
+          type: string
+          enum:
+          - any
+        value:
+          type: array
+          description: Add each value in its own string
+          items:
+            type: string
+    first-class-filters:
+      type: object
+      title: Filter by first-class field.
+      description: <a href="https://developer-platform.vibes.com/reference/first-class-fields">Learn more about first-class fields.</a>
+      properties:
+        name:
+          type: string
+          enum:
+          - first_class_field
+        field_name:
+          type: string
+          enum:
+          - email_address
+          - external_email_id
+          - first_name
+          - last_name
+          - code
+          - expiration_date
+          - account_number
+          - balance
+          - tier
+          - offer_value
+          - loyalty_tier
+          - loyalty_balance
+          - strip_image_code
+        selector:
+          type: string
+          enum:
+          - starts_with
+          - between
+          - '='
+          - <
+          - <=
+          - '>'
+          - '>='
+          - before
+          - after
+          - between
+          - 'on'
+        value:
+          type: string
+    walletMessageRequest:
+      example:
+        message:
+          header: Reminder
+          template: Your Spring Sale offer expires soon!
+        filters:
+        - name: group_code
+          selector: '='
+          value: vip
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: object
+          description: The message content delivered to each targeted pass.
+          properties:
+            template:
+              type: string
+              description: Message body sent to each pass. Supports Liquid personalization tags.
+            header:
+              type: string
+              description: Optional header shown with the message.
+            message_type:
+              type: string
+              description: Optional message type used to categorize the notification.
+        filters:
+          type: array
+          description: Filters that target the message to specific passes in the campaign. Omit to message all passes.
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/first-class-filters'
+            - $ref: '#/components/schemas/wallet-filters'
+            - $ref: '#/components/schemas/first-class-filters-any'
+            - $ref: '#/components/schemas/wallet-filters-any'
+    walletMessageResponse:
+      type: object
+      properties:
+        wallet_message_id:
+          type: string
+          description: Unique system-generated identifier for each message created.
+        message:
+          type: object
+          description: The message content that was delivered.
+          properties:
+            template:
+              type: string
+              description: Message body sent to each pass.
+            header:
+              type: string
+              description: Header shown with the message.
+        campaign_ref:
+          type: object
+          description: Reference to the wallet campaign this message belongs to.
+          properties:
+            id:
+              type: string
+              description: The campaign's `wallet_id` (SmartLink token).
+            type:
+              type: string
+              description: Wallet campaign type.
+            url:
+              type: string
+              description: Reference URL of the wallet campaign, as a relative URL on the API domain.
+        filters:
+          type: array
+          description: Filters that were applied to target the message.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Field the filter is applied to, for example `group_code`, `provider`, or `expiration_date`.
+              selector:
+                type: string
+                description: Comparison used by the filter, for example `=`, `starts_with`, or `between`.
+              value:
+                type: string
+                description: Value compared against the field.
+        created_at:
+          type: string
+          description: When the message was created, in ISO-8601 format.
+        updated_at:
+          type: string
+          description: When the message was last updated, in ISO-8601 format.
+        url:
+          type: string
+          description: A reference URL to this message, as a relative URL on the API domain.
+    walletMessagesResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/walletMessageResponse'
+    first-class-filters-any:
+      type: object
+      title: Filter by first-class field using selector "any".
+      description: <a href="https://developer-platform.vibes.com/reference/first-class-fields">Learn more about first-class fields.</a>
+      properties:
+        name:
+          type: string
+          enum:
+          - first_class_field
+        field-name:
+          type: string
+          enum:
+          - email_address
+          - external_email_id
+          - first_name
+          - last_name
+          - code
+          - expiration_date
+          - account_number
+          - balance
+          - tier
+          - offer_value
+          - loyalty_tier
+          - loyalty_balance
+          - strip_image_code
+        selector:
+          type: string
+          enum:
+          - any
+        value:
+          type: array
+          description: Add each value in its own string
+          items:
+            type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

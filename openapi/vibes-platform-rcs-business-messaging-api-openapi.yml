@@ -1,0 +1,799 @@
+openapi: 3.2.0
+info:
+  title: Vibes RCS Business Messaging API
+  version: 0.0.0
+servers:
+- url: https://rbm.us.vibes.com/connectCustomers
+  description: Regional endpoint
+security:
+- OAuth2Auth:
+  - https://rbm.vibes.com/rbm.agents
+tags:
+- name: RCS Business Messaging
+paths:
+  /{connect_customer_key}/capabilities/{msisdn}:
+    get:
+      tags:
+      - RCS Business Messaging
+      operationId: Get Mobile Device Capabilities
+      summary: Check for RCS capabilities
+      description: 'Get the Vibes RCS-related capabilities of a user device.    '
+      responses:
+        '200':
+          description: The request has succeeded. A payload with the specific capabilities will be returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Capabilities'
+        '403':
+          description: Forbidden agent. The `agentId` is either not valid, or it has not deployed on the provider.
+        '404':
+          description: Target phone number does not support RBM. If your agent is not yet launched, note that this will be returned if the MDN is not a tester for the agent.
+        '422':
+          description: Unprocessable entity. Specific data errors have occurred in the request. Additional details will be available in the content of the error. <br><br> Example - Invalid Phone Number. The phone number is not a valid mobile number, or is on a unsupported carrier.
+        '429':
+          description: Quota exceeded. You've either exceeded the number of calls allowed, or a downstream server is busy. Please try your request again later.
+      parameters:
+      - in: path
+        name: connect_customer_key
+        description: Your unique customer key.
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: msisdn
+        description: Target device's phone number in E.164 format.
+        required: true
+        schema:
+          type: string
+        example: '+16125551234'
+      - in: query
+        name: agentId
+        description: Alphanumeric string identifying your agent. To get your agentId, speak to your Vibes business rep.
+        required: true
+        schema:
+          type: string
+        explode: false
+      - in: query
+        name: carrierCode
+        description: Optional carrier code to target a specific carrier for the capabilities lookup.
+        required: false
+        schema:
+          type: string
+  /{connect_customer_key}/agentMessages/{msisdn}:
+    post:
+      tags:
+      - RCS Business Messaging
+      operationId: Send Agent Message
+      summary: Send an RCS message
+      description: Sends a message from an RBM agent to a mobile device. The message can contain text, rich card, and suggestions. The message can also be revoked between the time that it is sent and the time that it is delivered.<br><br><a href="https://developer-aggregation.vibes.com/reference/rcs-for-business-api#message-payload-examples" target="_blank">See some example RCS message payloads here.</a>
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentMessage'
+      responses:
+        '200':
+          description: The message has been queued for delivery. A webhook will be sent to the agent when the message is delivered to the mobile device.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentMessage'
+        '403':
+          description: Forbidden agent. The `agentId` is either not valid, or it has not deployed on the provider.
+        '422':
+          description: Unprocessable entity. Specific data errors have occurred in the request. Additional details will be available in the content of the error. <br><br> Example - Invalid Phone Number. The phone number is not a valid mobile number, or is on a unsupported carrier.
+        '429':
+          description: Quota exceeded. You've either exceeded the number of calls allowed, or a downstream server is busy. Please try your request again later.
+      parameters:
+      - in: path
+        name: connect_customer_key
+        description: Your unique customer key.
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: msisdn
+        description: Target device's phone number in E.164 format.
+        required: true
+        schema:
+          type: string
+        example: '+15555555555'
+      - in: query
+        name: agentId
+        description: Alphanumeric string identifying your agent. To get your agentId, speak to your Vibes business rep.
+        required: true
+        schema:
+          type: string
+        explode: false
+      - in: query
+        name: messageId
+        description: An alphanumeric 36-character UUID identifying the message. You can set this to whatever UUID you like, but if it is left blank, it will be filled in by the system.
+        schema:
+          type: string
+        explode: false
+  /{connect_customer_key}/agentEvents/{msisdn}:
+    post:
+      tags:
+      - RCS Business Messaging
+      operationId: Send Agent Event
+      summary: Send an RCS event
+      description: Sends an event from a Vibes customer RBM agent to a user. <br><br> Agent events include read receipts or "typing" notifications. If Vibes RBM can't reach the user, the Vibes RBM platform returns `404 NOT_FOUND`. Unlike agent messages, agent events cannot be revoked after sending.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentEvent'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentEvent'
+        '403':
+          description: Forbidden agent. The `agentId` is either not valid, or it has not deployed on the provider.
+        '422':
+          description: Unprocessable entity. Specific data errors have occurred in the request. Additional details will be available in the content of the error. <br><br> Example - Invalid Phone Number. The phone number is not a valid mobile number, or is on a unsupported carrier.
+        '429':
+          description: Quota exceeded. You've either exceeded the number of calls allowed, or a downstream server is busy. Please try your request again later.
+      parameters:
+      - in: path
+        name: connect_customer_key
+        description: Your unique customer key.
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: msisdn
+        description: Target device's phone number in E.164 format.
+        required: true
+        schema:
+          type: string
+        example: '+15555555555'
+      - in: query
+        name: agentId
+        description: Alphanumeric string identifying your agent. To get your agentId, speak to your Vibes business rep.
+        required: true
+        schema:
+          type: string
+        explode: false
+      - in: query
+        name: eventId
+        description: An alphanumeric string identifying the event. You can set this to whatever you like, but if it is left blank, it will be filled in by the system.
+        schema:
+          type: string
+        explode: false
+  /{connect_customer_key}/agentMessages/{msisdn}/{messageId}:
+    delete:
+      tags:
+      - RCS Business Messaging
+      operationId: Revoke Agent Message
+      summary: Revoke an RCS message
+      description: 'Revoke a message that has been sent to a mobile device, if the message has not already been delivered. '
+      responses:
+        '200':
+          description: The request was successful. Note that this does <b>not</b> mean the message has been revoked. A webhook will be sent to the agent if the message was revoked.
+        '403':
+          description: Forbidden agent. The `agentId` is either not valid, or it has not deployed on the provider.
+        '422':
+          description: Unprocessable entity. Specific data errors have occurred in the request. Additional details will be available in the content of the error. <br><br> Example - Invalid Phone Number. The phone number is not a valid mobile number, or is on a unsupported carrier.
+        '429':
+          description: Quota exceeded. You've either exceeded the number of calls allowed, or a downstream server is busy. Please try your request again later.
+      parameters:
+      - in: path
+        name: connect_customer_key
+        description: Your unique customer key.
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: msisdn
+        description: Target device's phone number in E.164 format.
+        required: true
+        schema:
+          type: string
+        example: '+15555555555'
+      - in: path
+        name: messageId
+        description: The alphanumeric 36-character UUID identifying the message.
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: agentId
+        description: Alphanumeric string identifying your agent. To get your agentId, speak to your Vibes business rep.
+        required: true
+        schema:
+          type: string
+        explode: false
+  /{connect_customer_key}/testers/{msisdn}:
+    post:
+      tags:
+      - RCS Business Messaging
+      operationId: Invite Agent Tester
+      summary: Invite an agent tester
+      description: Invite a mobile device to become a tester of an agent. The device must have RCS capabilities to become a tester. When a phone number is a registered tester, they are able to receive RCS messages from an agent, even if that agent is not yet launched.
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tester'
+        '403':
+          description: Forbidden agent. The `agentId` is either not valid, or it has not deployed on the provider.
+        '422':
+          description: Unprocessable entity. Specific data errors have occurred in the request. Additional details will be available in the content of the error. <br><br> Example - Invalid Phone Number. The phone number is not a valid mobile number, or is on a unsupported carrier.
+        '429':
+          description: Client error
+      parameters:
+      - in: path
+        name: connect_customer_key
+        description: Your unique customer key.
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: msisdn
+        description: Phone number in E.164 format of device you are inviting to be an agent tester.
+        required: true
+        schema:
+          type: string
+        example: '+16125551234'
+      - in: query
+        name: agentId
+        description: Alphanumeric string identifying your agent. To get your agentId, speak to your Vibes business rep.
+        required: true
+        schema:
+          type: string
+        explode: false
+    get:
+      tags:
+      - RCS Business Messaging
+      summary: Get the invite status of a tester device
+      operationId: getTester
+      parameters:
+      - name: connect_customer_key
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: msisdn
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: agentId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returned invite status of a tester device.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tester'
+        '400':
+          description: Bad request. Note that connect_customer_key, msisdn, and agentId are all required.
+        '401':
+          description: Authentication error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Authorization error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    delete:
+      tags:
+      - RCS Business Messaging
+      summary: Delete a tester device
+      operationId: deleteTester
+      parameters:
+      - name: connect_customer_key
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: msisdn
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: agentId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Deleted a tester device.
+          content:
+            application/json:
+              schema:
+                type: string
+                description: Empty object.
+                example: {}
+        '400':
+          description: Bad request. Note that connect_customer_key, msisdn, and agentId are all required.
+        '401':
+          description: Authentication error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Authorization error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /{connect_customer_key}/testers:
+    get:
+      tags:
+      - RCS Business Messaging
+      summary: List the invite statuses of tester devices
+      operationId: listTesters
+      parameters:
+      - name: connect_customer_key
+        description: Your unique customer key.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: agentId
+        description: Alphanumeric string identifying your agent. To get your agentId, speak to your Vibes business rep.
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returned invite statuses of tester devices for an agent.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tester'
+        '400':
+          description: Bad request. Note that connect_customer_key, msisdn, and agentId are all required.
+        '401':
+          description: Authentication error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Authorization error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+components:
+  schemas:
+    AgentMessage:
+      type: object
+      required:
+      - contentMessage
+      properties:
+        name:
+          type: string
+          description: Do not set this field. It will be populated by the API when the operation returns.
+          readOnly: true
+        sendTime:
+          type: string
+          description: Do not set this field. It will be populated by the API when the operation returns.
+          readOnly: true
+        contentMessage:
+          $ref: '#/components/schemas/AgentContentMessage'
+          description: The content of the agent message.
+        messageTrafficType:
+          $ref: '#/components/schemas/MessageTrafficType'
+          description: Optional. The message traffic type.
+          default: MESSAGE_TRAFFIC_TYPE_UNSPECIFIED
+        richMessageClassification:
+          $ref: '#/components/schemas/RichMessageClassification'
+          readOnly: true
+        totalPayloadSizeBytes:
+          type: string
+          format: int64
+          description: Output only. The total payload size of the message in bytes.
+          readOnly: true
+        carrier:
+          type: string
+          description: Output only. The carrier information that the user's phone number belongs to, according to Google RCS backends.
+          readOnly: true
+        expireTime:
+          type: string
+          description: Optional. Timestamp in UTC when this message will be considered expired.
+          example: '2024-09-03T15:01:23.000Z'
+        ttl:
+          type: string
+          description: Optional. Time in seconds the message will live before it is automatically revoked.
+          example: '3.5'
+    WebviewViewMode:
+      type: string
+      description: If URL is opened in integrated webview, specify view mode. Default is full view.
+      enum:
+      - WEBVIEW_VIEW_MODE_UNSPECIFIED
+      - FULL
+      - HALF
+      - TALL
+    AgentEvent:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Do not set this field. It will be populated by the API when the operation returns.
+        eventType:
+          $ref: '#/components/schemas/AgentEventType'
+        messageId:
+          type: string
+          description: If you are sending a read receipt event, the alphanumeric identifier of the message the read receipt is associated with.
+        sendTime:
+          type: string
+          description: Do not set this field. It will be populated by the API when the operation returns.
+      required:
+      - eventType
+    ApiError:
+      type: object
+      properties:
+        error:
+          type: string
+    RichMessageClassification:
+      type: object
+      description: Output only. Classifies the message according to the US billing model.
+      properties:
+        classificationType:
+          $ref: '#/components/schemas/RichMessageClassificationType'
+          description: Specifies the message's classification for billing purposes under the US billing model.
+        segmentCount:
+          type: integer
+          format: int32
+          description: The number of 160-byte segments for the message's text, always rounded up. Calculated from the total UTF-8 byte length of the text content only; data from suggested replies or actions is excluded.
+    SuggestedReply:
+      type: object
+      title: A suggested reply, which users can tap to send the text reply back to the agent.
+      properties:
+        text:
+          type: string
+          description: <span style="color:#dd1e2e;">Required.</span> Text of the suggested reply.
+          maxLength: 25
+        postbackData:
+          type: string
+          description: <span style="color:#dd1e2e;">Required.</span> The base64-encoded payload that the agent receives in a user event when the user taps the suggested reply. Maximum
+    CardOrientation:
+      type: string
+      enum:
+      - CARD_ORIENTATION_UNSPECIFIED
+      - HORIZONTAL
+      - VERTICAL
+    Feature:
+      type: string
+      enum:
+      - FEATURE_UNSPECIFIED
+      - RICHCARD_STANDALONE
+      - RICHCARD_CAROUSEL
+      - ACTION_CREATE_CALENDAR_EVENT
+      - ACTION_DIAL
+      - ACTION_OPEN_URL
+      - ACTION_SHARE_LOCATION
+      - ACTION_VIEW_LOCATION
+    ThumbnailImageAlignment:
+      type: string
+      description: Alignment of image preview for standalone cards with horizontal layout.
+      enum:
+      - THUMBNAIL_IMAGE_ALIGNMENT_UNSPECIFIED
+      - LEFT
+      - RIGHT
+    UploadedRbmFile:
+      type: object
+      description: A file that has been uploaded to the RCS Business Messaging platform.
+      properties:
+        fileName:
+          type: string
+          description: The name of the file, as provided by the RBM platform when the file is uploaded.
+          readOnly: true
+        thumbnailName:
+          type: string
+          description: The name of the thumbnail associated with the file, as provided by the RBM platform when the file is uploaded.
+          readOnly: true
+    ViewLocationAction:
+      type: object
+      description: Opens the device's default map app and selects the specified location or searches around the device's location given an agent-specified query.
+      properties:
+        label:
+          type: string
+          description: Optional. Text label of the location opened.
+        latLong:
+          description: <span style="color:#dd1e2e;">Required.</span>
+          $ref: '#/components/schemas/LatLng'
+        query:
+          type: string
+          description: Optional, only supported on Android Messages clients. Rather than specify a lat_long, a query string. For default map apps that support search functionality, tapping this suggested action results in a location search centered around the user's current location. <br><br> If the query is sufficiently specific, it select any location in the world. For instance, setting the query string to "Growing Tree Bank" will show all Growing Tree Bank locations in the device's vicinity. Setting the query string to "1600 Amphitheater Parkway, Mountain View, CA 94043" will select that specific address, regardless of the user's location.
+    CardWidth:
+      type: string
+      enum:
+      - CARD_WIDTH_UNSPECIFIED
+      - SMALL
+      - MEDIUM
+    MessageTrafficType:
+      type: string
+      enum:
+      - MESSAGE_TRAFFIC_TYPE_UNSPECIFIED
+      - AUTHENTICATION
+      - TRANSACTION
+      - PROMOTION
+      - SERVICEREQUEST
+      - ACKNOWLEDGEMENT
+    AgentContentMessage:
+      type: object
+      description: The content of the agent message.
+      properties:
+        text:
+          type: string
+          description: The body text of your message.
+        contentInfo:
+          description: Information about a file, including the URL of the file and the URL of the file’s thumbnail. The Vibes RBM platform serves content from a cache, but an agent can force the Vibes RBM platform to fetch a new version of the content and refresh the cache.
+          $ref: '#/components/schemas/ContentInfo'
+        suggestions:
+          type: array
+          description: Provide end users with suggested actions or responses.
+          items:
+            $ref: '#/components/schemas/Suggestion'
+          maxItems: 11
+        uploadedRbmFile:
+          $ref: '#/components/schemas/UploadedRbmFile'
+          description: A file that was uploaded to the RCS Business Messaging platform.
+        richCard:
+          $ref: '#/components/schemas/RichCard'
+    CardContent:
+      type: object
+      description: Each rich card must have at least one of title, description, or media.
+      properties:
+        title:
+          type: string
+          maxLength: 200
+          description: Title on the rich card.
+        description:
+          type: string
+          maxLength: 500
+          description: Description text on the rich card.
+        media:
+          $ref: '#/components/schemas/Media'
+        suggestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Suggestion'
+          maxItems: 10
+    CreateCalendarEventAction:
+      type: object
+      properties:
+        startTime:
+          type: string
+          description: <span style="color:#dd1e2e;">Required.</span> Event start time.
+        endTime:
+          type: string
+          description: <span style="color:#dd1e2e;">Required.</span> Event end time.
+        title:
+          type: string
+          maxLength: 100
+          description: <span style="color:#dd1e2e;">Required.</span> Event title.
+        description:
+          type: string
+          maxLength: 500
+          description: Optional. Event description.
+    MediaHeight:
+      type: string
+      enum:
+      - HEIGHT_UNSPECIFIED
+      - SHORT
+      - MEDIUM
+      - TALL
+    ContentInfo:
+      type: object
+      properties:
+        fileUrl:
+          type: string
+          description: Publicly reachable URL of the file. The Vibes RBM platform determines the MIME type of the file from the content-type field in the HTTP headers when the platform fetches the file. The content-type field must be present and accurate in the HTTP response from the URL. Recommended maximum file size of 100 MB.
+        thumbnailUrl:
+          type: string
+          description: For image, audio and video files only. Publicly reachable URL of the thumbnail. Maximum size of 100 kB. If you don't provide a thumbnail URL, the Vibes RBM platform displays a blank placeholder thumbnail until the user's device downloads the file. Depending on the user's setting, the file may not download automatically and may require the user to tap a download button. Recommended maximum file size of 100 kB.
+        forceRefresh:
+          type: boolean
+          description: Default is false. If true, the Vibes RBM platform fetches the file and thumbnail from the specified URLs, even if the platform has cached copies of the file (and/or of the thumbnail).
+    RichCard:
+      type: object
+      properties:
+        carouselCard:
+          description: A carousel of rich cards.
+          $ref: '#/components/schemas/CarouselCard'
+        standaloneCard:
+          description: A single rich card.
+          $ref: '#/components/schemas/StandaloneCard'
+    Media:
+      type: object
+      properties:
+        height:
+          $ref: '#/components/schemas/MediaHeight'
+          description: The height of the media. Applies only to standalone and carousel cards with vertical orientation.
+        contentInfo:
+          $ref: '#/components/schemas/ContentInfo'
+          description: Information about a file, including the URL of the file and the URL of the file's thumbnail.
+        uploadedRbmFile:
+          $ref: '#/components/schemas/UploadedRbmFile'
+          description: A file that was uploaded to the RCS Business Messaging platform.
+    LatLng:
+      type: object
+      properties:
+        latitude:
+          type: number
+        longitude:
+          type: number
+    AgentEventType:
+      type: string
+      enum:
+      - TYPE_UNSPECIFIED
+      - IS_TYPING
+      - READ
+    Suggestion:
+      type: object
+      title: Add a suggested reply or action
+      properties:
+        reply:
+          title: Suggested reply
+          $ref: '#/components/schemas/SuggestedReply'
+        action:
+          title: Suggested action
+          $ref: '#/components/schemas/SuggestedAction'
+    SuggestedAction:
+      type: object
+      properties:
+        text:
+          type: string
+          maxLength: 25
+          description: <span style="color:#dd1e2e;">Required.</span> Text label of suggested action.
+        postbackData:
+          type: string
+          maxLength: 2048
+          description: <span style="color:#dd1e2e;">Required.</span> Base64-encoded payload that will be sent to the agent in the user event that results when the user taps the suggested action. Maximum 2048 characters.
+        fallbackUrl:
+          type: string
+          maxLength: 2048
+          description: Optional. URL that will open in a new window if a mobile device doesn't support a suggested action.
+        dialAction:
+          description: Opens the device's default phone app with the specified phone number filled in.
+          $ref: '#/components/schemas/DialAction'
+        viewLocationAction:
+          description: Opens the device's default map app and selects the specified location or searches around the device's location given an agent-specified query.
+          $ref: '#/components/schemas/ViewLocationAction'
+        createCalendarEventAction:
+          description: Opens the device's default calendar app and creates a new calendar event prefilled with the event data.
+          $ref: '#/components/schemas/CreateCalendarEventAction'
+        openUrlAction:
+          description: Opens the specified URL.
+          $ref: '#/components/schemas/OpenUrlAction'
+        shareLocationAction:
+          description: Shares the device's location with the agent.
+          $ref: '#/components/schemas/ShareLocationAction'
+    RichMessageClassificationType:
+      type: string
+      enum:
+      - RICH_MESSAGE_CLASSIFICATION_TYPE_UNSPECIFIED
+      - RICH_MESSAGE
+      - RICH_MEDIA_MESSAGE
+      - SUGGESTED_ACTION_CLICK
+    OpenUrlApplication:
+      type: string
+      description: What app the URL will open in - browser or integrated webview window.
+      enum:
+      - OPEN_URL_APPLICATION_UNSPECIFIED
+      - WEBVIEW
+      - BROWSER
+    DialAction:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+          description: <span style="color:#dd1e2e;">Required.</span> Phone number to dial, in E.164 format.
+          example: '+15555555555'
+    TesterInviteStatus:
+      type: string
+      enum:
+      - INVITE_STATUS_UNSPECIFIED
+      - PENDING
+      - ACCEPTED
+      - DECLINED
+    StandaloneCard:
+      type: object
+      properties:
+        cardOrientation:
+          description: Orientation of the card.
+          $ref: '#/components/schemas/CardOrientation'
+        thumbnailImageAlignment:
+          description: Alignment of image preview for standalone cards with horizontal layout.
+          $ref: '#/components/schemas/ThumbnailImageAlignment'
+        cardContent:
+          $ref: '#/components/schemas/CardContent'
+    ShareLocationAction:
+      type: object
+    OpenUrlAction:
+      type: object
+      properties:
+        url:
+          type: string
+          maxLength: 2048
+          description: <span style="color:#dd1e2e;">Required.</span>
+        application:
+          description: What app the URL will open in - browser or integrated webview window.
+          $ref: '#/components/schemas/OpenUrlApplication'
+        webviewViewMode:
+          description: If URL is opened in integrated webview, specify view mode. Default is full view.
+          $ref: '#/components/schemas/WebviewViewMode'
+        description:
+          type: string
+    Tester:
+      type: object
+      properties:
+        agentId:
+          type: string
+          description: The ID of an agent.
+        inviteStatus:
+          allOf:
+          - $ref: '#/components/schemas/TesterInviteStatus'
+          description: Output only. The status of the invitation. Returned by the platform.
+          readOnly: true
+        name:
+          type: string
+          description: Output only. The unique identifier of the tester.
+          readOnly: true
+        phoneNumber:
+          type: string
+          description: The phone number of the tester in E.164 format.
+      required:
+      - phoneNumber
+    Capabilities:
+      type: object
+      required:
+      - features
+      properties:
+        carrier:
+          type: string
+          description: Output only. The carrier information that the user's phone number belongs to, according to Google RCS backends.
+        features:
+          type: array
+          description: List of Vibes RBM features that this device supports.
+          items:
+            $ref: '#/components/schemas/Feature'
+    CarouselCard:
+      type: object
+      description: A carousel of rich cards.
+      properties:
+        cardWidth:
+          $ref: '#/components/schemas/CardWidth'
+          description: The width of the cards in the carousel.
+        cardContents:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardContent'
+          maxItems: 10
+  securitySchemes:
+    OAuth2Auth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://vibes-rbm-prd.auth.us-west-2.amazoncognito.com/oauth2/token
+          scopes:
+            https://rbm.vibes.com/rbm.agents: ''
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

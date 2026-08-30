@@ -1,0 +1,520 @@
+openapi: 3.2.0
+info:
+  title: Vibes Platform Wallet Campaign API
+  version: 1.0.0
+  description: Manage mobile wallet campaigns and the individual wallet items (passes) issued from them. A wallet campaign is the container for a single offer, loyalty card, or event ticket program; it owns the iOS and Android pass templates, the messages you send, and the store locations attached to the passes. Items are the per-recipient passes created when end users add a pass to Apple Wallet or Google Wallet.
+servers:
+- url: https://public-api.vibescm.com
+  description: North America
+- url: https://public-api.eu.vibes.com/
+  description: EMEA
+security:
+- basicAuth: []
+tags:
+- name: Wallet Campaign API
+  description: Manage mobile wallet campaigns and the individual wallet items (passes) issued from them. A wallet campaign is the container for a single offer, loyalty card, or event ticket program; it owns the iOS and Android pass templates, the messages you send, and the store locations attached to the passes. Items are the per-recipient passes created when end users add a pass to Apple Wallet or Google Wallet.
+paths:
+  /companies/{company_key}/campaigns/wallet:
+    get:
+      tags:
+      - Wallet Campaign API
+      summary: Get wallet campaigns
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/walletCampaignsResponse'
+        '404':
+          description: No mobile wallet campaigns are located.
+    post:
+      tags:
+      - Wallet Campaign API
+      summary: Create a wallet campaign
+      description: Create a new mobile wallet campaign. The campaign `type` determines the kind of pass it issues (`offer`, `loyalty`, or `event_ticket`) and cannot be changed after creation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/walletCampaignRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> Using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a wallet campaign being created.</div></div>
+      responses:
+        '201':
+          description: The wallet campaign was created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/walletCampaignResponse'
+  /companies/{company_key}/campaigns/wallet/{wallet_id}:
+    get:
+      tags:
+      - Wallet Campaign API
+      summary: Get a wallet campaign
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: wallet_id
+        in: path
+        schema:
+          type: string
+          description: The `wallet_id` is the SmartLink token for a campaign.
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/walletCampaignResponse'
+        '404':
+          description: The `wallet_id` cannot be found.
+    put:
+      tags:
+      - Wallet Campaign API
+      summary: Update a wallet campaign
+      description: Update an existing wallet campaign. The campaign `type` is immutable and cannot be changed after creation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/walletCampaignRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: wallet_id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The `wallet_id` is the SmartLink token for a campaign.<br><div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a real wallet_id, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a wallet campaign being updated.</div></div>
+      responses:
+        '200':
+          description: The wallet campaign was updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/walletCampaignResponse'
+        '404':
+          description: The `wallet_id` cannot be found.
+  /companies/{company_key}/campaigns/wallet/{wallet_id}/items:
+    get:
+      tags:
+      - Wallet Campaign API
+      summary: Get wallet items
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: wallet_id
+        in: path
+        schema:
+          type: string
+          description: The `wallet_id` is the SmartLink token for a campaign.
+        required: true
+      - name: group_code
+        in: query
+        description: optional group_code filter
+        schema:
+          type: string
+      - name: expiration_date
+        in: query
+        description: optional expiration_date filter
+        schema:
+          type: string
+      - name: provider
+        in: query
+        description: optional provider filter
+        schema:
+          type: string
+      - name: field_name
+        in: query
+        description: optional first class field filter, where field_name == name of field to filter by
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/walletItemsResponse'
+        '404':
+          description: The specified mobile wallet campaigns or wallet items do not exist.
+  /companies/{company_key}/campaigns/wallet/{wallet_id}/items/{wallet_item_id}:
+    get:
+      tags:
+      - Wallet Campaign API
+      summary: Get a wallet item
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: wallet_id
+        in: path
+        schema:
+          type: string
+          description: The `wallet_id` is the SmartLink token for a campaign.
+        required: true
+      - name: wallet_item_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/walletItemResponse'
+        '404':
+          description: The specified `wallet_id` or `wallet_item_id` does not exist.
+    put:
+      tags:
+      - Wallet Campaign API
+      summary: Update a wallet item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/walletItemRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: wallet_id
+        in: path
+        schema:
+          type: string
+          description: The `wallet_id` is the SmartLink token for a campaign.
+        required: true
+      - name: wallet_item_id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a real wallet_item_id, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a wallet being updated.</div></div>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/walletItemResponse'
+        '404':
+          description: The wallet campaign or the wallet item cannot be found.
+components:
+  schemas:
+    walletCampaignRequest:
+      example:
+        campaign:
+          name: Spring Sale
+          description: 20% off all items this spring
+          type: offer
+          expiration_date: '2026-06-30T23:59:59Z'
+          redirect_link: https://example.com/expired
+      type: object
+      required:
+      - campaign
+      properties:
+        campaign:
+          type: object
+          required:
+          - name
+          - type
+          properties:
+            name:
+              type: string
+              description: Descriptive name of the mobile wallet campaign.
+            description:
+              type: string
+              description: Optional longer description of the campaign.
+            type:
+              type: string
+              enum:
+              - offer
+              - loyalty
+              - event_ticket
+              description: The kind of pass this campaign issues. One of `offer` (coupon), `loyalty` (store/loyalty card), or `event_ticket`. Immutable after the campaign is created.
+            expiration_date:
+              type: string
+              description: When the campaign expires, in ISO-8601 format. Required for `offer` and `event_ticket` campaigns; optional for `loyalty`.
+            redirect_link:
+              type: string
+              description: Optional URL that end users are redirected to after the campaign has expired.
+            ignore_unsecure_params:
+              type: boolean
+              description: When `true`, only values from a signed (JWT) payload are trusted when personalizing passes; unsigned query parameters are ignored.
+            security_configuration:
+              type: object
+              description: Optional JWT signing configuration used to verify personalization payloads sent on the SmartLink.
+              properties:
+                public_key:
+                  type: string
+                  description: Public key used to verify the JWT signature.
+                jwt_algorithm:
+                  type: string
+                  enum:
+                  - RS256
+                  - HS256
+                  description: Algorithm used to verify the JWT signature. Defaults to `RS256` (asymmetric); `HS256` is symmetric.
+    walletItemsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/walletItemResponse'
+    walletItemRequest:
+      type: object
+      properties:
+        tokens:
+          type: object
+          description: List of key/value pairs of item specific data that can be used to personalize the item.
+          additionalProperties:
+            type: string
+        locations:
+          type: array
+          items:
+            type: object
+            properties:
+              latitude:
+                type: number
+              longitude:
+                type: number
+              relevant_text:
+                type: string
+        passbook:
+          type: object
+          properties:
+            notification:
+              type: string
+              description: Optional lock screen notification for iOS devices.
+        google_wallet:
+          type: object
+          properties:
+            messages:
+              type: object
+              description: Optional update message for Android devices.
+              properties:
+                header:
+                  type: string
+                body:
+                  type: string
+    walletCampaignResponse:
+      type: object
+      properties:
+        wallet_id:
+          type: string
+          description: The `wallet_id` is the SmartLink token for the campaign. Use it to identify the campaign in all other Wallet API calls.
+        name:
+          type: string
+          description: Descriptive name of the mobile wallet campaign.
+        description:
+          type: string
+          description: Optional longer description of the campaign. Returned only when set.
+        type:
+          type: string
+          enum:
+          - offer
+          - loyalty
+          - event_ticket
+          description: The kind of pass this campaign issues. One of `offer` (coupon), `loyalty` (store/loyalty card), or `event_ticket`.
+        smartlink_url:
+          type: string
+          description: Public SmartLink URL used to distribute the pass to end users (the "Add to Wallet" link).
+        url:
+          type: string
+          description: REST API reference to this wallet campaign, as a relative URL on the API domain.
+        redirect_link:
+          type: string
+          description: URL that end users are redirected to after the campaign has expired. Returned only when set.
+        expiration_date:
+          type: string
+          description: When the campaign expires, in ISO-8601 format. Returned only when set.
+        ignore_unsecure_params:
+          type: boolean
+          description: When `true`, only values from a signed (JWT) payload are trusted when personalizing passes. Returned only when configured.
+        security_configuration:
+          type: object
+          description: JWT signing configuration used to verify personalization payloads. Returned only when configured.
+          properties:
+            public_key:
+              type: string
+              description: Public key used to verify the JWT signature. Redacted in responses.
+            jwt_algorithm:
+              type: string
+              enum:
+              - RS256
+              - HS256
+              description: Algorithm used to verify the JWT signature. `RS256` (asymmetric) is the default; `HS256` is symmetric.
+        created_at:
+          type: string
+          description: When the campaign was created, in ISO-8601 format.
+        updated_at:
+          type: string
+          description: When the campaign was last updated, in ISO-8601 format.
+    walletItemResponse:
+      type: object
+      properties:
+        wallet_item_id:
+          type: string
+          description: Unique Wallet Item ID that was specified at creation. This can be system generated or customer supplied in the creation URL.
+        group_code:
+          type: string
+          description: Optional string value to indicate groups of related Wallet items. Can be used for targeted messaging.
+        campaign_ref:
+          type: object
+          description: Reference to the wallet campaign this item belongs to.
+          properties:
+            id:
+              type: string
+              description: The campaign's `wallet_id` (SmartLink token).
+            type:
+              type: string
+              description: Wallet campaign type.
+            url:
+              type: string
+              description: Reference URL of the wallet campaign, as a relative URL on the API domain.
+        active:
+          type: boolean
+          description: TRUE if wallet item currently installed on person’s device.
+        tokens:
+          type: object
+          description: Key/value pairs of item-specific data used to personalize this pass (referenced by personalization tags in the template).
+          additionalProperties:
+            type: string
+        locations:
+          type: array
+          description: Geofenced locations that trigger a lock-screen reminder for this pass.
+          items:
+            type: object
+            properties:
+              latitude:
+                type: number
+                description: Latitude of the location.
+              longitude:
+                type: number
+                description: Longitude of the location.
+              relevant_text:
+                type: string
+                description: Message shown on the device when the user is near the location.
+        provider:
+          type: string
+          description: The wallet platform this item was issued to, for example `passbook` (Apple Wallet) or `google_wallet` (Google Wallet).
+        passbook:
+          type: object
+          description: Apple Wallet (iOS) specific data for this item. Returned only for Apple Wallet passes.
+          properties:
+            notification:
+              type: string
+              description: Lock-screen notification text shown on the user's iOS device.
+        google_wallet:
+          type: object
+          description: Google Wallet (Android) specific data for this item. Returned only for Google Wallet passes.
+          properties:
+            messages:
+              type: object
+              description: Update message shown on the user's Android device.
+              properties:
+                header:
+                  type: string
+                  description: Message header.
+                body:
+                  type: string
+                  description: Message body.
+        created_at:
+          type: string
+          description: When the wallet item was created, in ISO-8601 format.
+        updated_at:
+          type: string
+          description: When the wallet item was last updated, in ISO-8601 format.
+        url:
+          type: string
+          description: A reference URL to this wallet item, as a relative URL on the API domain.
+    walletCampaignsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/walletCampaignResponse'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

@@ -1,0 +1,618 @@
+openapi: 3.2.0
+info:
+  title: Vibes Platform Event-Triggered Campaign API
+  version: 1.0.0
+servers:
+- url: https://public-api.vibescm.com
+  description: North America
+- url: https://public-api.eu.vibes.com/
+  description: EMEA
+security:
+- basicAuth: []
+tags:
+- name: Event-Triggered Campaign API
+paths:
+  /companies/{company_key}/mobiledb/event_triggered_messages:
+    post:
+      tags:
+      - Event-Triggered Campaign API
+      summary: Create an event-triggered campaign
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/eventTriggeredRequest'
+              - $ref: '#/components/schemas/eventTriggeredRequestMMS'
+              - $ref: '#/components/schemas/eventTriggeredRequestPush'
+      parameters:
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> Please note that the <b>"Try It"</b> feature to the right will send an actual API call to our system, which may result in a new event-triggered broadcast being created.</div></div>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eventTriggeredResponse'
+        '202':
+          description: Campaign has been successfully created. This response will include additional information about your campaign, including the `event_triggered_messsage_id`, `status`, `created_by`, and more. These are defined by the system and cannot be changed.
+    get:
+      tags:
+      - Event-Triggered Campaign API
+      summary: Get event-triggered campaigns
+      parameters:
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: status
+        in: query
+        description: Optional status filter.
+        schema:
+          type: string
+      - name: event_type
+        in: query
+        description: Optional event type.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eventTriggeredsResponse'
+  /companies/{company_key}/mobiledb/event_triggered_messages/{event_triggered_message_id}:
+    get:
+      tags:
+      - Event-Triggered Campaign API
+      summary: Get event-triggered campaign info
+      parameters:
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: event_triggered_message_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response incentivePoolResponse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eventTriggeredResponse'
+        '404':
+          description: The `event_triggered_message_id` cannot be found.
+    put:
+      tags:
+      - Event-Triggered Campaign API
+      summary: Update an event-triggered campaign
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/eventTriggeredRequest'
+              - $ref: '#/components/schemas/eventTriggeredRequestMMS'
+              - $ref: '#/components/schemas/eventTriggeredRequestPush'
+      parameters:
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: event_triggered_message_id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a live event_triggered_message_id, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in changes being made to the live campaign.</div></div>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eventTriggeredResponse'
+        '404':
+          description: The `event_triggered_message_id` does not exist.
+        '422':
+          description: The status code of the entity does not allow updates. For example, the campaign has been cancelled.
+    delete:
+      tags:
+      - Event-Triggered Campaign API
+      summary: Cancel an event-triggered campaign
+      parameters:
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: event_triggered_message_id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a live event_triggered_message_id, please note that using the <b>"Try It"</b>  feature on the righthand console will send an actual API call to our system. This may result in the live campaign being deleted.</div></div>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eventTriggeredResponse'
+        '404':
+          description: The campaign cannot be found.
+components:
+  schemas:
+    filters-number:
+      type: number
+      title: Choose if filtering by subscription list.
+    eventTriggeredRequestPush:
+      type: object
+      title: Select for Push
+      properties:
+        name:
+          type: string
+        event_type:
+          type: string
+        start_date:
+          type: string
+          example: yyyy-mm-dd
+          format: date
+        end_date:
+          type: string
+          example: yyyy-mm-dd
+          format: date
+        targeting:
+          type: object
+          properties:
+            message_template:
+              type: string
+              description: Template for your message content. May include valid Liquid personalization tags.
+            short_url_base:
+              type: string
+              description: If you have a <a href="https://developer-platform.vibes.com/docs/creating-a-custom-short-domain">custom short domain</a>, enter it here.
+            shorten_urls:
+              type: boolean
+              description: Should URLs be shortened?
+            channel:
+              type: string
+              enum:
+              - push
+            push:
+              type: object
+              properties:
+                mdn_territory:
+                  type: string
+                app_id:
+                  type: string
+                  description: Vibes-specific UUID for the your app.
+                silent_push:
+                  type: boolean
+                  description: Select "true" if you'd like the customer to not recieve a visible message to the customer. Default is "false."
+                subject:
+                  type: string
+                  description: Subject line displayed in a push message.
+                media_url:
+                  type: string
+                  description: Requires Rich Media support in the operating system and device hardware.
+                sound:
+                  type: string
+                  description: The notification sound defaults to silent. Custom sounds must be built into the app.
+                badge:
+                  type: string
+                  description: Reset the total badge value on the app icon.
+                metadata:
+                  type: string
+                client_custom_data:
+                  type: string
+                collapse_id:
+                  type: string
+                  description: Identical collapse_id values on two notifications will allow a previous notification to be replaced with an incoming notification. iOS only.
+                category:
+                  type: string
+                  description: Notification channel, aka category, is used to group certain types of notifications together. Android 8+ only.
+                expiration_offset:
+                  type: number
+                  description: How long (in miliseconds) Apple or Google will attempt to send the message if the device is offline, up to 28 days.
+              required:
+              - app_id
+            filters:
+              type: array
+              items:
+                type: object
+                description: Any filters used to target recipients.
+                properties:
+                  name:
+                    type: string
+                    description: The name of the filter you are using. Use "subscription" for subscription list.
+                  transform:
+                    type: string
+                    description: The transform element is used to transform the value of the custom field into a value. For example, the transform 'month' changes a custom value into just a month value. If the value was the date 2023-10-17, the transform would change the value to 10.
+                  selector:
+                    type: string
+                    description: Use <b>any</b> to filter in the values. Use <b>none</b> to filter out values.
+                  value:
+                    type: array
+                    description: Select ADD+ once per value.
+                    items:
+                      oneOf:
+                      - $ref: '#/components/schemas/filters-number'
+                      - $ref: '#/components/schemas/filters-string'
+          required:
+          - push
+          - message_template
+          - channel
+      required:
+      - name
+      - event_type
+      - start_date
+      - targeting
+    eventTriggeredRequestMMS:
+      type: object
+      title: Select for MMS
+      properties:
+        name:
+          type: string
+          description: Name your campaign.
+        event_type:
+          type: string
+          description: The event_type that will trigger this campaign to send a message.
+        start_date:
+          type: string
+          example: yyyy-mm-dd
+          format: date
+        end_date:
+          type: string
+          example: yyyy-mm-dd
+          format: date
+        targeting:
+          type: object
+          properties:
+            message_template:
+              type: string
+              description: Template for your message content. May include valid Liquid personalization tags.
+            short_url_base:
+              type: string
+              description: If you have a <a href="https://developer-platform.vibes.com/docs/creating-a-custom-short-domain">custom short domain</a>, enter it here.
+            shorten_urls:
+              type: boolean
+              description: Should URLs be shortened?
+            channel:
+              type: string
+              description: <b>For MMS, select SMS.</b>
+              enum:
+              - sms
+            mms:
+              type: object
+              properties:
+                sourcecode:
+                  type: string
+                  description: The short or long code sending this message.
+                country_code:
+                  type: string
+                  description: The E.164 Country Calling Code for the country where the code is provisioned. (Ex. 1 for U.S.)
+                sourcecode_type:
+                  type: string
+                  description: SC for short or long numeric codes. ANC for alphanumeric codes.
+                  enum:
+                  - SC
+                  - ANC
+                subject:
+                  type: string
+                content:
+                  type: array
+                  description: An array containing a list of objects for your MMS. Your MMS may contain either an uploaded asset, a media URL, or a liquid template tag for personalized sends.<br><br><b>IMPORTANT - If you are sending both text and image, you <i>must</i> select ADD + twice to add <i>separate objects</i> for each. Selecting ADD + just once will result in only one element of your MMS being added.</b>
+                  items:
+                    anyOf:
+                    - $ref: '#/components/schemas/mmsurl'
+                    - $ref: '#/components/schemas/mmstext'
+              required:
+              - sourcecode
+              - country_code
+              - sourcecode_type
+              - content
+            filters:
+              type: array
+              items:
+                type: object
+                description: Any filters used to target recipients.
+                properties:
+                  name:
+                    type: string
+                    description: The name of the filter you are using. Use "subscription" for subscription list.
+                  transform:
+                    type: string
+                    description: The transform element is used to transform the value of the custom field into a value. For example, the transform 'month' changes a custom value into just a month value. If the value was the date 2023-10-17, the transform would change the value to 10.
+                  selector:
+                    type: string
+                    description: Use <b>any</b> to filter in the values. Use <b>none</b> to filter out values.
+                  value:
+                    type: array
+                    description: Select ADD+ once per value.
+                    items:
+                      oneOf:
+                      - $ref: '#/components/schemas/filters-number'
+                      - $ref: '#/components/schemas/filters-string'
+          required:
+          - mms
+          - channel
+      required:
+      - name
+      - event_type
+      - start_date
+      - targeting
+    filters-string:
+      type: string
+      title: Choose for all other filters.
+    eventTriggeredRequest:
+      type: object
+      title: Select for SMS
+      properties:
+        name:
+          type: string
+          description: Name your campaign.
+        event_type:
+          type: string
+          description: The event_type that will trigger this campaign to send a message.
+        start_date:
+          type: string
+          example: yyyy-mm-dd
+          format: date
+        end_date:
+          type: string
+          example: yyyy-mm-dd
+          format: date
+        targeting:
+          type: object
+          properties:
+            message_template:
+              type: string
+              description: Template for your message content. May include valid Liquid personalization tags.
+            short_url_base:
+              type: string
+              description: If you have a <a href="https://developer-platform.vibes.com/docs/creating-a-custom-short-domain">custom short domain</a>, enter it here.
+            shorten_urls:
+              type: boolean
+              description: Should URLs be shortened?
+            channel:
+              type: string
+              enum:
+              - sms
+            sms:
+              type: object
+              properties:
+                sourcecode:
+                  type: string
+                  description: The short or long code sending this message.
+                country_code:
+                  type: string
+                  description: The E.164 Country Calling Code for the country where the code is provisioned. (Ex. 1 for U.S.)
+                  example: 1
+                sourcecode_type:
+                  type: string
+                  description: SC for short or long numeric codes. ANC for alphanumeric codes.
+                mdn_territory:
+                  type: string
+                  description: ISO 2-character country code (such as "US" or "GB").
+              required:
+              - sourcecode
+              - country_code
+              - sourcecode_type
+            filters:
+              type: array
+              items:
+                type: object
+                description: Any filters used to target recipients.
+                properties:
+                  name:
+                    type: string
+                    description: The name of the filter you are using. Use "subscription" for subscription list.
+                  transform:
+                    type: string
+                    description: The transform element is used to transform the value of the custom field into a value. For example, the transform 'month' changes a custom value into just a month value. If the value was the date 2023-10-17, the transform would change the value to 10.
+                  selector:
+                    type: string
+                    description: Use <b>any</b> to filter in the values. Use <b>none</b> to filter out values.
+                  value:
+                    type: array
+                    description: Select ADD+ once per value.
+                    items:
+                      oneOf:
+                      - $ref: '#/components/schemas/filters-number'
+                      - $ref: '#/components/schemas/filters-string'
+          required:
+          - message_template
+          - sms
+      required:
+      - name
+      - event_type
+      - start_date
+      - targeting
+    mmstext:
+      type: object
+      title: Text
+      properties:
+        body:
+          type: string
+          description: The body text included in the MMS send.
+        mime_type:
+          type: string
+          description: Must be text/plain for this object.
+          enum:
+          - text/plain
+    eventTriggeredResponse:
+      type: object
+      properties:
+        event_triggered_message_id:
+          type: integer
+        status:
+          type: string
+        event_type:
+          type: string
+        start_date:
+          type: string
+        end_date:
+          type: string
+        created_by:
+          type: string
+        created_by_application:
+          type: string
+        targeting:
+          type: object
+          properties:
+            message_template:
+              type: string
+              description: Body of broadcast message.
+            short_url_base:
+              type: string
+              description: Base URL to use when shortening URLs.
+            shorten_urls:
+              type: boolean
+              description: Should URLs be shortened?
+            channel:
+              type: string
+              description: Message channel for broadcast.
+            message_format:
+              type: string
+              description: A read-only field that defines the message format.
+            sms:
+              type: object
+              properties:
+                sourcecode:
+                  type: string
+                country_code:
+                  type: string
+                sourcecode_type:
+                  type: string
+                mdn_territory:
+                  type: string
+            mms:
+              type: object
+              properties:
+                sourcecode:
+                  type: string
+                country_code:
+                  type: string
+                sourcecode_type:
+                  type: string
+                subject:
+                  type: string
+                content:
+                  type: array
+                  description: An array containing a list of objects for your MMS. Your MMS may contain either an uploaded asset, a media URL, or a liquid template tag for personalized sends.
+                  items:
+                    type: object
+                    properties:
+                      asset_id:
+                        type: string
+                        description: A read-only string identifying an uploaded asset.
+                      mime_type:
+                        type: string
+                        description: A read-only string identifying the MIME type of the uploaded asset. For example, `image/jpeg`
+                      media_url:
+                        type: string
+                        description: A URL link to the media to be included in the MMS.
+                      description:
+                        type: string
+                        description: An optional description of the media.
+                      body:
+                        type: string
+                        description: The body text included in the MMS send.
+            filters:
+              type: array
+              items:
+                type: object
+                description: Any filters used to target recipients.
+            url:
+              type: string
+            created_at:
+              type: string
+            updated_at:
+              type: string
+    eventTriggeredsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/eventTriggeredResponse'
+    mmsurl:
+      type: object
+      title: Media URL
+      properties:
+        media_url:
+          type: string
+          description: A URL link to the media to be included in the MMS. Do not use if you are using asset_id.
+        description:
+          type: string
+          description: An optional description of the media. Use only if you are using media_URL.
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

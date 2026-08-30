@@ -1,0 +1,274 @@
+openapi: 3.2.0
+info:
+  title: Vibes Platform Subscription API
+  version: 1.0.0
+servers:
+- url: https://public-api.vibescm.com
+  description: North America
+- url: https://public-api.eu.vibes.com/
+  description: EMEA
+security:
+- basicAuth: []
+tags:
+- name: Subscription API
+paths:
+  /companies/{company_key}/mobiledb/persons/{person_key}/subscriptions:
+    get:
+      tags:
+      - Subscription API
+      summary: Get subscriptions for a person_key
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: active_only
+        in: query
+        schema:
+          type: boolean
+        example: 'false'
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: person_key
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/subscriptionsResponse'
+        '404':
+          description: The `person_key` cannot be located.
+  /companies/{company_key}/mobiledb/persons/external/{external_person_id}/subscriptions:
+    get:
+      tags:
+      - Subscription API
+      summary: Get subscriptions for external_person_id
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: external_person_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/subscriptionsResponse'
+        '404':
+          description: The `external_person_id` cannot be located.
+  /companies/{company_key}/mobiledb/persons/{person_key}/subscriptions/{subscription_list_id}:
+    get:
+      tags:
+      - Subscription API
+      summary: Get subscription status for list by person_key
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: person_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: subscription_list_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/subscriptionsResponse'
+        '404':
+          description: The person record cannot be located or they are not subscribed to the specified list.
+    delete:
+      tags:
+      - Subscription API
+      summary: Unsubscribe person by person_key
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: person_key
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a real person_key, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a person being unsubscribed.</div></div>
+      - name: subscription_list_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+        '204':
+          description: Deletion was successful.
+        '404':
+          description: Either the person cannot be located or they are already not subscribed to the specified list.
+  /companies/{company_key}/mobiledb/persons/external/{external_person_id}/subscriptions/{subscription_list_id}:
+    get:
+      tags:
+      - Subscription API
+      summary: Get subscription status for list by external_person_id
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: external_person_id
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: subscription_list_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/subscriptionsResponse'
+        '404':
+          description: Either the person record cannot be located or the person is not subscribed to the specified list.
+    delete:
+      tags:
+      - Subscription API
+      summary: Unsubscribe person by external_person_id
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: external_person_id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a real external_person_id, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a person being unsubscribed.</div></div>
+      - name: subscription_list_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+        '204':
+          description: Deletion was successful.
+        '404':
+          description: Either the person cannot be located or they are already not subscribed to the specified list.
+components:
+  schemas:
+    subscriptionsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/subscriptionResponse'
+    subscriptionResponse:
+      type: object
+      properties:
+        person:
+          type: object
+          description: Person reference information for the subscription.
+          properties:
+            id:
+              type: string
+              description: Vibes-unique person identifier.
+            url:
+              type: string
+              description: Reference URL to the person resource.
+        subscription_list:
+          type: object
+          properties:
+            id:
+              type: string
+              description: Vibes unique subscription list identifier.
+            url:
+              type: string
+              description: Reference URL to the subscription list resource.
+        opt_in_date:
+          type: string
+          description: Date string indicating when the subscription was entered in ISO-8601 format.
+        opt_out_date:
+          type: string
+          description: Date string indicating when the subscription was ended, if relevant, in ISO-8601 format.
+        opt_out_reason:
+          type: string
+          description: The reason why the person was opted-out, if relevant.
+          enum:
+          - user_opt_out
+          - disconnect
+          - list_archived
+          - bulk_opt_out
+          - failed_at_carrier
+          - obsolete_carrier
+          - platform_opt_out
+          - keyword_opt_out
+          - api_opt_out
+          - button_opt_out
+        url:
+          type: string
+          description: A reference URL to the existing object, as a relative URL to the existing domain.
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

@@ -1,0 +1,284 @@
+openapi: 3.2.0
+info:
+  title: Vibes Platform Acquisition Campaign API
+  version: 1.0.0
+servers:
+- url: https://public-api.vibescm.com
+  description: North America
+- url: https://public-api.eu.vibes.com/
+  description: EMEA
+security:
+- basicAuth: []
+tags:
+- name: Acquisition Campaign API
+paths:
+  /companies/{company_key}/campaigns/acquisition:
+    get:
+      tags:
+      - Acquisition Campaign API
+      summary: Get acquisition campaigns
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/acquisitionsResponse'
+        '404':
+          description: No campaigns can be located.
+  /companies/{company_key}/campaigns/acquisition/{acquisition_id}:
+    get:
+      tags:
+      - Acquisition Campaign API
+      summary: Get an acquisition campaign
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: acquisition_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/acquisitionResponse'
+        '404':
+          description: The `acquisition_id` cannot be located.
+  /companies/{company_key}/campaigns/acquisition/{acquisition_id}/participants:
+    get:
+      tags:
+      - Acquisition Campaign API
+      summary: Search for pending participants
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: mdn
+        in: query
+        description: Mobile Directory Number. The dialable phone number associated with the phone. Required if searching by mdn.
+        schema:
+          type: string
+      - name: person_id
+        in: query
+        description: Vibes-assigned unique indentifier for the person. Required if searching by person_id
+        schema:
+          type: string
+      - name: external_person_id
+        in: query
+        description: A unique person identifier assigned by the brand, which can be used to link non-Vibes-assigned identifiers to Vibes person records. Required if searching by external_person_id.
+        schema:
+          type: string
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: acquisition_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: This is returned for all valid requests. The array with be empty for entities without pending subscriptions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/acquisitionParticipantsResponse'
+        '400':
+          description: The supplied MDN is not in proper mobile number format.
+    post:
+      tags:
+      - Acquisition Campaign API
+      summary: Add a participant
+      requestBody:
+        description: User details for acquisition
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/addParticipantRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: Content-Type
+        in: header
+        schema:
+          type: string
+        example: application/json
+        required: true
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: acquisition_id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a live acquistion_id, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a person being added to the live campaign.</div></div>
+      responses:
+        '200':
+          description: This means the person has a pending acquisition and has not yet confirmed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/addParticipantResponse'
+        '201':
+          description: 'Depending on the "status", the following can be returned: <br><ul> <li>`PENDING` - The person''s subscription is pending. This happens when an opt-in message has been sent, but the participant has not confirmed their subscription.</li> <li>`SUBSCRIBED` - The person is subscribed to your list.</li> </ul>'
+        '400':
+          description: The supplied mobile number is not in proper mobile number format.
+        '409':
+          description: Already subscribed. This means the person has tried to subscribe more than once, but is already subscribed to the list.
+        '422':
+          description: 'Returned in the following situations:<br> <ul> <li>`MDNHASCONFIRMATIONBLOCK`: Returned when the MDN has previously replied “No” to the acquisition campaign.<br><b>Note</b>: When an MDN has previously replied "No" to an acquisition campaign, they cannot be added via API using that campaign. However, the MDN can still join a subscription list by texting in the appropriate keyword.</li> <li>The supplied phone number does not map to a provisioned carrier. This is mostly returned for a landline number.</li> <li>`EXTERNALPERSONIDMISMATCH`: Returned when trying to subscribe a person with an `external_person_id` that is already in use.</li> <li>`UNPROCESSABLE ENTITY`: Returned when unable to process the request with the contained instructions. Please reach out to Vibes Customer Care or your account manager for troubleshooting support.</li> <li>An error listing specific elements from the body is returned when trying to populate custom field data for custom fields unknown to the platform.</li> </ul>'
+components:
+  schemas:
+    acquisitionParticipantsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/acquisitionParticipantResponse'
+    acquisitionsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/acquisitionResponse'
+    addParticipantRequest:
+      type: object
+      properties:
+        person_id:
+          type: string
+          description: Vibes-assigned unique indentifier for the person. Required if adding participant by person_id.
+        external_person_id:
+          type: string
+          description: A unique person identifier assigned by the brand, which can be used to link non-Vibes-assigned identifiers to Vibes person records. Required if adding participant by external_person_id.
+        mobile_phone:
+          type: object
+          description: Mobile Directory Number. The dialable phone number associated with the phone. Required if adding participant by mdn.
+          properties:
+            mdn:
+              type: string
+              description: Mobile Directory Number. The dialable phone number associated with the phone.
+        custom_fields:
+          type: object
+          description: A list of custom field key/value pairs to poulate when creating Acquisition request.
+          additionalProperties:
+            type: string
+    acquisitionParticipantResponse:
+      type: object
+      properties:
+        person:
+          type: object
+          description: Participant in the acquisition campaign.
+          properties:
+            person_id:
+              type: string
+              description: Vibes-assigned unique indentifier for the person.
+            url:
+              type: string
+              description: Unique resource URL for the person.
+        participation_date:
+          type: string
+          description: Date the person joined the acquisition campaign.
+        expire_date:
+          type: string
+          description: Date the person's acquisition request expires.
+        status:
+          type: string
+          description: Status of the aquisition request.
+    acquisitionResponse:
+      type: object
+      properties:
+        acquisition_id:
+          type: string
+          description: A Vibes-assigned alphanumeric unique identifier for each acquisition campaign.
+        description:
+          type: string
+          description: The name of the acquisition campaign.
+        campaign_type:
+          type: object
+          properties:
+            code:
+              type: string
+        status:
+          type: string
+          description: The status of the acquisition campaign. Values are scheduled, active, deleted, or past. Values are always lowercase.
+        start_date:
+          type: string
+          description: The date the campaign is starting, formatted in ISO-8601 format.
+        end_date:
+          type: string
+          description: The date the campaign is ending or has ended, formatted in ISO-8601 format.
+        created_date:
+          type: string
+          description: The date the campaign was created, formated in ISO-8601 format.
+        updated_date:
+          type: string
+          description: The date of the last time the campaign was updated, formated in ISO-8601 format.
+        acquisition_campaign:
+          type: object
+          properties:
+            keywords:
+              type: array
+              description: The keywords that a user can send in via SMS to join the campaign and begin the subscription process.
+              items:
+                type: string
+        url:
+          type: string
+          description: Unique resource URL for the acquisition campaign.
+    addParticipantResponse:
+      type: object
+      properties:
+        person:
+          type: object
+          properties:
+            person_id:
+              type: string
+              description: Vibes-assigned unique indentifier for the person.
+            person_key:
+              type: string
+              description: A unique Vibes-asigned alphanumeric identifier for each person record.
+            url:
+              type: string
+              description: Unique resource URL for the Person.
+        participation_date:
+          type: string
+          description: Date the person entered the Acquisition Campaign.
+        expire_date:
+          type: string
+          description: Date the person's acquisition request expires.
+        status:
+          type: string
+          description: Status of the aquisition request.
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

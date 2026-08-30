@@ -1,0 +1,246 @@
+openapi: 3.2.0
+info:
+  title: Vibes Platform Subscription List API
+  version: 1.0.0
+servers:
+- url: https://public-api.vibescm.com
+  description: North America
+- url: https://public-api.eu.vibes.com/
+  description: EMEA
+security:
+- basicAuth: []
+tags:
+- name: Subscription List API
+paths:
+  /companies/{company_key}/mobiledb/subscription_lists/{subscription_list_id}/subscribers:
+    get:
+      tags:
+      - Subscription List API
+      summary: Search for subscriber
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: subscription_list_id
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: mdn
+        in: query
+        description: Mobile Directory Number. The dialable phone number associated with the phone.<br><br>Required if searching by mdn.
+        schema:
+          type: string
+      - name: person_key
+        in: query
+        description: A unique Vibes-asigned alphanumeric identifier for each person record.<br><br>Required if searching by `person_key`.
+        schema:
+          type: string
+      - name: external_person_id
+        in: query
+        description: A unique person identifier assigned by the brand, which can be used to link non-Vibes-assigned identifiers to Vibes person records.<br><br>Required if searching by `external_person_id`.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/personResponse'
+        '404':
+          description: The subscriber cannot be located or they are not subscribed to the specified list.
+  /companies/{company_key}/mobiledb/subscription_lists/:
+    get:
+      tags:
+      - Subscription List API
+      summary: Get subscription lists
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/subscriptionListsResponse'
+  /companies/{company_key}/mobiledb/subscription_lists/{subscription_list_id}:
+    get:
+      tags:
+      - Subscription List API
+      summary: Get subscription list info
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: subscription_list_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/subscriptionListResponse'
+        '404':
+          description: The `subscription_list_id` cannot be found.
+  /companies/{company_key}/mobiledb/subscription_lists/{subscription_list_id}/acquisition_campaigns/:
+    get:
+      tags:
+      - Subscription List API
+      summary: Get acquisition campaigns for subscription list
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: subscription_list_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/acquisitionsResponse'
+        '404':
+          description: The `subscription_list_id` cannot be found.
+components:
+  schemas:
+    subscriptionListResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier for this particular subscription list.
+        name:
+          type: string
+          description: The display name for the subscription list.
+        url:
+          type: string
+          description: The REST API URL to the subscription list entity.
+        subscribers_url:
+          type: string
+          description: The REST API URL to the subscribers end point.
+        acquisition_campaigns_url:
+          type: string
+          description: The REST API URL to the acquisition campaigns list endpoint.
+    acquisitionsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/acquisitionResponse'
+    personResponse:
+      type: object
+      properties:
+        person_key:
+          type: string
+          description: A unique Vibes-asigned alphanumeric identifier for each person record.
+        external_person_id:
+          type: string
+          description: A unique person identifier assigned by the brand, which can be used to link non-Vibes-assigned identifiers to Vibes person records. Max 128 characters.
+        mobile_phone:
+          type: object
+          description: Object representation of a person's mobile phone. A person can have only one active mobile phone at a time.
+          properties:
+            mdn:
+              type: string
+              description: Mobile Directory Number. The dialable phone number associated with the phone.
+            carrier_code:
+              type: string
+              description: The cellular carrier associated with this mobile number.
+        custom_fields:
+          type: object
+          description: list of custom field key/value pairs.
+          additionalProperties:
+            type: string
+        created_at:
+          type: string
+          description: The date this person was created, in the ISO-8601 format.
+        updated_at:
+          type: string
+          description: The date this person was last updated, in the ISO-8601 format.
+        url:
+          type: string
+    acquisitionResponse:
+      type: object
+      properties:
+        acquisition_id:
+          type: string
+          description: A Vibes-assigned alphanumeric unique identifier for each acquisition campaign.
+        description:
+          type: string
+          description: The name of the acquisition campaign.
+        campaign_type:
+          type: object
+          properties:
+            code:
+              type: string
+        status:
+          type: string
+          description: The status of the acquisition campaign. Values are scheduled, active, deleted, or past. Values are always lowercase.
+        start_date:
+          type: string
+          description: The date the campaign is starting, formatted in ISO-8601 format.
+        end_date:
+          type: string
+          description: The date the campaign is ending or has ended, formatted in ISO-8601 format.
+        created_date:
+          type: string
+          description: The date the campaign was created, formated in ISO-8601 format.
+        updated_date:
+          type: string
+          description: The date of the last time the campaign was updated, formated in ISO-8601 format.
+        acquisition_campaign:
+          type: object
+          properties:
+            keywords:
+              type: array
+              description: The keywords that a user can send in via SMS to join the campaign and begin the subscription process.
+              items:
+                type: string
+        url:
+          type: string
+          description: Unique resource URL for the acquisition campaign.
+    subscriptionListsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/subscriptionListResponse'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

@@ -1,0 +1,238 @@
+openapi: 3.2.0
+info:
+  title: Vibes Platform Push Device Manager API
+  version: 1.0.0
+servers:
+- url: https://public-api.vibescm.com
+  description: North America
+- url: https://public-api.eu.vibes.com/
+  description: EMEA
+security:
+- basicAuth: []
+tags:
+- name: Push Device Manager API
+paths:
+  /companies/{company_key}/mobiledb/persons/{person_key}/push_devices:
+    get:
+      tags:
+      - Push Device Manager API
+      summary: Get push device info by person_key
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: person_key
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pushDeviceResponse'
+        '404':
+          description: The device cannot be located using the `person_key` provided.
+  /companies/{company_key}/mobiledb/persons/external/{external_person_id}/push_devices:
+    get:
+      tags:
+      - Push Device Manager API
+      summary: Get push device info by external_person_id
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: external_person_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pushDeviceResponse'
+        '404':
+          description: The device cannot be located using the `external_person_id` provided.
+  /mobile_apps/{app_id}/devices/{vibes_device_id}:
+    get:
+      tags:
+      - Push Device Manager API
+      summary: Get push device info by vibes_device_id
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: app_id
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: vibes_device_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pushDeviceResponse'
+        '404':
+          description: The device cannot be located by the `vibes_device_id` provided.
+  /mobile_apps/{app_id}/devices/{vibes_device_id}/assign:
+    post:
+      tags:
+      - Push Device Manager API
+      summary: Associate device with person record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/assignPushDeviceRequest'
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: app_id
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: vibes_device_id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: <div style="color:#dd1e2e; background:url(https://d2xs7zaan7w9gl.cloudfront.net/data/pages/64014/widgets/48027d01-e827-45e0-b96d-227c1099eedc/image/1680214872.png?icon-24x24-warning.png) no-repeat 10px center; background-color:#FCEAEC; padding:10px; font-size:13px;"><div style="padding-left:35px"><b>Important:</b> If you are entering a real vibes_device_id, please note that using the <b>"Try It"</b> feature on the righthand console will send an actual API call to our system. This may result in a person being associated with a push device.</div></div>
+      responses:
+        '200':
+          description: The device was successfully assigned to the given person.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/personResponse'
+        '404':
+          description: The `vibes_device_id` or `person_key` (if provided) could not be found.
+        '422':
+          description: Unprocessible entity. The requested assignment could not be completed. Reason will be stated in the response body.
+components:
+  schemas:
+    personResponse:
+      type: object
+      properties:
+        person_key:
+          type: string
+          description: A unique Vibes-asigned alphanumeric identifier for each person record.
+        external_person_id:
+          type: string
+          description: A unique person identifier assigned by the brand, which can be used to link non-Vibes-assigned identifiers to Vibes person records. Max 128 characters.
+        mobile_phone:
+          type: object
+          description: Object representation of a person's mobile phone. A person can have only one active mobile phone at a time.
+          properties:
+            mdn:
+              type: string
+              description: Mobile Directory Number. The dialable phone number associated with the phone.
+            carrier_code:
+              type: string
+              description: The cellular carrier associated with this mobile number.
+        custom_fields:
+          type: object
+          description: list of custom field key/value pairs.
+          additionalProperties:
+            type: string
+        created_at:
+          type: string
+          description: The date this person was created, in the ISO-8601 format.
+        updated_at:
+          type: string
+          description: The date this person was last updated, in the ISO-8601 format.
+        url:
+          type: string
+    pushDeviceResponse:
+      type: object
+      properties:
+        vibes_device_id:
+          type: string
+          description: Vibes unique identifier for each device.
+        OS:
+          type: string
+          description: Operating system of the push device (Android or iOS).
+        os_version:
+          type: string
+          description: Version of the operating system.
+        sdk_version:
+          type: string
+          description: Version of the Vibes Push SDK.
+        app_version:
+          type: string
+          description: Version of the mobile app.
+        push_token:
+          type: string
+          description: Android or IOS push token.
+        hardware_make:
+          type: string
+          description: Make of the mobile device.
+        hardware_model:
+          type: string
+          description: Model of the mobile device.
+        advertising_id:
+          type: string
+          description: Advertising ID (optional).
+        locale:
+          type: string
+          description: Locale (Language/Time Zone) of the device.
+        location:
+          type: object
+          properties:
+            latitude:
+              type: number
+              description: Last known latitude of the mobile device (optional).
+            longitude:
+              type: number
+              description: Last known longitude of the mobile device (optional).
+        timezone:
+          type: string
+          description: Timezone that is set on the mobile device.
+        url:
+          type: string
+    assignPushDeviceRequest:
+      type: object
+      description: One of external_person_id OR person_key is required.
+      properties:
+        external_person_id:
+          type: string
+          description: A unique person identifier assigned by the brand, which can be used to link non-Vibes-assigned identifiers to Vibes person records.
+        person_key:
+          type: string
+          description: A unique Vibes-asigned alphanumeric identifier for each person record.
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

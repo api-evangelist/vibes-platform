@@ -1,0 +1,74 @@
+openapi: 3.2.0
+info:
+  title: Vibes Platform Source Code API
+  version: 1.0.0
+servers:
+- url: https://public-api.vibescm.com
+  description: North America
+- url: https://public-api.eu.vibes.com/
+  description: EMEA
+security:
+- basicAuth: []
+tags:
+- name: Source Code API
+paths:
+  /companies/{company_key}/sourcecodes:
+    get:
+      tags:
+      - Source Code API
+      summary: Get your active source codes
+      parameters:
+      - name: X-API-Version
+        in: header
+        schema:
+          type: string
+          default: 1
+      - name: company_key
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sourceCodesResponse'
+components:
+  schemas:
+    sourceCodeResponse:
+      type: object
+      properties:
+        sourcecode:
+          type: string
+          description: The short, long or alphanumeric code value.
+        country_code:
+          type: string
+          description: The E.164 Country Calling Code for the country where the code is provisioned.
+        sourcecode_type:
+          type: string
+          description: SC for short or long numeric codes; ANC for alphanumeric codes.
+          enum:
+          - SC
+          - ANC
+        primary_country_name:
+          type: string
+          description: A human-readable name of the primary country where the code is provisioned.
+        sms_enabled:
+          type: boolean
+          description: Indicates whether the code is provisioned for SMS messaging.
+        mms_enabled:
+          type: boolean
+          description: Indicates whether the code is provisioned for MMS messaging.
+        sourcecode_end_date:
+          type: string
+          description: Date string indicating when the current code lease expires in ISO-8601 format.
+    sourceCodesResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/sourceCodeResponse'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
