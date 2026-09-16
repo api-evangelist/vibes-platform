@@ -1,59 +1,68 @@
-generated: '2026-07-15'
+generated: '2026-09-16'
 method: generated
-source: openapi/vibes-connect-openapi.yml, openapi/vibes-platform-openapi.yml
+source: openapi/vibes-platform-acquisition-campaign-api-api-openapi.yml, openapi/vibes-platform-acquisition-campaigns-api-openapi.yml,
+  openapi/vibes-platform-android-wallet-templates-api-api-openapi.yml, openapi/vibes-platform-authentication-api-openapi.yml,
+  openapi/vibes-platform-broadcast-api-api-openapi.yml, openapi/vibes-platform-broadcasts-api-openapi.yml,
+  openapi/vibes-platform-callback-api-api-openapi.yml, openapi/vibes-platform-callbacks-api-openapi.yml,
+  openapi/vibes-platform-carrier-lookup-api-openapi.yml, openapi/vibes-platform-event-api-api-openapi.yml,
+  openapi/vibes-platform-event-triggered-campaign-api-api-openapi.yml, openapi/vibes-platform-events-api-openapi.yml,
+  openapi/vibes-platform-inbound-messages-api-openapi.yml, openapi/vibes-platform-incentive-code-api-api-openapi.yml,
+  openapi/vibes-platform-incentive-pool-api-api-openapi.yml, openapi/vibes-platform-ios-wallet-templates-api-api-openapi.yml,
+  openapi/vibes-platform-messages-api-openapi.yml, openapi/vibes-platform-person-api-api-openapi.yml,
+  openapi/vibes-platform-persons-api-openapi.yml, openapi/vibes-platform-push-device-manager-api-api-openapi.yml,
+  openapi/vibes-platform-rcs-business-messaging-api-openapi.yml, openapi/vibes-platform-source-code-api-api-openapi.yml,
+  openapi/vibes-platform-subscription-api-api-openapi.yml, openapi/vibes-platform-subscription-list-api-api-openapi.yml,
+  openapi/vibes-platform-subscription-lists-api-openapi.yml, openapi/vibes-platform-wallet-campaign-api-api-openapi.yml,
+  openapi/vibes-platform-wallet-location-selector-api-api-openapi.yml, openapi/vibes-platform-wallet-messaging-api-api-openapi.yml,
+  openapi/vibes-platform-wallet-passes-api-openapi.yml, openapi/vibes-platform-wallet-store-locations-api-api-openapi.yml
 description: Recommended x-agentic-access execution contracts, classified heuristically from
   the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
   audience per deployment. See research/curity/agentic-governance/.
 summary:
-  operations: 22
+  operations: 106
   by_action_class:
-    acting: 12
-    connected: 10
+    connected: 52
+    acting: 54
   by_consequence:
-    physical: 2
-    write: 10
-    read: 10
-  human_in_the_loop_required: 0
+    read: 52
+    write: 49
+    physical: 4
+    safety-critical: 1
+  human_in_the_loop_required: 1
 operations:
-- path: /api/v1/sms/messages
-  method: post
-  operationId: sendSmsMessage
+- path: /companies/{company_key}/campaigns/acquisition
+  method: get
+  operationId: getCompaniesByCompanyKeyCampaignsAcquisition
   x-agentic-access:
-    action-class: acting
-    consequence: physical
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 300
-      exchange: true
-      purpose-required: true
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /api/v1/mms/messages
-  method: post
-  operationId: sendMmsMessage
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/campaigns/acquisition/{acquisition_id}
+  method: get
+  operationId: getCompaniesByCompanyKeyCampaignsAcquisitionByAcquisitionId
   x-agentic-access:
-    action-class: acting
-    consequence: physical
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 300
-      exchange: true
-      purpose-required: true
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /api/v1/carrier-lookup
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/campaigns/acquisition/{acquisition_id}/participants
+  method: get
+  operationId: getCompaniesByCompanyKeyCampaignsAcquisitionByAcquisitionIdParticipants
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/campaigns/acquisition/{acquisition_id}/participants
   method: post
-  operationId: lookupCarrier
+  operationId: postCompaniesByCompanyKeyCampaignsAcquisitionByAcquisitionIdParticipants
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -67,9 +76,165 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /api/v1/callbacks
+- path: /companies/{company_key}/campaigns/acquisition
+  method: get
+  operationId: listAcquisitionCampaigns
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/campaigns/acquisition/{campaign_id}
+  method: get
+  operationId: getAcquisitionCampaign
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/campaigns/acquisition/{campaign_id}/participants
+  method: get
+  operationId: listPendingParticipants
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/campaigns/acquisition/{campaign_id}/participants
   method: post
-  operationId: registerSmsCallback
+  operationId: addParticipant
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/campaigns/wallet/{token}/wallet_template
+  method: get
+  operationId: getCompaniesByCompanyKeyCampaignsWalletByTokenWalletTemplate
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/campaigns/wallet/{token}/wallet_template
+  method: post
+  operationId: postCompaniesByCompanyKeyCampaignsWalletByTokenWalletTemplate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/campaigns/wallet/{token}/wallet_template
+  method: put
+  operationId: putCompaniesByCompanyKeyCampaignsWalletByTokenWalletTemplate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /oauth2/token
+  method: post
+  operationId: postOauth2Token
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/mobiledb/broadcasts/
+  method: post
+  operationId: postCompaniesByCompanyKeyMobiledbBroadcasts
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/mobiledb/broadcasts
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbBroadcasts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/broadcasts/{broadcast_id}
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbBroadcastsByBroadcastId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/broadcasts/{broadcast_id}
+  method: put
+  operationId: putCompaniesByCompanyKeyMobiledbBroadcastsByBroadcastId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/mobiledb/broadcasts/{broadcast_id}
+  method: delete
+  operationId: deleteCompaniesByCompanyKeyMobiledbBroadcastsByBroadcastId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -135,39 +300,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /companies/{company_key}/campaigns/acquisition
-  method: get
-  operationId: listAcquisitionCampaigns
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /companies/{company_key}/campaigns/acquisition/{campaign_id}
-  method: get
-  operationId: getAcquisitionCampaign
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /companies/{company_key}/campaigns/acquisition/{campaign_id}/participants
-  method: get
-  operationId: listPendingParticipants
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /companies/{company_key}/campaigns/acquisition/{campaign_id}/participants
+- path: /companies/{company_key}/config/callbacks/
   method: post
-  operationId: addParticipant
+  operationId: postCompaniesByCompanyKeyConfigCallbacks
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -181,6 +316,810 @@ operations:
       - abnormal
       - high-value
     audit: required
+- path: /companies/{company_key}/config/callbacks/
+  method: get
+  operationId: getCompaniesByCompanyKeyConfigCallbacks
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/config/callbacks/{callback_id}
+  method: get
+  operationId: getCompaniesByCompanyKeyConfigCallbacksByCallbackId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/config/callbacks/{callback_id}
+  method: put
+  operationId: putCompaniesByCompanyKeyConfigCallbacksByCallbackId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/config/callbacks/{callback_id}
+  method: delete
+  operationId: deleteCompaniesByCompanyKeyConfigCallbacksByCallbackId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/config/callback_events/test
+  method: post
+  operationId: postCompaniesByCompanyKeyConfigCallbackEventsTest
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/callbacks
+  method: get
+  operationId: listCallbacks
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/callbacks
+  method: post
+  operationId: registerCallback
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/carrier-lookup
+  method: post
+  operationId: lookupCarrier
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/events
+  method: post
+  operationId: postCompaniesByCompanyKeyEvents
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/mobiledb/event_triggered_messages
+  method: post
+  operationId: postCompaniesByCompanyKeyMobiledbEventTriggeredMessages
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/mobiledb/event_triggered_messages
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbEventTriggeredMessages
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/event_triggered_messages/{event_triggered_message_id}
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbEventTriggeredMessagesByEventTriggeredMessageId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/event_triggered_messages/{event_triggered_message_id}
+  method: put
+  operationId: putCompaniesByCompanyKeyMobiledbEventTriggeredMessagesByEventTriggeredMessageId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/mobiledb/event_triggered_messages/{event_triggered_message_id}
+  method: delete
+  operationId: deleteCompaniesByCompanyKeyMobiledbEventTriggeredMessagesByEventTriggeredMessageId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/events
+  method: post
+  operationId: createEvent
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/callbacks
+  method: post
+  operationId: registerSmsCallback
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/incentives/pools/{issuance_pool_id}/issuances
+  method: post
+  operationId: postCompaniesByCompanyKeyIncentivesPoolsByIssuancePoolIdIssuances
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/incentives/codes/{incentive_code}
+  method: get
+  operationId: getCompaniesByCompanyKeyIncentivesCodesByIncentiveCode
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/incentives/codes/{incentive_code}/issuances
+  method: get
+  operationId: getCompaniesByCompanyKeyIncentivesCodesByIncentiveCodeIssuances
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/incentives/codes/{incentive_code}/redemptions
+  method: post
+  operationId: postCompaniesByCompanyKeyIncentivesCodesByIncentiveCodeRedemptions
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/incentives/codes/{incentive_code}/redemptions
+  method: get
+  operationId: getCompaniesByCompanyKeyIncentivesCodesByIncentiveCodeRedemptions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/incentives/pools
+  method: get
+  operationId: getCompaniesByCompanyKeyIncentivesPools
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/incentives/pools
+  method: post
+  operationId: postCompaniesByCompanyKeyIncentivesPools
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/incentives/pools/{incentive_pool_id}
+  method: put
+  operationId: putCompaniesByCompanyKeyIncentivesPoolsByIncentivePoolId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/incentives/pools/{incentive_pool_id}
+  method: get
+  operationId: getCompaniesByCompanyKeyIncentivesPoolsByIncentivePoolId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/campaigns/wallet/{token}/passbook_template
+  method: get
+  operationId: getCompaniesByCompanyKeyCampaignsWalletByTokenPassbookTemplate
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/campaigns/wallet/{token}/passbook_template
+  method: post
+  operationId: postCompaniesByCompanyKeyCampaignsWalletByTokenPassbookTemplate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/campaigns/wallet/{token}/passbook_template
+  method: put
+  operationId: putCompaniesByCompanyKeyCampaignsWalletByTokenPassbookTemplate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/sms/messages
+  method: post
+  operationId: sendSmsMessage
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/mms/messages
+  method: post
+  operationId: sendMmsMessage
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/mobiledb/persons/{person_key}
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbPersonsByPersonKey
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/persons/{person_key}
+  method: put
+  operationId: putCompaniesByCompanyKeyMobiledbPersonsByPersonKey
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/mobiledb/persons/external/{external_person_id}
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbPersonsExternalByExternalPersonId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/persons/external/{external_person_id}
+  method: put
+  operationId: putCompaniesByCompanyKeyMobiledbPersonsExternalByExternalPersonId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/mobiledb/persons
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbPersons
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/persons/
+  method: post
+  operationId: postCompaniesByCompanyKeyMobiledbPersons
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/mobiledb/persons/{person_key}
+  method: get
+  operationId: getPerson
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/persons/{person_key}/push_devices
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbPersonsByPersonKeyPushDevices
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/persons/external/{external_person_id}/push_devices
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbPersonsExternalByExternalPersonIdPushDevices
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /mobile_apps/{app_id}/devices/{vibes_device_id}
+  method: get
+  operationId: getMobileAppsByAppIdDevicesByVibesDeviceId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /mobile_apps/{app_id}/devices/{vibes_device_id}/assign
+  method: post
+  operationId: postMobileAppsByAppIdDevicesByVibesDeviceIdAssign
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /{connect_customer_key}/capabilities/{msisdn}
+  method: get
+  operationId: Get Mobile Device Capabilities
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - https://rbm.vibes.com/rbm.agents
+- path: /{connect_customer_key}/agentMessages/{msisdn}
+  method: post
+  operationId: Send Agent Message
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+    scope:
+    - https://rbm.vibes.com/rbm.agents
+- path: /{connect_customer_key}/agentEvents/{msisdn}
+  method: post
+  operationId: Send Agent Event
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+    scope:
+    - https://rbm.vibes.com/rbm.agents
+- path: /{connect_customer_key}/agentMessages/{msisdn}/{messageId}
+  method: delete
+  operationId: Revoke Agent Message
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+    scope:
+    - https://rbm.vibes.com/rbm.agents
+- path: /{connect_customer_key}/testers/{msisdn}
+  method: post
+  operationId: Invite Agent Tester
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+    scope:
+    - https://rbm.vibes.com/rbm.agents
+- path: /{connect_customer_key}/testers/{msisdn}
+  method: get
+  operationId: getTester
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - https://rbm.vibes.com/rbm.agents
+- path: /{connect_customer_key}/testers/{msisdn}
+  method: delete
+  operationId: deleteTester
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+    scope:
+    - https://rbm.vibes.com/rbm.agents
+- path: /{connect_customer_key}/testers
+  method: get
+  operationId: listTesters
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - https://rbm.vibes.com/rbm.agents
+- path: /companies/{company_key}/sourcecodes
+  method: get
+  operationId: getCompaniesByCompanyKeySourcecodes
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/persons/{person_key}/subscriptions
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbPersonsByPersonKeySubscriptions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/persons/external/{external_person_id}/subscriptions
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbPersonsExternalByExternalPersonIdSubscriptions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/persons/{person_key}/subscriptions/{subscription_list_id}
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbPersonsByPersonKeySubscriptionsBySubscriptionListId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/persons/{person_key}/subscriptions/{subscription_list_id}
+  method: delete
+  operationId: deleteCompaniesByCompanyKeyMobiledbPersonsByPersonKeySubscriptionsBySubscriptionListId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/mobiledb/persons/external/{external_person_id}/subscriptions/{subscription_list_id}
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbPersonsExternalByExternalPersonIdSubscriptionsBySubscriptionListId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/persons/external/{external_person_id}/subscriptions/{subscription_list_id}
+  method: delete
+  operationId: deleteCompaniesByCompanyKeyMobiledbPersonsExternalByExternalPersonIdSubscriptionsBySubscriptionListId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/mobiledb/subscription_lists/{subscription_list_id}/subscribers
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbSubscriptionListsBySubscriptionListIdSubscribers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/subscription_lists/
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbSubscriptionLists
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/subscription_lists/{subscription_list_id}
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbSubscriptionListsBySubscriptionListId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/mobiledb/subscription_lists/{subscription_list_id}/acquisition_campaigns/
+  method: get
+  operationId: getCompaniesByCompanyKeyMobiledbSubscriptionListsBySubscriptionListIdAcquisitionCampaigns
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
 - path: /companies/{company_key}/mobiledb/subscription_lists
   method: get
   operationId: listSubscriptionLists
@@ -194,16 +1133,6 @@ operations:
 - path: /companies/{company_key}/mobiledb/subscription_lists/{subscription_list_id}
   method: get
   operationId: getSubscriptionList
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /companies/{company_key}/mobiledb/persons/{person_key}
-  method: get
-  operationId: getPerson
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -243,9 +1172,19 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /companies/{company_key}/events
+- path: /companies/{company_key}/campaigns/wallet
+  method: get
+  operationId: getCompaniesByCompanyKeyCampaignsWallet
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/campaigns/wallet
   method: post
-  operationId: createEvent
+  operationId: postCompaniesByCompanyKeyCampaignsWallet
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -259,6 +1198,162 @@ operations:
       - abnormal
       - high-value
     audit: required
+- path: /companies/{company_key}/campaigns/wallet/{wallet_id}
+  method: get
+  operationId: getCompaniesByCompanyKeyCampaignsWalletByWalletId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/campaigns/wallet/{wallet_id}
+  method: put
+  operationId: putCompaniesByCompanyKeyCampaignsWalletByWalletId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/campaigns/wallet/{wallet_id}/items
+  method: get
+  operationId: getCompaniesByCompanyKeyCampaignsWalletByWalletIdItems
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/campaigns/wallet/{wallet_id}/items/{wallet_item_id}
+  method: get
+  operationId: getCompaniesByCompanyKeyCampaignsWalletByWalletIdItemsByWalletItemId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/campaigns/wallet/{wallet_id}/items/{wallet_item_id}
+  method: put
+  operationId: putCompaniesByCompanyKeyCampaignsWalletByWalletIdItemsByWalletItemId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/campaigns/wallet/{token}/location_selector
+  method: get
+  operationId: getCompaniesByCompanyKeyCampaignsWalletByTokenLocationSelector
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/campaigns/wallet/{token}/location_selector
+  method: post
+  operationId: postCompaniesByCompanyKeyCampaignsWalletByTokenLocationSelector
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/campaigns/wallet/{token}/location_selector
+  method: put
+  operationId: putCompaniesByCompanyKeyCampaignsWalletByTokenLocationSelector
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/campaigns/wallet/{token}/location_selector
+  method: delete
+  operationId: deleteCompaniesByCompanyKeyCampaignsWalletByTokenLocationSelector
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/campaigns/wallet/{wallet_id}/messages
+  method: post
+  operationId: postCompaniesByCompanyKeyCampaignsWalletByWalletIdMessages
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/campaigns/wallet/{wallet_id}/messages
+  method: get
+  operationId: getCompaniesByCompanyKeyCampaignsWalletByWalletIdMessages
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /companies/{company_key}/campaigns/wallet/{wallet_id}/messages/{wallet_message_id}
+  method: get
+  operationId: getCompaniesByCompanyKeyCampaignsWalletByWalletIdMessagesByWalletMessageId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
 - path: /companies/{company_key}/wallet_items
   method: get
   operationId: listWalletItems
@@ -285,9 +1380,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /companies/{company_key}/callbacks
+- path: /companies/{company_key}/campaigns/wallet/{token}/locations
   method: get
-  operationId: listCallbacks
+  operationId: getCompaniesByCompanyKeyCampaignsWalletByTokenLocations
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -295,9 +1390,41 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /companies/{company_key}/callbacks
+- path: /companies/{company_key}/campaigns/wallet/{token}/locations/bulk
   method: post
-  operationId: registerCallback
+  operationId: postCompaniesByCompanyKeyCampaignsWalletByTokenLocationsBulk
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/campaigns/wallet/{token}/locations/{id}
+  method: delete
+  operationId: deleteCompaniesByCompanyKeyCampaignsWalletByTokenLocationsById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{company_key}/campaigns/wallet/{token}/locations/delete_all
+  method: delete
+  operationId: deleteCompaniesByCompanyKeyCampaignsWalletByTokenLocationsDeleteAll
   x-agentic-access:
     action-class: acting
     consequence: write
