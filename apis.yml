@@ -35,6 +35,8 @@ apis:
   humanURL: https://developer-platform.vibes.com/
   baseURL: https://public-api.vibescm.com
   tags:
+  - Broadcast
+  tags_raw:
   - Broadcasts
   properties:
   - type: OpenAPI
