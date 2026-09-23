@@ -44,6 +44,8 @@ paths:
           description: The person record cannot be found using this `person_key`.
         '422':
           description: The server understands the content type of the request entity, and the syntax of the request entity is correct, but it was unable to process the contained instructions.
+      operationId: getCompaniesByCompanyKeyMobiledbPersonsByPersonKey
+      x-operation-id-source: derived
     put:
       tags:
       - Person API
@@ -90,6 +92,8 @@ paths:
           description: Conflict error. This may occur if you are attempting to update an MDN. Note that you cannot update an MDN on an existing person record, but you may remove an MDN by setting the value to `null`.
         '422':
           description: The server understands the content type of the request entity, and the syntax of the request entity is correct, but it was unable to process the contained instructions.
+      operationId: putCompaniesByCompanyKeyMobiledbPersonsByPersonKey
+      x-operation-id-source: derived
   /companies/{company_key}/mobiledb/persons/external/{external_person_id}:
     get:
       tags:
@@ -122,6 +126,8 @@ paths:
           description: Person record cannot be found using the specified `external_person_id`.
         '422':
           description: The server understands the content type of the request entity, and the syntax of the request entity is correct, but it was unable to process the contained instructions.
+      operationId: getCompaniesByCompanyKeyMobiledbPersonsExternalByExternalPersonId
+      x-operation-id-source: derived
     put:
       tags:
       - Person API
@@ -168,6 +174,8 @@ paths:
           description: Conflict error. This occurs if you are attempting to update an MDN. An MDN cannot be updated, but it can be removed if you set its value to `null`.
         '422':
           description: The server understands the content type of the request entity, and the syntax of the request entity is correct, but it was unable to process the contained instructions.
+      operationId: putCompaniesByCompanyKeyMobiledbPersonsExternalByExternalPersonId
+      x-operation-id-source: derived
   /companies/{company_key}/mobiledb/persons:
     get:
       tags:
@@ -200,6 +208,8 @@ paths:
           description: Invalid MDN format. If you are using E.164 format, be sure to include %2B in place of +.
         '404':
           description: MDN not found. This can be returned if you don’t specify an MDN, or if there are no person records associated with that MDN.
+      operationId: getCompaniesByCompanyKeyMobiledbPersons
+      x-operation-id-source: derived
   /companies/{company_key}/mobiledb/persons/:
     post:
       tags:
@@ -242,6 +252,8 @@ paths:
           description: Conflict error. Generally, this occurs if you are attempting to create a person record with an MDN that is already associted with another person record.
         '422':
           description: The server understands the content type of the request entity, and the syntax of the request entity is correct, but it was unable to process the contained instructions.
+      operationId: postCompaniesByCompanyKeyMobiledbPersons
+      x-operation-id-source: derived
 components:
   schemas:
     personResponse:

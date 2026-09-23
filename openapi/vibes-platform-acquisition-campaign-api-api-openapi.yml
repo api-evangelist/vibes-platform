@@ -37,6 +37,8 @@ paths:
                 $ref: '#/components/schemas/acquisitionsResponse'
         '404':
           description: No campaigns can be located.
+      operationId: getCompaniesByCompanyKeyCampaignsAcquisition
+      x-operation-id-source: derived
   /companies/{company_key}/campaigns/acquisition/{acquisition_id}:
     get:
       tags:
@@ -67,6 +69,8 @@ paths:
                 $ref: '#/components/schemas/acquisitionResponse'
         '404':
           description: The `acquisition_id` cannot be located.
+      operationId: getCompaniesByCompanyKeyCampaignsAcquisitionByAcquisitionId
+      x-operation-id-source: derived
   /companies/{company_key}/campaigns/acquisition/{acquisition_id}/participants:
     get:
       tags:
@@ -112,6 +116,8 @@ paths:
                 $ref: '#/components/schemas/acquisitionParticipantsResponse'
         '400':
           description: The supplied MDN is not in proper mobile number format.
+      operationId: getCompaniesByCompanyKeyCampaignsAcquisitionByAcquisitionIdParticipants
+      x-operation-id-source: derived
     post:
       tags:
       - Acquisition Campaign API
@@ -161,16 +167,14 @@ paths:
           description: Already subscribed. This means the person has tried to subscribe more than once, but is already subscribed to the list.
         '422':
           description: 'Returned in the following situations:<br> <ul> <li>`MDNHASCONFIRMATIONBLOCK`: Returned when the MDN has previously replied “No” to the acquisition campaign.<br><b>Note</b>: When an MDN has previously replied "No" to an acquisition campaign, they cannot be added via API using that campaign. However, the MDN can still join a subscription list by texting in the appropriate keyword.</li> <li>The supplied phone number does not map to a provisioned carrier. This is mostly returned for a landline number.</li> <li>`EXTERNALPERSONIDMISMATCH`: Returned when trying to subscribe a person with an `external_person_id` that is already in use.</li> <li>`UNPROCESSABLE ENTITY`: Returned when unable to process the request with the contained instructions. Please reach out to Vibes Customer Care or your account manager for troubleshooting support.</li> <li>An error listing specific elements from the body is returned when trying to populate custom field data for custom fields unknown to the platform.</li> </ul>'
+      operationId: postCompaniesByCompanyKeyCampaignsAcquisitionByAcquisitionIdParticipants
+      x-operation-id-source: derived
 components:
   schemas:
     acquisitionParticipantsResponse:
       type: array
       items:
         $ref: '#/components/schemas/acquisitionParticipantResponse'
-    acquisitionsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/acquisitionResponse'
     addParticipantRequest:
       type: object
       properties:
@@ -192,28 +196,6 @@ components:
           description: A list of custom field key/value pairs to poulate when creating Acquisition request.
           additionalProperties:
             type: string
-    acquisitionParticipantResponse:
-      type: object
-      properties:
-        person:
-          type: object
-          description: Participant in the acquisition campaign.
-          properties:
-            person_id:
-              type: string
-              description: Vibes-assigned unique indentifier for the person.
-            url:
-              type: string
-              description: Unique resource URL for the person.
-        participation_date:
-          type: string
-          description: Date the person joined the acquisition campaign.
-        expire_date:
-          type: string
-          description: Date the person's acquisition request expires.
-        status:
-          type: string
-          description: Status of the aquisition request.
     acquisitionResponse:
       type: object
       properties:
@@ -254,6 +236,32 @@ components:
         url:
           type: string
           description: Unique resource URL for the acquisition campaign.
+    acquisitionsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/acquisitionResponse'
+    acquisitionParticipantResponse:
+      type: object
+      properties:
+        person:
+          type: object
+          description: Participant in the acquisition campaign.
+          properties:
+            person_id:
+              type: string
+              description: Vibes-assigned unique indentifier for the person.
+            url:
+              type: string
+              description: Unique resource URL for the person.
+        participation_date:
+          type: string
+          description: Date the person joined the acquisition campaign.
+        expire_date:
+          type: string
+          description: Date the person's acquisition request expires.
+        status:
+          type: string
+          description: Status of the aquisition request.
     addParticipantResponse:
       type: object
       properties:

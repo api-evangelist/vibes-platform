@@ -47,6 +47,8 @@ paths:
                 $ref: '#/components/schemas/subscriptionsResponse'
         '404':
           description: The `person_key` cannot be located.
+      operationId: getCompaniesByCompanyKeyMobiledbPersonsByPersonKeySubscriptions
+      x-operation-id-source: derived
   /companies/{company_key}/mobiledb/persons/external/{external_person_id}/subscriptions:
     get:
       tags:
@@ -77,6 +79,8 @@ paths:
                 $ref: '#/components/schemas/subscriptionsResponse'
         '404':
           description: The `external_person_id` cannot be located.
+      operationId: getCompaniesByCompanyKeyMobiledbPersonsExternalByExternalPersonIdSubscriptions
+      x-operation-id-source: derived
   /companies/{company_key}/mobiledb/persons/{person_key}/subscriptions/{subscription_list_id}:
     get:
       tags:
@@ -112,6 +116,8 @@ paths:
                 $ref: '#/components/schemas/subscriptionsResponse'
         '404':
           description: The person record cannot be located or they are not subscribed to the specified list.
+      operationId: getCompaniesByCompanyKeyMobiledbPersonsByPersonKeySubscriptionsBySubscriptionListId
+      x-operation-id-source: derived
     delete:
       tags:
       - Subscription API
@@ -147,6 +153,8 @@ paths:
           description: Deletion was successful.
         '404':
           description: Either the person cannot be located or they are already not subscribed to the specified list.
+      operationId: deleteCompaniesByCompanyKeyMobiledbPersonsByPersonKeySubscriptionsBySubscriptionListId
+      x-operation-id-source: derived
   /companies/{company_key}/mobiledb/persons/external/{external_person_id}/subscriptions/{subscription_list_id}:
     get:
       tags:
@@ -182,6 +190,8 @@ paths:
                 $ref: '#/components/schemas/subscriptionsResponse'
         '404':
           description: Either the person record cannot be located or the person is not subscribed to the specified list.
+      operationId: getCompaniesByCompanyKeyMobiledbPersonsExternalByExternalPersonIdSubscriptionsBySubscriptionListId
+      x-operation-id-source: derived
     delete:
       tags:
       - Subscription API
@@ -217,6 +227,8 @@ paths:
           description: Deletion was successful.
         '404':
           description: Either the person cannot be located or they are already not subscribed to the specified list.
+      operationId: deleteCompaniesByCompanyKeyMobiledbPersonsExternalByExternalPersonIdSubscriptionsBySubscriptionListId
+      x-operation-id-source: derived
 components:
   schemas:
     subscriptionsResponse:

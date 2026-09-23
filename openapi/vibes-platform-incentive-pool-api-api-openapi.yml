@@ -30,6 +30,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/incentivePoolsResponse'
+      operationId: getCompaniesByCompanyKeyIncentivesPools
+      x-operation-id-source: derived
     post:
       tags:
       - Incentive Pool API
@@ -64,6 +66,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/incentivePoolResponse'
+      operationId: postCompaniesByCompanyKeyIncentivesPools
+      x-operation-id-source: derived
   /companies/{company_key}/incentives/pools/{incentive_pool_id}:
     put:
       tags:
@@ -105,6 +109,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/incentivePoolResponse'
+      operationId: putCompaniesByCompanyKeyIncentivesPoolsByIncentivePoolId
+      x-operation-id-source: derived
     get:
       tags:
       - Incentive Pool API
@@ -138,6 +144,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/incentivePoolResponse'
+      operationId: getCompaniesByCompanyKeyIncentivesPoolsByIncentivePoolId
+      x-operation-id-source: derived
 components:
   schemas:
     incentivePoolRequest:
@@ -183,6 +191,10 @@ components:
       - incentive_codes
       - distribution
       - notification_email_address
+    incentivePoolsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/incentivePoolResponse'
     incentivePoolResponse:
       type: object
       properties:
@@ -233,10 +245,6 @@ components:
           description: The date this pool was last updated in ISO-8601 format.
         url:
           type: string
-    incentivePoolsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/incentivePoolResponse'
   securitySchemes:
     basicAuth:
       type: http

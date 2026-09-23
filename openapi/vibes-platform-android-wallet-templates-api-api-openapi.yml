@@ -46,6 +46,8 @@ paths:
                 $ref: '#/components/schemas/androidTemplateResponse'
         '404':
           description: The campaign or its Google Wallet template cannot be found.
+      operationId: getCompaniesByCompanyKeyCampaignsWalletByTokenWalletTemplate
+      x-operation-id-source: derived
     post:
       tags:
       - Android Wallet Templates API
@@ -87,6 +89,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/androidTemplateResponse'
+      operationId: postCompaniesByCompanyKeyCampaignsWalletByTokenWalletTemplate
+      x-operation-id-source: derived
     put:
       tags:
       - Android Wallet Templates API
@@ -130,6 +134,8 @@ paths:
                 $ref: '#/components/schemas/androidTemplateResponse'
         '404':
           description: The campaign or its Google Wallet template cannot be found.
+      operationId: putCompaniesByCompanyKeyCampaignsWalletByTokenWalletTemplate
+      x-operation-id-source: derived
 components:
   schemas:
     androidTemplateResponse:

@@ -39,6 +39,8 @@ paths:
                 $ref: '#/components/schemas/walletCampaignsResponse'
         '404':
           description: No mobile wallet campaigns are located.
+      operationId: getCompaniesByCompanyKeyCampaignsWallet
+      x-operation-id-source: derived
     post:
       tags:
       - Wallet Campaign API
@@ -75,6 +77,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/walletCampaignResponse'
+      operationId: postCompaniesByCompanyKeyCampaignsWallet
+      x-operation-id-source: derived
   /companies/{company_key}/campaigns/wallet/{wallet_id}:
     get:
       tags:
@@ -106,6 +110,8 @@ paths:
                 $ref: '#/components/schemas/walletCampaignResponse'
         '404':
           description: The `wallet_id` cannot be found.
+      operationId: getCompaniesByCompanyKeyCampaignsWalletByWalletId
+      x-operation-id-source: derived
     put:
       tags:
       - Wallet Campaign API
@@ -149,6 +155,8 @@ paths:
                 $ref: '#/components/schemas/walletCampaignResponse'
         '404':
           description: The `wallet_id` cannot be found.
+      operationId: putCompaniesByCompanyKeyCampaignsWalletByWalletId
+      x-operation-id-source: derived
   /companies/{company_key}/campaigns/wallet/{wallet_id}/items:
     get:
       tags:
@@ -200,6 +208,8 @@ paths:
                 $ref: '#/components/schemas/walletItemsResponse'
         '404':
           description: The specified mobile wallet campaigns or wallet items do not exist.
+      operationId: getCompaniesByCompanyKeyCampaignsWalletByWalletIdItems
+      x-operation-id-source: derived
   /companies/{company_key}/campaigns/wallet/{wallet_id}/items/{wallet_item_id}:
     get:
       tags:
@@ -236,6 +246,8 @@ paths:
                 $ref: '#/components/schemas/walletItemResponse'
         '404':
           description: The specified `wallet_id` or `wallet_item_id` does not exist.
+      operationId: getCompaniesByCompanyKeyCampaignsWalletByWalletIdItemsByWalletItemId
+      x-operation-id-source: derived
     put:
       tags:
       - Wallet Campaign API
@@ -284,8 +296,14 @@ paths:
                 $ref: '#/components/schemas/walletItemResponse'
         '404':
           description: The wallet campaign or the wallet item cannot be found.
+      operationId: putCompaniesByCompanyKeyCampaignsWalletByWalletIdItemsByWalletItemId
+      x-operation-id-source: derived
 components:
   schemas:
+    walletCampaignsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/walletCampaignResponse'
     walletCampaignRequest:
       example:
         campaign:
@@ -343,6 +361,84 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/walletItemResponse'
+    walletItemResponse:
+      type: object
+      properties:
+        wallet_item_id:
+          type: string
+          description: Unique Wallet Item ID that was specified at creation. This can be system generated or customer supplied in the creation URL.
+        group_code:
+          type: string
+          description: Optional string value to indicate groups of related Wallet items. Can be used for targeted messaging.
+        campaign_ref:
+          type: object
+          description: Reference to the wallet campaign this item belongs to.
+          properties:
+            id:
+              type: string
+              description: The campaign's `wallet_id` (SmartLink token).
+            type:
+              type: string
+              description: Wallet campaign type.
+            url:
+              type: string
+              description: Reference URL of the wallet campaign, as a relative URL on the API domain.
+        active:
+          type: boolean
+          description: TRUE if wallet item currently installed on person’s device.
+        tokens:
+          type: object
+          description: Key/value pairs of item-specific data used to personalize this pass (referenced by personalization tags in the template).
+          additionalProperties:
+            type: string
+        locations:
+          type: array
+          description: Geofenced locations that trigger a lock-screen reminder for this pass.
+          items:
+            type: object
+            properties:
+              latitude:
+                type: number
+                description: Latitude of the location.
+              longitude:
+                type: number
+                description: Longitude of the location.
+              relevant_text:
+                type: string
+                description: Message shown on the device when the user is near the location.
+        provider:
+          type: string
+          description: The wallet platform this item was issued to, for example `passbook` (Apple Wallet) or `google_wallet` (Google Wallet).
+        passbook:
+          type: object
+          description: Apple Wallet (iOS) specific data for this item. Returned only for Apple Wallet passes.
+          properties:
+            notification:
+              type: string
+              description: Lock-screen notification text shown on the user's iOS device.
+        google_wallet:
+          type: object
+          description: Google Wallet (Android) specific data for this item. Returned only for Google Wallet passes.
+          properties:
+            messages:
+              type: object
+              description: Update message shown on the user's Android device.
+              properties:
+                header:
+                  type: string
+                  description: Message header.
+                body:
+                  type: string
+                  description: Message body.
+        created_at:
+          type: string
+          description: When the wallet item was created, in ISO-8601 format.
+        updated_at:
+          type: string
+          description: When the wallet item was last updated, in ISO-8601 format.
+        url:
+          type: string
+          description: A reference URL to this wallet item, as a relative URL on the API domain.
     walletItemRequest:
       type: object
       properties:
@@ -432,88 +528,6 @@ components:
         updated_at:
           type: string
           description: When the campaign was last updated, in ISO-8601 format.
-    walletItemResponse:
-      type: object
-      properties:
-        wallet_item_id:
-          type: string
-          description: Unique Wallet Item ID that was specified at creation. This can be system generated or customer supplied in the creation URL.
-        group_code:
-          type: string
-          description: Optional string value to indicate groups of related Wallet items. Can be used for targeted messaging.
-        campaign_ref:
-          type: object
-          description: Reference to the wallet campaign this item belongs to.
-          properties:
-            id:
-              type: string
-              description: The campaign's `wallet_id` (SmartLink token).
-            type:
-              type: string
-              description: Wallet campaign type.
-            url:
-              type: string
-              description: Reference URL of the wallet campaign, as a relative URL on the API domain.
-        active:
-          type: boolean
-          description: TRUE if wallet item currently installed on person’s device.
-        tokens:
-          type: object
-          description: Key/value pairs of item-specific data used to personalize this pass (referenced by personalization tags in the template).
-          additionalProperties:
-            type: string
-        locations:
-          type: array
-          description: Geofenced locations that trigger a lock-screen reminder for this pass.
-          items:
-            type: object
-            properties:
-              latitude:
-                type: number
-                description: Latitude of the location.
-              longitude:
-                type: number
-                description: Longitude of the location.
-              relevant_text:
-                type: string
-                description: Message shown on the device when the user is near the location.
-        provider:
-          type: string
-          description: The wallet platform this item was issued to, for example `passbook` (Apple Wallet) or `google_wallet` (Google Wallet).
-        passbook:
-          type: object
-          description: Apple Wallet (iOS) specific data for this item. Returned only for Apple Wallet passes.
-          properties:
-            notification:
-              type: string
-              description: Lock-screen notification text shown on the user's iOS device.
-        google_wallet:
-          type: object
-          description: Google Wallet (Android) specific data for this item. Returned only for Google Wallet passes.
-          properties:
-            messages:
-              type: object
-              description: Update message shown on the user's Android device.
-              properties:
-                header:
-                  type: string
-                  description: Message header.
-                body:
-                  type: string
-                  description: Message body.
-        created_at:
-          type: string
-          description: When the wallet item was created, in ISO-8601 format.
-        updated_at:
-          type: string
-          description: When the wallet item was last updated, in ISO-8601 format.
-        url:
-          type: string
-          description: A reference URL to this wallet item, as a relative URL on the API domain.
-    walletCampaignsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/walletCampaignResponse'
   securitySchemes:
     basicAuth:
       type: http

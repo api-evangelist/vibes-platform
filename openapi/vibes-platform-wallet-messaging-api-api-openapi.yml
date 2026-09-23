@@ -58,6 +58,8 @@ paths:
                 $ref: '#/components/schemas/walletMessageResponse'
         '404':
           description: The specified wallet_id does not exist.
+      operationId: postCompaniesByCompanyKeyCampaignsWalletByWalletIdMessages
+      x-operation-id-source: derived
     get:
       tags:
       - Wallet Messaging API
@@ -88,6 +90,8 @@ paths:
                 $ref: '#/components/schemas/walletMessagesResponse'
         '404':
           description: The specified `wallet_id` does not exist.
+      operationId: getCompaniesByCompanyKeyCampaignsWalletByWalletIdMessages
+      x-operation-id-source: derived
   /companies/{company_key}/campaigns/wallet/{wallet_id}/messages/{wallet_message_id}:
     get:
       tags:
@@ -124,34 +128,10 @@ paths:
                 $ref: '#/components/schemas/walletMessageResponse'
         '404':
           description: The specific campaign or wallet message does not exist.
+      operationId: getCompaniesByCompanyKeyCampaignsWalletByWalletIdMessagesByWalletMessageId
+      x-operation-id-source: derived
 components:
   schemas:
-    wallet-filters:
-      type: object
-      title: Filter by another field.
-      properties:
-        name:
-          type: string
-          enum:
-          - group_code
-          - provider
-          - expiration_date
-        selector:
-          type: string
-          enum:
-          - starts_with
-          - between
-          - '='
-          - <
-          - <=
-          - '>'
-          - '>='
-          - before
-          - after
-          - between
-          - 'on'
-        value:
-          type: string
     wallet-filters-any:
       type: object
       title: Filter by another field using selector "any".
@@ -162,6 +142,40 @@ components:
           - group_code
           - provider
           - expiration_date
+        selector:
+          type: string
+          enum:
+          - any
+        value:
+          type: array
+          description: Add each value in its own string
+          items:
+            type: string
+    first-class-filters-any:
+      type: object
+      title: Filter by first-class field using selector "any".
+      description: <a href="https://developer-platform.vibes.com/reference/first-class-fields">Learn more about first-class fields.</a>
+      properties:
+        name:
+          type: string
+          enum:
+          - first_class_field
+        field-name:
+          type: string
+          enum:
+          - email_address
+          - external_email_id
+          - first_name
+          - last_name
+          - code
+          - expiration_date
+          - account_number
+          - balance
+          - tier
+          - offer_value
+          - loyalty_tier
+          - loyalty_balance
+          - strip_image_code
         selector:
           type: string
           enum:
@@ -247,6 +261,32 @@ components:
             - $ref: '#/components/schemas/wallet-filters'
             - $ref: '#/components/schemas/first-class-filters-any'
             - $ref: '#/components/schemas/wallet-filters-any'
+    wallet-filters:
+      type: object
+      title: Filter by another field.
+      properties:
+        name:
+          type: string
+          enum:
+          - group_code
+          - provider
+          - expiration_date
+        selector:
+          type: string
+          enum:
+          - starts_with
+          - between
+          - '='
+          - <
+          - <=
+          - '>'
+          - '>='
+          - before
+          - after
+          - between
+          - 'on'
+        value:
+          type: string
     walletMessageResponse:
       type: object
       properties:
@@ -304,40 +344,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/walletMessageResponse'
-    first-class-filters-any:
-      type: object
-      title: Filter by first-class field using selector "any".
-      description: <a href="https://developer-platform.vibes.com/reference/first-class-fields">Learn more about first-class fields.</a>
-      properties:
-        name:
-          type: string
-          enum:
-          - first_class_field
-        field-name:
-          type: string
-          enum:
-          - email_address
-          - external_email_id
-          - first_name
-          - last_name
-          - code
-          - expiration_date
-          - account_number
-          - balance
-          - tier
-          - offer_value
-          - loyalty_tier
-          - loyalty_balance
-          - strip_image_code
-        selector:
-          type: string
-          enum:
-          - any
-        value:
-          type: array
-          description: Add each value in its own string
-          items:
-            type: string
   securitySchemes:
     basicAuth:
       type: http

@@ -49,14 +49,10 @@ paths:
                 $ref: '#/components/schemas/eventResponse'
         '202':
           description: Returned if the event has been successfully submitted but will not necessarily result in a message. To track whether or not your message was sent and received by the end user, we recommend registering for <a href="https://developer-platform.vibes.com/reference/event-triggered-callbacks">Event-Triggered Callbacks</a>.
+      operationId: postCompaniesByCompanyKeyEvents
+      x-operation-id-source: derived
 components:
   schemas:
-    eventResponse:
-      type: object
-      properties:
-        event_id:
-          type: string
-          description: Unique identifier for the event triggered.
     eventRequest:
       type: object
       properties:
@@ -87,6 +83,12 @@ components:
       required:
       - event_type
       - event_data
+    eventResponse:
+      type: object
+      properties:
+        event_id:
+          type: string
+          description: Unique identifier for the event triggered.
   securitySchemes:
     basicAuth:
       type: http

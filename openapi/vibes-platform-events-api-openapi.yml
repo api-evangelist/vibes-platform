@@ -1,17 +1,18 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Vibes Connect HTTP Message Acquisition Campaigns Events API
-  description: The Vibes Connect HTTP Message API enables sending and receiving SMS and MMS messages via HTTP calls. Vibes is a Tier 1 carrier in the United States with direct connections to Verizon, AT&T, T-Mobile, and regional providers. The API supports SMS messaging, MMS messaging with multimedia content, callback setup for inbound messages, and carrier information lookups.
-  version: '3.0'
+  title: Vibes Platform Events API
+  description: The Vibes Platform API provides programmatic access to mobile engagement capabilities including broadcast messaging (SMS and push notifications), acquisition campaign management, subscription list management, wallet pass management, event-triggered messages, and callback registrations. Vibes is a Tier 1 mobile messaging provider with direct carrier connections to AT&T, Verizon, T-Mobile, and regional carriers in the US and Canada.
+  version: '1.0'
   contact:
-    url: https://developer-aggregation.vibes.com
+    url: https://developer-platform.vibes.com/docs/support-1
+  termsOfService: https://www.vibes.com/legal/terms
   license:
     name: Proprietary
 servers:
-- url: https://messageapi.vibesapps.com
-  description: US and Canada SMS Endpoint
-- url: https://messageapi-mms.vibesapps.com
-  description: US MMS Endpoint
+- url: https://public-api.vibescm.com
+  description: US Production Environment
+- url: https://public-api.eu.vibes.com
+  description: EU Production Environment
 security:
 - basicAuth: []
 tags:
@@ -48,8 +49,13 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   responses:
-    BadRequest:
-      description: Bad request - invalid parameters or request body.
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Number of seconds to wait before retrying.
       content:
         application/json:
           schema:
@@ -60,13 +66,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Rate limit exceeded - too many requests.
-      headers:
-        Retry-After:
-          schema:
-            type: integer
-          description: Number of seconds to wait before retrying.
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
       content:
         application/json:
           schema:
@@ -86,6 +87,23 @@ components:
           items:
             type: string
           description: Additional error details.
+    EventCreate:
+      type: object
+      required:
+      - event_type
+      - person_key
+      properties:
+        event_type:
+          type: string
+          description: Type of event that triggers messaging.
+        person_key:
+          type: string
+          description: Internal Vibes person key or external_person_id.
+        attributes:
+          type: object
+          description: Custom attributes to personalize triggered messages.
+          additionalProperties:
+            type: string
     Event:
       type: object
       properties:
@@ -109,23 +127,6 @@ components:
           type: string
           format: date-time
           description: When the event was submitted.
-    EventCreate:
-      type: object
-      required:
-      - event_type
-      - person_key
-      properties:
-        event_type:
-          type: string
-          description: Type of event that triggers messaging.
-        person_key:
-          type: string
-          description: Internal Vibes person key or external_person_id.
-        attributes:
-          type: object
-          description: Custom attributes to personalize triggered messages.
-          additionalProperties:
-            type: string
   parameters:
     company_key:
       name: company_key
@@ -140,5 +141,5 @@ components:
       scheme: basic
       description: HTTP Basic Authentication. Combine the username and password into a "username:password" string, encode it using Base64, and add the Authorization HTTP header set to "Basic " plus the encoded string.
 externalDocs:
-  url: https://developer-aggregation.vibes.com/reference/http-message-api
-  description: Vibes Connect API Documentation
+  url: https://developer-platform.vibes.com/reference/our-apis
+  description: Vibes Platform Developer Documentation

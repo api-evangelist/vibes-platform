@@ -35,8 +35,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/sourceCodesResponse'
+      operationId: getCompaniesByCompanyKeySourcecodes
+      x-operation-id-source: derived
 components:
   schemas:
+    sourceCodesResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/sourceCodeResponse'
     sourceCodeResponse:
       type: object
       properties:
@@ -64,10 +70,6 @@ components:
         sourcecode_end_date:
           type: string
           description: Date string indicating when the current code lease expires in ISO-8601 format.
-    sourceCodesResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/sourceCodeResponse'
   securitySchemes:
     basicAuth:
       type: http

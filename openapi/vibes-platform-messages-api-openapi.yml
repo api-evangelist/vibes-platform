@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Vibes Connect HTTP Message Acquisition Campaigns Messages API
+  title: Vibes Connect HTTP Message Messages API
   description: The Vibes Connect HTTP Message API enables sending and receiving SMS and MMS messages via HTTP calls. Vibes is a Tier 1 carrier in the United States with direct connections to Verizon, AT&T, T-Mobile, and regional providers. The API supports SMS messaging, MMS messaging with multimedia content, callback setup for inbound messages, and carrier information lookups.
   version: '3.0'
   contact:
@@ -71,7 +71,53 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
+  responses:
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    MmsMessageResponse:
+      type: object
+      properties:
+        message_id:
+          type: string
+          description: Unique identifier for the submitted MMS message.
+        status:
+          type: string
+          description: Delivery status of the MMS message.
+          enum:
+          - accepted
+          - queued
+          - sent
+          - delivered
+          - failed
+        to:
+          type: string
+          description: Recipient mobile number.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier.
+        message:
+          type: string
+          description: Human-readable error message.
     SmsMessageResponse:
       type: object
       properties:
@@ -93,6 +139,29 @@ components:
         from:
           type: string
           description: Sender short code or long code.
+    SmsMessageCreate:
+      type: object
+      required:
+      - to
+      - from
+      - text
+      properties:
+        to:
+          type: string
+          description: Recipient mobile number in E.164 format.
+          example: '+15551234567'
+        from:
+          type: string
+          description: Short code or long code to send from.
+          example: '12345'
+        text:
+          type: string
+          description: SMS message text content (up to 160 characters per segment).
+          maxLength: 1600
+        callback_url:
+          type: string
+          format: uri
+          description: URL to receive delivery receipt callbacks.
     MmsMessageCreate:
       type: object
       required:
@@ -128,75 +197,6 @@ components:
           type: string
           format: uri
           description: URL to receive delivery receipt callbacks.
-    MmsMessageResponse:
-      type: object
-      properties:
-        message_id:
-          type: string
-          description: Unique identifier for the submitted MMS message.
-        status:
-          type: string
-          description: Delivery status of the MMS message.
-          enum:
-          - accepted
-          - queued
-          - sent
-          - delivered
-          - failed
-        to:
-          type: string
-          description: Recipient mobile number.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type identifier.
-        message:
-          type: string
-          description: Human-readable error message.
-    SmsMessageCreate:
-      type: object
-      required:
-      - to
-      - from
-      - text
-      properties:
-        to:
-          type: string
-          description: Recipient mobile number in E.164 format.
-          example: '+15551234567'
-        from:
-          type: string
-          description: Short code or long code to send from.
-          example: '12345'
-        text:
-          type: string
-          description: SMS message text content (up to 160 characters per segment).
-          maxLength: 1600
-        callback_url:
-          type: string
-          format: uri
-          description: URL to receive delivery receipt callbacks.
-  responses:
-    Unauthorized:
-      description: Unauthorized - invalid or missing credentials.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request - invalid parameters or request body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Rate limit exceeded - too many requests.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     basicAuth:
       type: http

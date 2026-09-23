@@ -57,6 +57,8 @@ paths:
                 $ref: '#/components/schemas/personResponse'
         '404':
           description: The subscriber cannot be located or they are not subscribed to the specified list.
+      operationId: getCompaniesByCompanyKeyMobiledbSubscriptionListsBySubscriptionListIdSubscribers
+      x-operation-id-source: derived
   /companies/{company_key}/mobiledb/subscription_lists/:
     get:
       tags:
@@ -80,6 +82,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/subscriptionListsResponse'
+      operationId: getCompaniesByCompanyKeyMobiledbSubscriptionLists
+      x-operation-id-source: derived
   /companies/{company_key}/mobiledb/subscription_lists/{subscription_list_id}:
     get:
       tags:
@@ -110,6 +114,8 @@ paths:
                 $ref: '#/components/schemas/subscriptionListResponse'
         '404':
           description: The `subscription_list_id` cannot be found.
+      operationId: getCompaniesByCompanyKeyMobiledbSubscriptionListsBySubscriptionListId
+      x-operation-id-source: derived
   /companies/{company_key}/mobiledb/subscription_lists/{subscription_list_id}/acquisition_campaigns/:
     get:
       tags:
@@ -140,30 +146,14 @@ paths:
                 $ref: '#/components/schemas/acquisitionsResponse'
         '404':
           description: The `subscription_list_id` cannot be found.
+      operationId: getCompaniesByCompanyKeyMobiledbSubscriptionListsBySubscriptionListIdAcquisitionCampaigns
+      x-operation-id-source: derived
 components:
   schemas:
-    subscriptionListResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Identifier for this particular subscription list.
-        name:
-          type: string
-          description: The display name for the subscription list.
-        url:
-          type: string
-          description: The REST API URL to the subscription list entity.
-        subscribers_url:
-          type: string
-          description: The REST API URL to the subscribers end point.
-        acquisition_campaigns_url:
-          type: string
-          description: The REST API URL to the acquisition campaigns list endpoint.
-    acquisitionsResponse:
+    subscriptionListsResponse:
       type: array
       items:
-        $ref: '#/components/schemas/acquisitionResponse'
+        $ref: '#/components/schemas/subscriptionListResponse'
     personResponse:
       type: object
       properties:
@@ -236,10 +226,28 @@ components:
         url:
           type: string
           description: Unique resource URL for the acquisition campaign.
-    subscriptionListsResponse:
+    subscriptionListResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier for this particular subscription list.
+        name:
+          type: string
+          description: The display name for the subscription list.
+        url:
+          type: string
+          description: The REST API URL to the subscription list entity.
+        subscribers_url:
+          type: string
+          description: The REST API URL to the subscribers end point.
+        acquisition_campaigns_url:
+          type: string
+          description: The REST API URL to the acquisition campaigns list endpoint.
+    acquisitionsResponse:
       type: array
       items:
-        $ref: '#/components/schemas/subscriptionListResponse'
+        $ref: '#/components/schemas/acquisitionResponse'
   securitySchemes:
     basicAuth:
       type: http

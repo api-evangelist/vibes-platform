@@ -18,7 +18,16 @@ paths:
       tags:
       - Authentication
       summary: Request Access token
-      description: 'Get an OAuth 2.0 access token for authenticated API calls <br><br> The API will respond with a JSON object containing the access token and other relevant information. <br/><br/> To make an authenticated API call, include the access token in the authorization header of your API request: <br/><br/> Example: `Authorization: Bearer [access_token]`'
+      description: 'Get an OAuth 2.0 access token for authenticated API calls
+
+
+        The API will respond with a JSON object containing the access token and other relevant information.
+
+
+        To make an authenticated API call, include the access token in the authorization header of your API request:
+
+
+        Example: `Authorization: Bearer [access_token]`'
       responses:
         '200':
           description: Successful response
@@ -57,8 +66,15 @@ paths:
                   description: The permissions required for this API. Must be "https://rbm.vibes.com/rbm.agents"
                   examples:
                   - https://rbm.vibes.com/rbm.agents
+      operationId: postOauth2Token
+      x-operation-id-source: derived
 components:
   schemas:
+    Empty:
+      type: object
+      description: Empty message.
+      id: Empty
+      properties: {}
     TokenResponse:
       type: object
       description: Object containing an OAuth 2.0 access token and related data
@@ -73,11 +89,6 @@ components:
         token_type:
           description: The type of token returned by the service. Defaults to "Bearer".
           type: string
-    Empty:
-      type: object
-      description: Empty message.
-      id: Empty
-      properties: {}
   securitySchemes:
     basicAuth:
       type: http

@@ -2,7 +2,7 @@ overlay: 1.0.0
 info:
   title: API Evangelist enhancements — Vibes Platform API
   version: 1.0.0
-  description: 'Non-destructive enhancements applied on top of the OpenAPI Vibes publishes at developer-platform.vibes.com.
+  x-description: 'Non-destructive enhancements applied on top of the OpenAPI Vibes publishes at developer-platform.vibes.com.
     Two gaps are addressed: (1) the published spec declares no operationId on any of its 75 operations,
     so every operation here is given a stable id derived from Vibes'' own summary text; (2) the 429 response
     Vibes documents in prose is absent from every operation in the machine-readable contract. Nothing

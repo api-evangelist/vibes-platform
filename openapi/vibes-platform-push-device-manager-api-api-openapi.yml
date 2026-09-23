@@ -42,6 +42,8 @@ paths:
                 $ref: '#/components/schemas/pushDeviceResponse'
         '404':
           description: The device cannot be located using the `person_key` provided.
+      operationId: getCompaniesByCompanyKeyMobiledbPersonsByPersonKeyPushDevices
+      x-operation-id-source: derived
   /companies/{company_key}/mobiledb/persons/external/{external_person_id}/push_devices:
     get:
       tags:
@@ -72,6 +74,8 @@ paths:
                 $ref: '#/components/schemas/pushDeviceResponse'
         '404':
           description: The device cannot be located using the `external_person_id` provided.
+      operationId: getCompaniesByCompanyKeyMobiledbPersonsExternalByExternalPersonIdPushDevices
+      x-operation-id-source: derived
   /mobile_apps/{app_id}/devices/{vibes_device_id}:
     get:
       tags:
@@ -102,6 +106,8 @@ paths:
                 $ref: '#/components/schemas/pushDeviceResponse'
         '404':
           description: The device cannot be located by the `vibes_device_id` provided.
+      operationId: getMobileAppsByAppIdDevicesByVibesDeviceId
+      x-operation-id-source: derived
   /mobile_apps/{app_id}/devices/{vibes_device_id}/assign:
     post:
       tags:
@@ -141,40 +147,10 @@ paths:
           description: The `vibes_device_id` or `person_key` (if provided) could not be found.
         '422':
           description: Unprocessible entity. The requested assignment could not be completed. Reason will be stated in the response body.
+      operationId: postMobileAppsByAppIdDevicesByVibesDeviceIdAssign
+      x-operation-id-source: derived
 components:
   schemas:
-    personResponse:
-      type: object
-      properties:
-        person_key:
-          type: string
-          description: A unique Vibes-asigned alphanumeric identifier for each person record.
-        external_person_id:
-          type: string
-          description: A unique person identifier assigned by the brand, which can be used to link non-Vibes-assigned identifiers to Vibes person records. Max 128 characters.
-        mobile_phone:
-          type: object
-          description: Object representation of a person's mobile phone. A person can have only one active mobile phone at a time.
-          properties:
-            mdn:
-              type: string
-              description: Mobile Directory Number. The dialable phone number associated with the phone.
-            carrier_code:
-              type: string
-              description: The cellular carrier associated with this mobile number.
-        custom_fields:
-          type: object
-          description: list of custom field key/value pairs.
-          additionalProperties:
-            type: string
-        created_at:
-          type: string
-          description: The date this person was created, in the ISO-8601 format.
-        updated_at:
-          type: string
-          description: The date this person was last updated, in the ISO-8601 format.
-        url:
-          type: string
     pushDeviceResponse:
       type: object
       properties:
@@ -220,6 +196,38 @@ components:
         timezone:
           type: string
           description: Timezone that is set on the mobile device.
+        url:
+          type: string
+    personResponse:
+      type: object
+      properties:
+        person_key:
+          type: string
+          description: A unique Vibes-asigned alphanumeric identifier for each person record.
+        external_person_id:
+          type: string
+          description: A unique person identifier assigned by the brand, which can be used to link non-Vibes-assigned identifiers to Vibes person records. Max 128 characters.
+        mobile_phone:
+          type: object
+          description: Object representation of a person's mobile phone. A person can have only one active mobile phone at a time.
+          properties:
+            mdn:
+              type: string
+              description: Mobile Directory Number. The dialable phone number associated with the phone.
+            carrier_code:
+              type: string
+              description: The cellular carrier associated with this mobile number.
+        custom_fields:
+          type: object
+          description: list of custom field key/value pairs.
+          additionalProperties:
+            type: string
+        created_at:
+          type: string
+          description: The date this person was created, in the ISO-8601 format.
+        updated_at:
+          type: string
+          description: The date this person was last updated, in the ISO-8601 format.
         url:
           type: string
     assignPushDeviceRequest:

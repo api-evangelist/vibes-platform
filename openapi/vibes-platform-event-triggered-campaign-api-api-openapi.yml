@@ -53,6 +53,8 @@ paths:
                 $ref: '#/components/schemas/eventTriggeredResponse'
         '202':
           description: Campaign has been successfully created. This response will include additional information about your campaign, including the `event_triggered_messsage_id`, `status`, `created_by`, and more. These are defined by the system and cannot be changed.
+      operationId: postCompaniesByCompanyKeyMobiledbEventTriggeredMessages
+      x-operation-id-source: derived
     get:
       tags:
       - Event-Triggered Campaign API
@@ -91,6 +93,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/eventTriggeredsResponse'
+      operationId: getCompaniesByCompanyKeyMobiledbEventTriggeredMessages
+      x-operation-id-source: derived
   /companies/{company_key}/mobiledb/event_triggered_messages/{event_triggered_message_id}:
     get:
       tags:
@@ -127,6 +131,8 @@ paths:
                 $ref: '#/components/schemas/eventTriggeredResponse'
         '404':
           description: The `event_triggered_message_id` cannot be found.
+      operationId: getCompaniesByCompanyKeyMobiledbEventTriggeredMessagesByEventTriggeredMessageId
+      x-operation-id-source: derived
     put:
       tags:
       - Event-Triggered Campaign API
@@ -174,6 +180,8 @@ paths:
           description: The `event_triggered_message_id` does not exist.
         '422':
           description: The status code of the entity does not allow updates. For example, the campaign has been cancelled.
+      operationId: putCompaniesByCompanyKeyMobiledbEventTriggeredMessagesByEventTriggeredMessageId
+      x-operation-id-source: derived
     delete:
       tags:
       - Event-Triggered Campaign API
@@ -210,11 +218,22 @@ paths:
                 $ref: '#/components/schemas/eventTriggeredResponse'
         '404':
           description: The campaign cannot be found.
+      operationId: deleteCompaniesByCompanyKeyMobiledbEventTriggeredMessagesByEventTriggeredMessageId
+      x-operation-id-source: derived
 components:
   schemas:
-    filters-number:
-      type: number
-      title: Choose if filtering by subscription list.
+    mmstext:
+      type: object
+      title: Text
+      properties:
+        body:
+          type: string
+          description: The body text included in the MMS send.
+        mime_type:
+          type: string
+          description: Must be text/plain for this object.
+          enum:
+          - text/plain
     eventTriggeredRequestPush:
       type: object
       title: Select for Push
@@ -410,105 +429,6 @@ components:
       - event_type
       - start_date
       - targeting
-    filters-string:
-      type: string
-      title: Choose for all other filters.
-    eventTriggeredRequest:
-      type: object
-      title: Select for SMS
-      properties:
-        name:
-          type: string
-          description: Name your campaign.
-        event_type:
-          type: string
-          description: The event_type that will trigger this campaign to send a message.
-        start_date:
-          type: string
-          example: yyyy-mm-dd
-          format: date
-        end_date:
-          type: string
-          example: yyyy-mm-dd
-          format: date
-        targeting:
-          type: object
-          properties:
-            message_template:
-              type: string
-              description: Template for your message content. May include valid Liquid personalization tags.
-            short_url_base:
-              type: string
-              description: If you have a <a href="https://developer-platform.vibes.com/docs/creating-a-custom-short-domain">custom short domain</a>, enter it here.
-            shorten_urls:
-              type: boolean
-              description: Should URLs be shortened?
-            channel:
-              type: string
-              enum:
-              - sms
-            sms:
-              type: object
-              properties:
-                sourcecode:
-                  type: string
-                  description: The short or long code sending this message.
-                country_code:
-                  type: string
-                  description: The E.164 Country Calling Code for the country where the code is provisioned. (Ex. 1 for U.S.)
-                  example: 1
-                sourcecode_type:
-                  type: string
-                  description: SC for short or long numeric codes. ANC for alphanumeric codes.
-                mdn_territory:
-                  type: string
-                  description: ISO 2-character country code (such as "US" or "GB").
-              required:
-              - sourcecode
-              - country_code
-              - sourcecode_type
-            filters:
-              type: array
-              items:
-                type: object
-                description: Any filters used to target recipients.
-                properties:
-                  name:
-                    type: string
-                    description: The name of the filter you are using. Use "subscription" for subscription list.
-                  transform:
-                    type: string
-                    description: The transform element is used to transform the value of the custom field into a value. For example, the transform 'month' changes a custom value into just a month value. If the value was the date 2023-10-17, the transform would change the value to 10.
-                  selector:
-                    type: string
-                    description: Use <b>any</b> to filter in the values. Use <b>none</b> to filter out values.
-                  value:
-                    type: array
-                    description: Select ADD+ once per value.
-                    items:
-                      oneOf:
-                      - $ref: '#/components/schemas/filters-number'
-                      - $ref: '#/components/schemas/filters-string'
-          required:
-          - message_template
-          - sms
-      required:
-      - name
-      - event_type
-      - start_date
-      - targeting
-    mmstext:
-      type: object
-      title: Text
-      properties:
-        body:
-          type: string
-          description: The body text included in the MMS send.
-        mime_type:
-          type: string
-          description: Must be text/plain for this object.
-          enum:
-          - text/plain
     eventTriggeredResponse:
       type: object
       properties:
@@ -598,10 +518,9 @@ components:
               type: string
             updated_at:
               type: string
-    eventTriggeredsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/eventTriggeredResponse'
+    filters-string:
+      type: string
+      title: Choose for all other filters.
     mmsurl:
       type: object
       title: Media URL
@@ -612,6 +531,97 @@ components:
         description:
           type: string
           description: An optional description of the media. Use only if you are using media_URL.
+    eventTriggeredRequest:
+      type: object
+      title: Select for SMS
+      properties:
+        name:
+          type: string
+          description: Name your campaign.
+        event_type:
+          type: string
+          description: The event_type that will trigger this campaign to send a message.
+        start_date:
+          type: string
+          example: yyyy-mm-dd
+          format: date
+        end_date:
+          type: string
+          example: yyyy-mm-dd
+          format: date
+        targeting:
+          type: object
+          properties:
+            message_template:
+              type: string
+              description: Template for your message content. May include valid Liquid personalization tags.
+            short_url_base:
+              type: string
+              description: If you have a <a href="https://developer-platform.vibes.com/docs/creating-a-custom-short-domain">custom short domain</a>, enter it here.
+            shorten_urls:
+              type: boolean
+              description: Should URLs be shortened?
+            channel:
+              type: string
+              enum:
+              - sms
+            sms:
+              type: object
+              properties:
+                sourcecode:
+                  type: string
+                  description: The short or long code sending this message.
+                country_code:
+                  type: string
+                  description: The E.164 Country Calling Code for the country where the code is provisioned. (Ex. 1 for U.S.)
+                  example: 1
+                sourcecode_type:
+                  type: string
+                  description: SC for short or long numeric codes. ANC for alphanumeric codes.
+                mdn_territory:
+                  type: string
+                  description: ISO 2-character country code (such as "US" or "GB").
+              required:
+              - sourcecode
+              - country_code
+              - sourcecode_type
+            filters:
+              type: array
+              items:
+                type: object
+                description: Any filters used to target recipients.
+                properties:
+                  name:
+                    type: string
+                    description: The name of the filter you are using. Use "subscription" for subscription list.
+                  transform:
+                    type: string
+                    description: The transform element is used to transform the value of the custom field into a value. For example, the transform 'month' changes a custom value into just a month value. If the value was the date 2023-10-17, the transform would change the value to 10.
+                  selector:
+                    type: string
+                    description: Use <b>any</b> to filter in the values. Use <b>none</b> to filter out values.
+                  value:
+                    type: array
+                    description: Select ADD+ once per value.
+                    items:
+                      oneOf:
+                      - $ref: '#/components/schemas/filters-number'
+                      - $ref: '#/components/schemas/filters-string'
+          required:
+          - message_template
+          - sms
+      required:
+      - name
+      - event_type
+      - start_date
+      - targeting
+    eventTriggeredsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/eventTriggeredResponse'
+    filters-number:
+      type: number
+      title: Choose if filtering by subscription list.
   securitySchemes:
     basicAuth:
       type: http

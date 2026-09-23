@@ -2,7 +2,7 @@ overlay: 1.0.0
 info:
   title: API Evangelist enhancements — Vibes RCS Business Messaging API
   version: 1.0.0
-  description: >-
+  x-description: >-
     Non-destructive enhancements on top of the OpenAPI Vibes publishes for its RCS Business
     Messaging API at developer-aggregation.vibes.com. Two real defects in the published document are
     corrected here without touching anything else: five of the eight operations carry operationIds

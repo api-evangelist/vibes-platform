@@ -71,6 +71,8 @@ paths:
                 $ref: '#/components/schemas/walletLocationsResponse'
         '404':
           description: The specified campaign does not exist.
+      operationId: getCompaniesByCompanyKeyCampaignsWalletByTokenLocations
+      x-operation-id-source: derived
   /companies/{company_key}/campaigns/wallet/{token}/locations/bulk:
     post:
       tags:
@@ -115,6 +117,8 @@ paths:
       responses:
         '201':
           description: The store locations were created.
+      operationId: postCompaniesByCompanyKeyCampaignsWalletByTokenLocationsBulk
+      x-operation-id-source: derived
   /companies/{company_key}/campaigns/wallet/{token}/locations/{id}:
     delete:
       tags:
@@ -149,6 +153,8 @@ paths:
           description: The store location was deleted.
         '404':
           description: The campaign or store location cannot be found.
+      operationId: deleteCompaniesByCompanyKeyCampaignsWalletByTokenLocationsById
+      x-operation-id-source: derived
   /companies/{company_key}/campaigns/wallet/{token}/locations/delete_all:
     delete:
       tags:
@@ -182,8 +188,22 @@ paths:
           description: The matching store locations were deleted.
         '404':
           description: The specified campaign does not exist.
+      operationId: deleteCompaniesByCompanyKeyCampaignsWalletByTokenLocationsDeleteAll
+      x-operation-id-source: derived
 components:
   schemas:
+    walletLocationsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/walletLocationResponse'
+    walletLocationResponse:
+      allOf:
+      - type: object
+        properties:
+          id:
+            type: integer
+            description: Unique identifier of the store location.
+      - $ref: '#/components/schemas/walletLocation'
     walletLocationsBulkRequest:
       example:
         locations:
@@ -205,14 +225,6 @@ components:
           description: Store locations to add (up to 1000 per request).
           items:
             $ref: '#/components/schemas/walletLocation'
-    walletLocationResponse:
-      allOf:
-      - type: object
-        properties:
-          id:
-            type: integer
-            description: Unique identifier of the store location.
-      - $ref: '#/components/schemas/walletLocation'
     walletLocation:
       type: object
       description: A store location attached to a wallet campaign.
@@ -253,10 +265,6 @@ components:
         notification_message:
           type: string
           description: Lock-screen message shown to pass holders when they are near this location.
-    walletLocationsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/walletLocationResponse'
   securitySchemes:
     basicAuth:
       type: http

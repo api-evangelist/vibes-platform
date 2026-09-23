@@ -46,6 +46,8 @@ paths:
                 $ref: '#/components/schemas/iosTemplateResponse'
         '404':
           description: The campaign or its Apple Wallet template cannot be found.
+      operationId: getCompaniesByCompanyKeyCampaignsWalletByTokenPassbookTemplate
+      x-operation-id-source: derived
     post:
       tags:
       - iOS Wallet Templates API
@@ -87,6 +89,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/iosTemplateResponse'
+      operationId: postCompaniesByCompanyKeyCampaignsWalletByTokenPassbookTemplate
+      x-operation-id-source: derived
     put:
       tags:
       - iOS Wallet Templates API
@@ -130,8 +134,74 @@ paths:
                 $ref: '#/components/schemas/iosTemplateResponse'
         '404':
           description: The campaign or its Apple Wallet template cannot be found.
+      operationId: putCompaniesByCompanyKeyCampaignsWalletByTokenPassbookTemplate
+      x-operation-id-source: derived
 components:
   schemas:
+    iosTemplateRequest:
+      example:
+        passbook_template:
+          organization_name: Example Co
+          pass_description: Spring Sale offer
+          logo_text: Spring Sale
+          colors:
+            background: '#ff0000'
+            foreground: '#ffffff'
+            label: '#cccccc'
+          barcode:
+            type: PKBarcodeFormatQR
+            code: '{{ token }}'
+            description: Scan at checkout
+          images:
+            logo:
+              url: https://cdn.example.com/logo.png
+            icon:
+              url: https://cdn.example.com/icon.png
+          fields:
+            primary:
+            - label: Discount
+              value: 20% off
+      type: object
+      required:
+      - passbook_template
+      properties:
+        passbook_template:
+          required:
+          - pass_description
+          - colors
+          - images
+          allOf:
+          - $ref: '#/components/schemas/appleWalletTemplateBody'
+    passbookField:
+      type: object
+      description: A single label/value entry within an Apple Wallet pass field region.
+      properties:
+        label:
+          type: string
+          description: Small caption shown above the value (rendered in the label color).
+        value:
+          type: string
+          description: Field content (rendered in the foreground color).
+        change_message:
+          type: string
+          description: Notification text shown when this field changes on an installed pass. Must contain the `%@` placeholder for the new value.
+    iosTemplateResponse:
+      allOf:
+      - type: object
+        properties:
+          id:
+            type: string
+            description: Unique identifier of the Apple Wallet template.
+          active:
+            type: boolean
+            description: Whether the template is active.
+          created_at:
+            type: string
+            description: When the template was created, in ISO-8601 format.
+          updated_at:
+            type: string
+            description: When the template was last updated, in ISO-8601 format.
+      - $ref: '#/components/schemas/appleWalletTemplateBody'
     appleWalletTemplateBody:
       type: object
       description: Design and content of an Apple Wallet (iOS) pass — a card with a front and a back whose fields map to fixed regions on the card. Field semantics follow Apple Wallet Passes (https://developer.apple.com/documentation/WalletPasses). Many text fields accept Liquid personalization tags that are replaced per recipient.
@@ -313,70 +383,6 @@ components:
                 password:
                   type: string
                   description: Password for the loyalty backend (HTTP Basic). Masked in responses.
-    iosTemplateResponse:
-      allOf:
-      - type: object
-        properties:
-          id:
-            type: string
-            description: Unique identifier of the Apple Wallet template.
-          active:
-            type: boolean
-            description: Whether the template is active.
-          created_at:
-            type: string
-            description: When the template was created, in ISO-8601 format.
-          updated_at:
-            type: string
-            description: When the template was last updated, in ISO-8601 format.
-      - $ref: '#/components/schemas/appleWalletTemplateBody'
-    iosTemplateRequest:
-      example:
-        passbook_template:
-          organization_name: Example Co
-          pass_description: Spring Sale offer
-          logo_text: Spring Sale
-          colors:
-            background: '#ff0000'
-            foreground: '#ffffff'
-            label: '#cccccc'
-          barcode:
-            type: PKBarcodeFormatQR
-            code: '{{ token }}'
-            description: Scan at checkout
-          images:
-            logo:
-              url: https://cdn.example.com/logo.png
-            icon:
-              url: https://cdn.example.com/icon.png
-          fields:
-            primary:
-            - label: Discount
-              value: 20% off
-      type: object
-      required:
-      - passbook_template
-      properties:
-        passbook_template:
-          required:
-          - pass_description
-          - colors
-          - images
-          allOf:
-          - $ref: '#/components/schemas/appleWalletTemplateBody'
-    passbookField:
-      type: object
-      description: A single label/value entry within an Apple Wallet pass field region.
-      properties:
-        label:
-          type: string
-          description: Small caption shown above the value (rendered in the label color).
-        value:
-          type: string
-          description: Field content (rendered in the foreground color).
-        change_message:
-          type: string
-          description: Notification text shown when this field changes on an installed pass. Must contain the `%@` placeholder for the new value.
   securitySchemes:
     basicAuth:
       type: http

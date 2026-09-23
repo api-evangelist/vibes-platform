@@ -49,6 +49,8 @@ paths:
                 $ref: '#/components/schemas/broadcastResponse'
         '201':
           description: Broadcast has been created.
+      operationId: postCompaniesByCompanyKeyMobiledbBroadcasts
+      x-operation-id-source: derived
   /companies/{company_key}/mobiledb/broadcasts:
     get:
       tags:
@@ -85,6 +87,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/broadcastsResponse'
+      operationId: getCompaniesByCompanyKeyMobiledbBroadcasts
+      x-operation-id-source: derived
   /companies/{company_key}/mobiledb/broadcasts/{broadcast_id}:
     get:
       tags:
@@ -115,6 +119,8 @@ paths:
                 $ref: '#/components/schemas/broadcastResponse'
         '404':
           description: The broadcast cannot be found or the `broadcast_id` is invalid.
+      operationId: getCompaniesByCompanyKeyMobiledbBroadcastsByBroadcastId
+      x-operation-id-source: derived
     put:
       tags:
       - Broadcast API
@@ -159,6 +165,8 @@ paths:
           description: The status of the broadcast is not scheduled.
         '404':
           description: The `broadcast_id` cannot be found.
+      operationId: putCompaniesByCompanyKeyMobiledbBroadcastsByBroadcastId
+      x-operation-id-source: derived
     delete:
       tags:
       - Broadcast API
@@ -197,8 +205,92 @@ paths:
           description: Returned if the broadcast cannot be canceled because it has already been sent.
         '404':
           description: The `broadcast_id` cannot be found.
+      operationId: deleteCompaniesByCompanyKeyMobiledbBroadcastsByBroadcastId
+      x-operation-id-source: derived
 components:
   schemas:
+    broadcastResponse:
+      type: object
+      properties:
+        broadcast_id:
+          type: string
+          description: Vibes unique identifier for the broadcast.
+        status:
+          type: string
+          description: The status of the broadcast.
+          enum:
+          - scheduled
+          - in_progress
+          - sent
+          - canceled
+          - deleted
+          - paused
+          - failed
+        name:
+          type: string
+          description: The name of the campaign.
+        send_scheduled_date:
+          type: string
+          description: The date the campaign is scheduled to send.
+        created_by:
+          type: string
+          description: The user that created the campaign.
+        created_by_application:
+          type: string
+          description: The application that created the campaign, if applicable.
+        targeting:
+          type: object
+          properties:
+            message_template:
+              type: string
+              description: Body of the broadcast message.
+            short_url_base:
+              type: string
+              description: Base URL to use when shortening URLs.
+            shorten_urls:
+              type: boolean
+              description: Should URLs be shortened?
+            channel:
+              type: string
+              description: Message channel for broadcast.
+            source_short_code:
+              type: string
+              description: Short code the broadcast will be delviered on (if SMS or MMS).
+            source_lists:
+              type: array
+              items:
+                type: string
+                description: IDs of lists included in the broadcast.
+            filters:
+              type: array
+              description: Any filters used to target recipients.
+              items:
+                type: object
+            delivery:
+              type: object
+              properties:
+                send_start_date:
+                  type: string
+                  description: Date the broadcast started.
+                enqueue_completed_date:
+                  type: string
+                  description: Date the final message was queued for delivery.
+                recipient_count:
+                  type: integer
+                  description: Number of recipients.
+            url:
+              type: string
+              description: Unique resource URL for the Broadcast Campaign.
+            created_at:
+              type: string
+              description: Date that the broadcast campaign was created in ISO-8601 format.
+            updated_at:
+              type: string
+              description: Date that the broadcast campaign was last updated in ISO-8601 format.
+    broadcastsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/broadcastResponse'
     broadcastRequest:
       type: object
       properties:
@@ -291,88 +383,6 @@ components:
       required:
       - name
       - send_scheduled_date
-    broadcastsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/broadcastResponse'
-    broadcastResponse:
-      type: object
-      properties:
-        broadcast_id:
-          type: string
-          description: Vibes unique identifier for the broadcast.
-        status:
-          type: string
-          description: The status of the broadcast.
-          enum:
-          - scheduled
-          - in_progress
-          - sent
-          - canceled
-          - deleted
-          - paused
-          - failed
-        name:
-          type: string
-          description: The name of the campaign.
-        send_scheduled_date:
-          type: string
-          description: The date the campaign is scheduled to send.
-        created_by:
-          type: string
-          description: The user that created the campaign.
-        created_by_application:
-          type: string
-          description: The application that created the campaign, if applicable.
-        targeting:
-          type: object
-          properties:
-            message_template:
-              type: string
-              description: Body of the broadcast message.
-            short_url_base:
-              type: string
-              description: Base URL to use when shortening URLs.
-            shorten_urls:
-              type: boolean
-              description: Should URLs be shortened?
-            channel:
-              type: string
-              description: Message channel for broadcast.
-            source_short_code:
-              type: string
-              description: Short code the broadcast will be delviered on (if SMS or MMS).
-            source_lists:
-              type: array
-              items:
-                type: string
-                description: IDs of lists included in the broadcast.
-            filters:
-              type: array
-              description: Any filters used to target recipients.
-              items:
-                type: object
-            delivery:
-              type: object
-              properties:
-                send_start_date:
-                  type: string
-                  description: Date the broadcast started.
-                enqueue_completed_date:
-                  type: string
-                  description: Date the final message was queued for delivery.
-                recipient_count:
-                  type: integer
-                  description: Number of recipients.
-            url:
-              type: string
-              description: Unique resource URL for the Broadcast Campaign.
-            created_at:
-              type: string
-              description: Date that the broadcast campaign was created in ISO-8601 format.
-            updated_at:
-              type: string
-              description: Date that the broadcast campaign was last updated in ISO-8601 format.
   securitySchemes:
     basicAuth:
       type: http
