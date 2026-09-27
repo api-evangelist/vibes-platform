@@ -46,6 +46,12 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   responses:
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     TooManyRequests:
       description: Rate limit exceeded - too many requests.
       content:
@@ -58,13 +64,16 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request - invalid parameters or request body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier.
+        message:
+          type: string
+          description: Human-readable error message.
     Callback:
       type: object
       properties:
@@ -84,15 +93,6 @@ components:
         created_at:
           type: string
           format: date-time
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type identifier.
-        message:
-          type: string
-          description: Human-readable error message.
     CallbackCreate:
       type: object
       required:

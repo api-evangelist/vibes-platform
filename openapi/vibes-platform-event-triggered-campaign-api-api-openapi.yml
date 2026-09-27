@@ -222,18 +222,109 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    mmstext:
+    mmsurl:
       type: object
-      title: Text
+      title: Media URL
       properties:
-        body:
+        media_url:
           type: string
-          description: The body text included in the MMS send.
-        mime_type:
+          description: A URL link to the media to be included in the MMS. Do not use if you are using asset_id.
+        description:
           type: string
-          description: Must be text/plain for this object.
-          enum:
-          - text/plain
+          description: An optional description of the media. Use only if you are using media_URL.
+    eventTriggeredResponse:
+      type: object
+      properties:
+        event_triggered_message_id:
+          type: integer
+        status:
+          type: string
+        event_type:
+          type: string
+        start_date:
+          type: string
+        end_date:
+          type: string
+        created_by:
+          type: string
+        created_by_application:
+          type: string
+        targeting:
+          type: object
+          properties:
+            message_template:
+              type: string
+              description: Body of broadcast message.
+            short_url_base:
+              type: string
+              description: Base URL to use when shortening URLs.
+            shorten_urls:
+              type: boolean
+              description: Should URLs be shortened?
+            channel:
+              type: string
+              description: Message channel for broadcast.
+            message_format:
+              type: string
+              description: A read-only field that defines the message format.
+            sms:
+              type: object
+              properties:
+                sourcecode:
+                  type: string
+                country_code:
+                  type: string
+                sourcecode_type:
+                  type: string
+                mdn_territory:
+                  type: string
+            mms:
+              type: object
+              properties:
+                sourcecode:
+                  type: string
+                country_code:
+                  type: string
+                sourcecode_type:
+                  type: string
+                subject:
+                  type: string
+                content:
+                  type: array
+                  description: An array containing a list of objects for your MMS. Your MMS may contain either an uploaded asset, a media URL, or a liquid template tag for personalized sends.
+                  items:
+                    type: object
+                    properties:
+                      asset_id:
+                        type: string
+                        description: A read-only string identifying an uploaded asset.
+                      mime_type:
+                        type: string
+                        description: A read-only string identifying the MIME type of the uploaded asset. For example, `image/jpeg`
+                      media_url:
+                        type: string
+                        description: A URL link to the media to be included in the MMS.
+                      description:
+                        type: string
+                        description: An optional description of the media.
+                      body:
+                        type: string
+                        description: The body text included in the MMS send.
+            filters:
+              type: array
+              items:
+                type: object
+                description: Any filters used to target recipients.
+            url:
+              type: string
+            created_at:
+              type: string
+            updated_at:
+              type: string
+    eventTriggeredsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/eventTriggeredResponse'
     eventTriggeredRequestPush:
       type: object
       title: Select for Push
@@ -335,6 +426,108 @@ components:
       - event_type
       - start_date
       - targeting
+    filters-string:
+      type: string
+      title: Choose for all other filters.
+    filters-number:
+      type: number
+      title: Choose if filtering by subscription list.
+    eventTriggeredRequest:
+      type: object
+      title: Select for SMS
+      properties:
+        name:
+          type: string
+          description: Name your campaign.
+        event_type:
+          type: string
+          description: The event_type that will trigger this campaign to send a message.
+        start_date:
+          type: string
+          example: yyyy-mm-dd
+          format: date
+        end_date:
+          type: string
+          example: yyyy-mm-dd
+          format: date
+        targeting:
+          type: object
+          properties:
+            message_template:
+              type: string
+              description: Template for your message content. May include valid Liquid personalization tags.
+            short_url_base:
+              type: string
+              description: If you have a <a href="https://developer-platform.vibes.com/docs/creating-a-custom-short-domain">custom short domain</a>, enter it here.
+            shorten_urls:
+              type: boolean
+              description: Should URLs be shortened?
+            channel:
+              type: string
+              enum:
+              - sms
+            sms:
+              type: object
+              properties:
+                sourcecode:
+                  type: string
+                  description: The short or long code sending this message.
+                country_code:
+                  type: string
+                  description: The E.164 Country Calling Code for the country where the code is provisioned. (Ex. 1 for U.S.)
+                  example: 1
+                sourcecode_type:
+                  type: string
+                  description: SC for short or long numeric codes. ANC for alphanumeric codes.
+                mdn_territory:
+                  type: string
+                  description: ISO 2-character country code (such as "US" or "GB").
+              required:
+              - sourcecode
+              - country_code
+              - sourcecode_type
+            filters:
+              type: array
+              items:
+                type: object
+                description: Any filters used to target recipients.
+                properties:
+                  name:
+                    type: string
+                    description: The name of the filter you are using. Use "subscription" for subscription list.
+                  transform:
+                    type: string
+                    description: The transform element is used to transform the value of the custom field into a value. For example, the transform 'month' changes a custom value into just a month value. If the value was the date 2023-10-17, the transform would change the value to 10.
+                  selector:
+                    type: string
+                    description: Use <b>any</b> to filter in the values. Use <b>none</b> to filter out values.
+                  value:
+                    type: array
+                    description: Select ADD+ once per value.
+                    items:
+                      oneOf:
+                      - $ref: '#/components/schemas/filters-number'
+                      - $ref: '#/components/schemas/filters-string'
+          required:
+          - message_template
+          - sms
+      required:
+      - name
+      - event_type
+      - start_date
+      - targeting
+    mmstext:
+      type: object
+      title: Text
+      properties:
+        body:
+          type: string
+          description: The body text included in the MMS send.
+        mime_type:
+          type: string
+          description: Must be text/plain for this object.
+          enum:
+          - text/plain
     eventTriggeredRequestMMS:
       type: object
       title: Select for MMS
@@ -429,199 +622,6 @@ components:
       - event_type
       - start_date
       - targeting
-    eventTriggeredResponse:
-      type: object
-      properties:
-        event_triggered_message_id:
-          type: integer
-        status:
-          type: string
-        event_type:
-          type: string
-        start_date:
-          type: string
-        end_date:
-          type: string
-        created_by:
-          type: string
-        created_by_application:
-          type: string
-        targeting:
-          type: object
-          properties:
-            message_template:
-              type: string
-              description: Body of broadcast message.
-            short_url_base:
-              type: string
-              description: Base URL to use when shortening URLs.
-            shorten_urls:
-              type: boolean
-              description: Should URLs be shortened?
-            channel:
-              type: string
-              description: Message channel for broadcast.
-            message_format:
-              type: string
-              description: A read-only field that defines the message format.
-            sms:
-              type: object
-              properties:
-                sourcecode:
-                  type: string
-                country_code:
-                  type: string
-                sourcecode_type:
-                  type: string
-                mdn_territory:
-                  type: string
-            mms:
-              type: object
-              properties:
-                sourcecode:
-                  type: string
-                country_code:
-                  type: string
-                sourcecode_type:
-                  type: string
-                subject:
-                  type: string
-                content:
-                  type: array
-                  description: An array containing a list of objects for your MMS. Your MMS may contain either an uploaded asset, a media URL, or a liquid template tag for personalized sends.
-                  items:
-                    type: object
-                    properties:
-                      asset_id:
-                        type: string
-                        description: A read-only string identifying an uploaded asset.
-                      mime_type:
-                        type: string
-                        description: A read-only string identifying the MIME type of the uploaded asset. For example, `image/jpeg`
-                      media_url:
-                        type: string
-                        description: A URL link to the media to be included in the MMS.
-                      description:
-                        type: string
-                        description: An optional description of the media.
-                      body:
-                        type: string
-                        description: The body text included in the MMS send.
-            filters:
-              type: array
-              items:
-                type: object
-                description: Any filters used to target recipients.
-            url:
-              type: string
-            created_at:
-              type: string
-            updated_at:
-              type: string
-    filters-string:
-      type: string
-      title: Choose for all other filters.
-    mmsurl:
-      type: object
-      title: Media URL
-      properties:
-        media_url:
-          type: string
-          description: A URL link to the media to be included in the MMS. Do not use if you are using asset_id.
-        description:
-          type: string
-          description: An optional description of the media. Use only if you are using media_URL.
-    eventTriggeredRequest:
-      type: object
-      title: Select for SMS
-      properties:
-        name:
-          type: string
-          description: Name your campaign.
-        event_type:
-          type: string
-          description: The event_type that will trigger this campaign to send a message.
-        start_date:
-          type: string
-          example: yyyy-mm-dd
-          format: date
-        end_date:
-          type: string
-          example: yyyy-mm-dd
-          format: date
-        targeting:
-          type: object
-          properties:
-            message_template:
-              type: string
-              description: Template for your message content. May include valid Liquid personalization tags.
-            short_url_base:
-              type: string
-              description: If you have a <a href="https://developer-platform.vibes.com/docs/creating-a-custom-short-domain">custom short domain</a>, enter it here.
-            shorten_urls:
-              type: boolean
-              description: Should URLs be shortened?
-            channel:
-              type: string
-              enum:
-              - sms
-            sms:
-              type: object
-              properties:
-                sourcecode:
-                  type: string
-                  description: The short or long code sending this message.
-                country_code:
-                  type: string
-                  description: The E.164 Country Calling Code for the country where the code is provisioned. (Ex. 1 for U.S.)
-                  example: 1
-                sourcecode_type:
-                  type: string
-                  description: SC for short or long numeric codes. ANC for alphanumeric codes.
-                mdn_territory:
-                  type: string
-                  description: ISO 2-character country code (such as "US" or "GB").
-              required:
-              - sourcecode
-              - country_code
-              - sourcecode_type
-            filters:
-              type: array
-              items:
-                type: object
-                description: Any filters used to target recipients.
-                properties:
-                  name:
-                    type: string
-                    description: The name of the filter you are using. Use "subscription" for subscription list.
-                  transform:
-                    type: string
-                    description: The transform element is used to transform the value of the custom field into a value. For example, the transform 'month' changes a custom value into just a month value. If the value was the date 2023-10-17, the transform would change the value to 10.
-                  selector:
-                    type: string
-                    description: Use <b>any</b> to filter in the values. Use <b>none</b> to filter out values.
-                  value:
-                    type: array
-                    description: Select ADD+ once per value.
-                    items:
-                      oneOf:
-                      - $ref: '#/components/schemas/filters-number'
-                      - $ref: '#/components/schemas/filters-string'
-          required:
-          - message_template
-          - sms
-      required:
-      - name
-      - event_type
-      - start_date
-      - targeting
-    eventTriggeredsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/eventTriggeredResponse'
-    filters-number:
-      type: number
-      title: Choose if filtering by subscription list.
   securitySchemes:
     basicAuth:
       type: http

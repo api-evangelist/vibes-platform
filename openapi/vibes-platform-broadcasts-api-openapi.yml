@@ -158,6 +158,12 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   responses:
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     TooManyRequests:
       description: Rate limit exceeded - too many requests.
       headers:
@@ -169,39 +175,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized - invalid or missing credentials.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request - invalid parameters or request body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     NotFound:
       description: Resource not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    broadcast_id:
-      name: broadcast_id
-      in: path
-      required: true
-      description: The unique identifier for the broadcast.
-      schema:
-        type: string
-    company_key:
-      name: company_key
-      in: path
-      required: true
-      description: Your Vibes company identifier.
-      schema:
-        type: string
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object
@@ -217,33 +202,6 @@ components:
           items:
             type: string
           description: Additional error details.
-    BroadcastCreate:
-      type: object
-      required:
-      - name
-      - message_type
-      - message_text
-      - subscription_list_id
-      properties:
-        name:
-          type: string
-          description: Name of the broadcast.
-        message_type:
-          type: string
-          description: Type of message (SMS or push notification).
-          enum:
-          - sms
-          - push
-        message_text:
-          type: string
-          description: Message content template (supports personalization placeholders).
-        subscription_list_id:
-          type: string
-          description: The subscription list to send the broadcast to.
-        scheduled_at:
-          type: string
-          format: date-time
-          description: When to schedule the broadcast. Omit for immediate send.
     Broadcast:
       type: object
       properties:
@@ -289,6 +247,48 @@ components:
           type: string
           format: date-time
           description: When the broadcast was last updated.
+    BroadcastCreate:
+      type: object
+      required:
+      - name
+      - message_type
+      - message_text
+      - subscription_list_id
+      properties:
+        name:
+          type: string
+          description: Name of the broadcast.
+        message_type:
+          type: string
+          description: Type of message (SMS or push notification).
+          enum:
+          - sms
+          - push
+        message_text:
+          type: string
+          description: Message content template (supports personalization placeholders).
+        subscription_list_id:
+          type: string
+          description: The subscription list to send the broadcast to.
+        scheduled_at:
+          type: string
+          format: date-time
+          description: When to schedule the broadcast. Omit for immediate send.
+  parameters:
+    company_key:
+      name: company_key
+      in: path
+      required: true
+      description: Your Vibes company identifier.
+      schema:
+        type: string
+    broadcast_id:
+      name: broadcast_id
+      in: path
+      required: true
+      description: The unique identifier for the broadcast.
+      schema:
+        type: string
   securitySchemes:
     basicAuth:
       type: http

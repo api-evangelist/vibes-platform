@@ -150,42 +150,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    subscriptionListsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/subscriptionListResponse'
-    personResponse:
-      type: object
-      properties:
-        person_key:
-          type: string
-          description: A unique Vibes-asigned alphanumeric identifier for each person record.
-        external_person_id:
-          type: string
-          description: A unique person identifier assigned by the brand, which can be used to link non-Vibes-assigned identifiers to Vibes person records. Max 128 characters.
-        mobile_phone:
-          type: object
-          description: Object representation of a person's mobile phone. A person can have only one active mobile phone at a time.
-          properties:
-            mdn:
-              type: string
-              description: Mobile Directory Number. The dialable phone number associated with the phone.
-            carrier_code:
-              type: string
-              description: The cellular carrier associated with this mobile number.
-        custom_fields:
-          type: object
-          description: list of custom field key/value pairs.
-          additionalProperties:
-            type: string
-        created_at:
-          type: string
-          description: The date this person was created, in the ISO-8601 format.
-        updated_at:
-          type: string
-          description: The date this person was last updated, in the ISO-8601 format.
-        url:
-          type: string
     acquisitionResponse:
       type: object
       properties:
@@ -226,6 +190,38 @@ components:
         url:
           type: string
           description: Unique resource URL for the acquisition campaign.
+    personResponse:
+      type: object
+      properties:
+        person_key:
+          type: string
+          description: A unique Vibes-asigned alphanumeric identifier for each person record.
+        external_person_id:
+          type: string
+          description: A unique person identifier assigned by the brand, which can be used to link non-Vibes-assigned identifiers to Vibes person records. Max 128 characters.
+        mobile_phone:
+          type: object
+          description: Object representation of a person's mobile phone. A person can have only one active mobile phone at a time.
+          properties:
+            mdn:
+              type: string
+              description: Mobile Directory Number. The dialable phone number associated with the phone.
+            carrier_code:
+              type: string
+              description: The cellular carrier associated with this mobile number.
+        custom_fields:
+          type: object
+          description: list of custom field key/value pairs.
+          additionalProperties:
+            type: string
+        created_at:
+          type: string
+          description: The date this person was created, in the ISO-8601 format.
+        updated_at:
+          type: string
+          description: The date this person was last updated, in the ISO-8601 format.
+        url:
+          type: string
     subscriptionListResponse:
       type: object
       properties:
@@ -244,6 +240,10 @@ components:
         acquisition_campaigns_url:
           type: string
           description: The REST API URL to the acquisition campaigns list endpoint.
+    subscriptionListsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/subscriptionListResponse'
     acquisitionsResponse:
       type: array
       items:

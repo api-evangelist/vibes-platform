@@ -49,6 +49,12 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   responses:
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     TooManyRequests:
       description: Rate limit exceeded - too many requests.
       headers:
@@ -62,12 +68,6 @@ components:
             $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Unauthorized - invalid or missing credentials.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request - invalid parameters or request body.
       content:
         application/json:
           schema:

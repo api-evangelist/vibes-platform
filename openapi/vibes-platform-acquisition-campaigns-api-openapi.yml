@@ -124,36 +124,6 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  responses:
-    TooManyRequests:
-      description: Rate limit exceeded - too many requests.
-      headers:
-        Retry-After:
-          schema:
-            type: integer
-          description: Number of seconds to wait before retrying.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized - invalid or missing credentials.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request - invalid parameters or request body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
     Participant:
       type: object
@@ -189,6 +159,17 @@ components:
           items:
             type: string
           description: Additional error details.
+    ParticipantCreate:
+      type: object
+      required:
+      - mobile_phone
+      properties:
+        mobile_phone:
+          type: string
+          description: Participant's mobile phone number (E.164 format recommended).
+        external_person_id:
+          type: string
+          description: External identifier for the person.
     AcquisitionCampaign:
       type: object
       properties:
@@ -218,17 +199,36 @@ components:
           type: string
           format: date-time
           description: When the campaign was created.
-    ParticipantCreate:
-      type: object
-      required:
-      - mobile_phone
-      properties:
-        mobile_phone:
-          type: string
-          description: Participant's mobile phone number (E.164 format recommended).
-        external_person_id:
-          type: string
-          description: External identifier for the person.
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Number of seconds to wait before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     campaign_id:
       name: campaign_id

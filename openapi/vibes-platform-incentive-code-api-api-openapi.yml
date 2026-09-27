@@ -250,6 +250,21 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/incentiveCodeIssuanceResponse'
+    incentiveCodeIssuanceRequest:
+      type: object
+      properties:
+        external_issuee_id:
+          type: string
+          description: Unique external issuee ID.
+        code:
+          type: string
+          description: If provided, this specific code is issued.
+        referring_application:
+          type: string
+          description: Application issuing the code. Required in pools requiring a campaign_registration.
+        referring_application_ref_id:
+          type: string
+          description: Application reference ID. Required in pools requiring a campaign_registration.
     incentiveCodeIssuanceResponse:
       type: object
       properties:
@@ -294,21 +309,6 @@ components:
         updated_at:
           type: string
           description: The date this issuance was last updated, in the ISO-8601 format.
-    incentiveCodeIssuanceRequest:
-      type: object
-      properties:
-        external_issuee_id:
-          type: string
-          description: Unique external issuee ID.
-        code:
-          type: string
-          description: If provided, this specific code is issued.
-        referring_application:
-          type: string
-          description: Application issuing the code. Required in pools requiring a campaign_registration.
-        referring_application_ref_id:
-          type: string
-          description: Application reference ID. Required in pools requiring a campaign_registration.
   securitySchemes:
     basicAuth:
       type: http

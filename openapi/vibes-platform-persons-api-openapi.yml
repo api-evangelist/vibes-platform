@@ -43,45 +43,6 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  parameters:
-    person_key:
-      name: person_key
-      in: path
-      required: true
-      description: The internal Vibes person key for the subscriber.
-      schema:
-        type: string
-    company_key:
-      name: company_key
-      in: path
-      required: true
-      description: Your Vibes company identifier.
-      schema:
-        type: string
-  responses:
-    TooManyRequests:
-      description: Rate limit exceeded - too many requests.
-      headers:
-        Retry-After:
-          schema:
-            type: integer
-          description: Number of seconds to wait before retrying.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized - invalid or missing credentials.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
     Person:
       type: object
@@ -119,6 +80,45 @@ components:
           items:
             type: string
           description: Additional error details.
+  responses:
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Number of seconds to wait before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    person_key:
+      name: person_key
+      in: path
+      required: true
+      description: The internal Vibes person key for the subscriber.
+      schema:
+        type: string
+    company_key:
+      name: company_key
+      in: path
+      required: true
+      description: Your Vibes company identifier.
+      schema:
+        type: string
   securitySchemes:
     basicAuth:
       type: http
