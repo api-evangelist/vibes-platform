@@ -256,6 +256,27 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    personRequest:
+      type: object
+      properties:
+        external_person_id:
+          type: string
+          description: A unique person identifier assigned by the brand, which can be used to link non-Vibes-assigned identifiers to Vibes person records. Max 128 characters.
+        mobile_phone:
+          type: object
+          description: Object representation of a person's mobile phone. A person can have only one active mobile phone at a time.
+          properties:
+            mdn:
+              type: string
+              description: Mobile Directory Number. The dialable phone number associated with the phone.
+            carrier_code:
+              type: string
+              description: The cellular carrier associated with this mobile number.
+        custom_fields:
+          type: object
+          description: List of custom field key/value pairs.
+          additionalProperties:
+            type: string
     personResponse:
       type: object
       properties:
@@ -288,27 +309,6 @@ components:
           description: The date this person was last updated, in the ISO-8601 format.
         url:
           type: string
-    personRequest:
-      type: object
-      properties:
-        external_person_id:
-          type: string
-          description: A unique person identifier assigned by the brand, which can be used to link non-Vibes-assigned identifiers to Vibes person records. Max 128 characters.
-        mobile_phone:
-          type: object
-          description: Object representation of a person's mobile phone. A person can have only one active mobile phone at a time.
-          properties:
-            mdn:
-              type: string
-              description: Mobile Directory Number. The dialable phone number associated with the phone.
-            carrier_code:
-              type: string
-              description: The cellular carrier associated with this mobile number.
-        custom_fields:
-          type: object
-          description: List of custom field key/value pairs.
-          additionalProperties:
-            type: string
   securitySchemes:
     basicAuth:
       type: http

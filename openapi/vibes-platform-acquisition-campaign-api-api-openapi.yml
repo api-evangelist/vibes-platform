@@ -171,6 +171,14 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    acquisitionsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/acquisitionResponse'
+    acquisitionParticipantsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/acquisitionParticipantResponse'
     acquisitionResponse:
       type: object
       properties:
@@ -211,24 +219,22 @@ components:
         url:
           type: string
           description: Unique resource URL for the acquisition campaign.
-    addParticipantResponse:
+    acquisitionParticipantResponse:
       type: object
       properties:
         person:
           type: object
+          description: Participant in the acquisition campaign.
           properties:
             person_id:
               type: string
               description: Vibes-assigned unique indentifier for the person.
-            person_key:
-              type: string
-              description: A unique Vibes-asigned alphanumeric identifier for each person record.
             url:
               type: string
-              description: Unique resource URL for the Person.
+              description: Unique resource URL for the person.
         participation_date:
           type: string
-          description: Date the person entered the Acquisition Campaign.
+          description: Date the person joined the acquisition campaign.
         expire_date:
           type: string
           description: Date the person's acquisition request expires.
@@ -256,30 +262,24 @@ components:
           description: A list of custom field key/value pairs to poulate when creating Acquisition request.
           additionalProperties:
             type: string
-    acquisitionParticipantsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/acquisitionParticipantResponse'
-    acquisitionsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/acquisitionResponse'
-    acquisitionParticipantResponse:
+    addParticipantResponse:
       type: object
       properties:
         person:
           type: object
-          description: Participant in the acquisition campaign.
           properties:
             person_id:
               type: string
               description: Vibes-assigned unique indentifier for the person.
+            person_key:
+              type: string
+              description: A unique Vibes-asigned alphanumeric identifier for each person record.
             url:
               type: string
-              description: Unique resource URL for the person.
+              description: Unique resource URL for the Person.
         participation_date:
           type: string
-          description: Date the person joined the acquisition campaign.
+          description: Date the person entered the Acquisition Campaign.
         expire_date:
           type: string
           description: Date the person's acquisition request expires.

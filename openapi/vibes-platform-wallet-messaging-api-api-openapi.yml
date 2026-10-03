@@ -132,16 +132,16 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    first-class-filters-any:
+    first-class-filters:
       type: object
-      title: Filter by first-class field using selector "any".
+      title: Filter by first-class field.
       description: <a href="https://developer-platform.vibes.com/reference/first-class-fields">Learn more about first-class fields.</a>
       properties:
         name:
           type: string
           enum:
           - first_class_field
-        field-name:
+        field_name:
           type: string
           enum:
           - email_address
@@ -160,29 +160,6 @@ components:
         selector:
           type: string
           enum:
-          - any
-        value:
-          type: array
-          description: Add each value in its own string
-          items:
-            type: string
-    walletMessagesResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/walletMessageResponse'
-    wallet-filters:
-      type: object
-      title: Filter by another field.
-      properties:
-        name:
-          type: string
-          enum:
-          - group_code
-          - provider
-          - expiration_date
-        selector:
-          type: string
-          enum:
           - starts_with
           - between
           - '='
@@ -196,6 +173,10 @@ components:
           - 'on'
         value:
           type: string
+    walletMessagesResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/walletMessageResponse'
     walletMessageRequest:
       example:
         message:
@@ -231,6 +212,66 @@ components:
             - $ref: '#/components/schemas/wallet-filters'
             - $ref: '#/components/schemas/first-class-filters-any'
             - $ref: '#/components/schemas/wallet-filters-any'
+    first-class-filters-any:
+      type: object
+      title: Filter by first-class field using selector "any".
+      description: <a href="https://developer-platform.vibes.com/reference/first-class-fields">Learn more about first-class fields.</a>
+      properties:
+        name:
+          type: string
+          enum:
+          - first_class_field
+        field-name:
+          type: string
+          enum:
+          - email_address
+          - external_email_id
+          - first_name
+          - last_name
+          - code
+          - expiration_date
+          - account_number
+          - balance
+          - tier
+          - offer_value
+          - loyalty_tier
+          - loyalty_balance
+          - strip_image_code
+        selector:
+          type: string
+          enum:
+          - any
+        value:
+          type: array
+          description: Add each value in its own string
+          items:
+            type: string
+    wallet-filters:
+      type: object
+      title: Filter by another field.
+      properties:
+        name:
+          type: string
+          enum:
+          - group_code
+          - provider
+          - expiration_date
+        selector:
+          type: string
+          enum:
+          - starts_with
+          - between
+          - '='
+          - <
+          - <=
+          - '>'
+          - '>='
+          - before
+          - after
+          - between
+          - 'on'
+        value:
+          type: string
     walletMessageResponse:
       type: object
       properties:
@@ -284,47 +325,6 @@ components:
         url:
           type: string
           description: A reference URL to this message, as a relative URL on the API domain.
-    first-class-filters:
-      type: object
-      title: Filter by first-class field.
-      description: <a href="https://developer-platform.vibes.com/reference/first-class-fields">Learn more about first-class fields.</a>
-      properties:
-        name:
-          type: string
-          enum:
-          - first_class_field
-        field_name:
-          type: string
-          enum:
-          - email_address
-          - external_email_id
-          - first_name
-          - last_name
-          - code
-          - expiration_date
-          - account_number
-          - balance
-          - tier
-          - offer_value
-          - loyalty_tier
-          - loyalty_balance
-          - strip_image_code
-        selector:
-          type: string
-          enum:
-          - starts_with
-          - between
-          - '='
-          - <
-          - <=
-          - '>'
-          - '>='
-          - before
-          - after
-          - between
-          - 'on'
-        value:
-          type: string
     wallet-filters-any:
       type: object
       title: Filter by another field using selector "any".

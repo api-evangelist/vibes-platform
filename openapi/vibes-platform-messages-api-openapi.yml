@@ -72,14 +72,14 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   responses:
-    BadRequest:
-      description: Bad request - invalid parameters or request body.
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Rate limit exceeded - too many requests.
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
       content:
         application/json:
           schema:
@@ -100,68 +100,6 @@ components:
         message:
           type: string
           description: Human-readable error message.
-    MmsMessageResponse:
-      type: object
-      properties:
-        message_id:
-          type: string
-          description: Unique identifier for the submitted MMS message.
-        status:
-          type: string
-          description: Delivery status of the MMS message.
-          enum:
-          - accepted
-          - queued
-          - sent
-          - delivered
-          - failed
-        to:
-          type: string
-          description: Recipient mobile number.
-    SmsMessageResponse:
-      type: object
-      properties:
-        message_id:
-          type: string
-          description: Unique identifier for the submitted message.
-        status:
-          type: string
-          description: Delivery status of the message.
-          enum:
-          - accepted
-          - queued
-          - sent
-          - delivered
-          - failed
-        to:
-          type: string
-          description: Recipient mobile number.
-        from:
-          type: string
-          description: Sender short code or long code.
-    SmsMessageCreate:
-      type: object
-      required:
-      - to
-      - from
-      - text
-      properties:
-        to:
-          type: string
-          description: Recipient mobile number in E.164 format.
-          example: '+15551234567'
-        from:
-          type: string
-          description: Short code or long code to send from.
-          example: '12345'
-        text:
-          type: string
-          description: SMS message text content (up to 160 characters per segment).
-          maxLength: 1600
-        callback_url:
-          type: string
-          format: uri
-          description: URL to receive delivery receipt callbacks.
     MmsMessageCreate:
       type: object
       required:
@@ -197,6 +135,68 @@ components:
           type: string
           format: uri
           description: URL to receive delivery receipt callbacks.
+    MmsMessageResponse:
+      type: object
+      properties:
+        message_id:
+          type: string
+          description: Unique identifier for the submitted MMS message.
+        status:
+          type: string
+          description: Delivery status of the MMS message.
+          enum:
+          - accepted
+          - queued
+          - sent
+          - delivered
+          - failed
+        to:
+          type: string
+          description: Recipient mobile number.
+    SmsMessageCreate:
+      type: object
+      required:
+      - to
+      - from
+      - text
+      properties:
+        to:
+          type: string
+          description: Recipient mobile number in E.164 format.
+          example: '+15551234567'
+        from:
+          type: string
+          description: Short code or long code to send from.
+          example: '12345'
+        text:
+          type: string
+          description: SMS message text content (up to 160 characters per segment).
+          maxLength: 1600
+        callback_url:
+          type: string
+          format: uri
+          description: URL to receive delivery receipt callbacks.
+    SmsMessageResponse:
+      type: object
+      properties:
+        message_id:
+          type: string
+          description: Unique identifier for the submitted message.
+        status:
+          type: string
+          description: Delivery status of the message.
+          enum:
+          - accepted
+          - queued
+          - sent
+          - delivered
+          - failed
+        to:
+          type: string
+          description: Recipient mobile number.
+        from:
+          type: string
+          description: Sender short code or long code.
   securitySchemes:
     basicAuth:
       type: http

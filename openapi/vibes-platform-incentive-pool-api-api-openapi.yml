@@ -148,10 +148,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    incentivePoolsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/incentivePoolResponse'
     incentivePoolResponse:
       type: object
       properties:
@@ -245,6 +241,10 @@ components:
       - incentive_codes
       - distribution
       - notification_email_address
+    incentivePoolsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/incentivePoolResponse'
   securitySchemes:
     basicAuth:
       type: http

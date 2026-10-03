@@ -108,6 +108,35 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
+  parameters:
+    person_key:
+      name: person_key
+      in: path
+      required: true
+      description: The internal Vibes person key for the subscriber.
+      schema:
+        type: string
+    company_key:
+      name: company_key
+      in: path
+      required: true
+      description: Your Vibes company identifier.
+      schema:
+        type: string
+    external_person_id:
+      name: external_person_id
+      in: path
+      required: true
+      description: The external person identifier for the subscriber.
+      schema:
+        type: string
+    subscription_list_id:
+      name: subscription_list_id
+      in: path
+      required: true
+      description: The unique identifier for the subscription list.
+      schema:
+        type: string
   schemas:
     Error:
       type: object
@@ -142,35 +171,6 @@ components:
           type: string
           format: date-time
           description: When the subscription list was created.
-  parameters:
-    subscription_list_id:
-      name: subscription_list_id
-      in: path
-      required: true
-      description: The unique identifier for the subscription list.
-      schema:
-        type: string
-    person_key:
-      name: person_key
-      in: path
-      required: true
-      description: The internal Vibes person key for the subscriber.
-      schema:
-        type: string
-    company_key:
-      name: company_key
-      in: path
-      required: true
-      description: Your Vibes company identifier.
-      schema:
-        type: string
-    external_person_id:
-      name: external_person_id
-      in: path
-      required: true
-      description: The external person identifier for the subscriber.
-      schema:
-        type: string
   responses:
     TooManyRequests:
       description: Rate limit exceeded - too many requests.

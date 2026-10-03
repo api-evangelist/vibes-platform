@@ -163,6 +163,23 @@ components:
           - barcode
           allOf:
           - $ref: '#/components/schemas/googleWalletTemplateBody'
+    androidTemplateResponse:
+      allOf:
+      - type: object
+        properties:
+          id:
+            type: string
+            description: Unique identifier of the Google Wallet template.
+          active:
+            type: boolean
+            description: Whether the template is active.
+          created_at:
+            type: string
+            description: When the template was created, in ISO-8601 format.
+          updated_at:
+            type: string
+            description: When the template was last updated, in ISO-8601 format.
+      - $ref: '#/components/schemas/googleWalletTemplateBody'
     googleWalletTemplateBody:
       type: object
       description: Design and content of a Google Wallet (Android) pass. Google models three pass kinds — Offer, Loyalty, and Event Ticket — that share a common frame; field semantics follow Google Wallet generic passes (https://developers.google.com/wallet/generic). Many text fields accept Liquid personalization tags that are replaced per recipient. Fields noted as "loyalty only" or "event ticket only" apply only to campaigns of that type.
@@ -446,23 +463,6 @@ components:
             sort_index:
               type: integer
               description: Position of this pass within its group.
-    androidTemplateResponse:
-      allOf:
-      - type: object
-        properties:
-          id:
-            type: string
-            description: Unique identifier of the Google Wallet template.
-          active:
-            type: boolean
-            description: Whether the template is active.
-          created_at:
-            type: string
-            description: When the template was created, in ISO-8601 format.
-          updated_at:
-            type: string
-            description: When the template was last updated, in ISO-8601 format.
-      - $ref: '#/components/schemas/googleWalletTemplateBody'
   securitySchemes:
     basicAuth:
       type: http

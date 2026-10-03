@@ -211,45 +211,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    incentiveCodeResponse:
-      type: object
-      properties:
-        code:
-          type: string
-          description: The incentive code.
-        active:
-          type: boolean
-          description: Whether issuance of the incentive code is currently allowed.
-        issuances:
-          type: object
-          properties:
-            total:
-              type: integer
-              description: The total number of times this code has been issued.
-            unique:
-              type: integer
-              description: The number of unique times this code has been issued.
-        redemptions:
-          type: object
-          properties:
-            total:
-              type: integer
-              description: The total number of times this code has been redeemed.
-            unique:
-              type: integer
-              description: The number of unique times this code has been redeemed.
-        created_at:
-          type: string
-          description: The date this code was created, in the ISO-8601 format.
-        updated_at:
-          type: string
-          description: The date this code was last updated, in the ISO-8601 format.
-        url:
-          type: string
-    incentiveCodeIssuancesResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/incentiveCodeIssuanceResponse'
     incentiveCodeIssuanceRequest:
       type: object
       properties:
@@ -309,6 +270,45 @@ components:
         updated_at:
           type: string
           description: The date this issuance was last updated, in the ISO-8601 format.
+    incentiveCodeResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The incentive code.
+        active:
+          type: boolean
+          description: Whether issuance of the incentive code is currently allowed.
+        issuances:
+          type: object
+          properties:
+            total:
+              type: integer
+              description: The total number of times this code has been issued.
+            unique:
+              type: integer
+              description: The number of unique times this code has been issued.
+        redemptions:
+          type: object
+          properties:
+            total:
+              type: integer
+              description: The total number of times this code has been redeemed.
+            unique:
+              type: integer
+              description: The number of unique times this code has been redeemed.
+        created_at:
+          type: string
+          description: The date this code was created, in the ISO-8601 format.
+        updated_at:
+          type: string
+          description: The date this code was last updated, in the ISO-8601 format.
+        url:
+          type: string
+    incentiveCodeIssuancesResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/incentiveCodeIssuanceResponse'
   securitySchemes:
     basicAuth:
       type: http

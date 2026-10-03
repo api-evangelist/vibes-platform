@@ -49,12 +49,6 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   responses:
-    BadRequest:
-      description: Bad request - invalid parameters or request body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     TooManyRequests:
       description: Rate limit exceeded - too many requests.
       headers:
@@ -66,12 +60,26 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Unauthorized - invalid or missing credentials.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    company_key:
+      name: company_key
+      in: path
+      required: true
+      description: Your Vibes company identifier.
+      schema:
+        type: string
   schemas:
     Error:
       type: object
@@ -127,14 +135,6 @@ components:
           type: string
           format: date-time
           description: When the event was submitted.
-  parameters:
-    company_key:
-      name: company_key
-      in: path
-      required: true
-      description: Your Vibes company identifier.
-      schema:
-        type: string
   securitySchemes:
     basicAuth:
       type: http

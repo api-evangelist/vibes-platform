@@ -150,6 +150,10 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    acquisitionsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/acquisitionResponse'
     acquisitionResponse:
       type: object
       properties:
@@ -190,6 +194,10 @@ components:
         url:
           type: string
           description: Unique resource URL for the acquisition campaign.
+    subscriptionListsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/subscriptionListResponse'
     personResponse:
       type: object
       properties:
@@ -240,14 +248,6 @@ components:
         acquisition_campaigns_url:
           type: string
           description: The REST API URL to the acquisition campaigns list endpoint.
-    subscriptionListsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/subscriptionListResponse'
-    acquisitionsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/acquisitionResponse'
   securitySchemes:
     basicAuth:
       type: http

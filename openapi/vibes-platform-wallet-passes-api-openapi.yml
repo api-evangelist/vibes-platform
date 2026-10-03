@@ -96,6 +96,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    company_key:
+      name: company_key
+      in: path
+      required: true
+      description: Your Vibes company identifier.
+      schema:
+        type: string
   schemas:
     Error:
       type: object
@@ -161,14 +169,6 @@ components:
           type: string
           format: date-time
           description: When the wallet item was created.
-  parameters:
-    company_key:
-      name: company_key
-      in: path
-      required: true
-      description: Your Vibes company identifier.
-      schema:
-        type: string
   securitySchemes:
     basicAuth:
       type: http
