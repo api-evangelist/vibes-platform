@@ -70,6 +70,11 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    Empty:
+      type: object
+      description: Empty message.
+      id: Empty
+      properties: {}
     TokenResponse:
       type: object
       description: Object containing an OAuth 2.0 access token and related data
@@ -84,11 +89,6 @@ components:
         token_type:
           description: The type of token returned by the service. Defaults to "Bearer".
           type: string
-    Empty:
-      type: object
-      description: Empty message.
-      id: Empty
-      properties: {}
   securitySchemes:
     basicAuth:
       type: http

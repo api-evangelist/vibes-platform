@@ -396,149 +396,6 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    RichCard:
-      type: object
-      properties:
-        carouselCard:
-          description: A carousel of rich cards.
-          $ref: '#/components/schemas/CarouselCard'
-        standaloneCard:
-          description: A single rich card.
-          $ref: '#/components/schemas/StandaloneCard'
-    AgentContentMessage:
-      type: object
-      description: The content of the agent message.
-      properties:
-        text:
-          type: string
-          description: The body text of your message.
-        contentInfo:
-          description: Information about a file, including the URL of the file and the URL of the file’s thumbnail. The Vibes RBM platform serves content from a cache, but an agent can force the Vibes RBM platform to fetch a new version of the content and refresh the cache.
-          $ref: '#/components/schemas/ContentInfo'
-        suggestions:
-          type: array
-          description: Provide end users with suggested actions or responses.
-          items:
-            $ref: '#/components/schemas/Suggestion'
-          maxItems: 11
-        uploadedRbmFile:
-          $ref: '#/components/schemas/UploadedRbmFile'
-          description: A file that was uploaded to the RCS Business Messaging platform.
-        richCard:
-          $ref: '#/components/schemas/RichCard'
-    OpenUrlAction:
-      type: object
-      properties:
-        url:
-          type: string
-          maxLength: 2048
-          description: <span style="color:#dd1e2e;">Required.</span>
-        application:
-          description: What app the URL will open in - browser or integrated webview window.
-          $ref: '#/components/schemas/OpenUrlApplication'
-        webviewViewMode:
-          description: If URL is opened in integrated webview, specify view mode. Default is full view.
-          $ref: '#/components/schemas/WebviewViewMode'
-        description:
-          type: string
-    OpenUrlApplication:
-      type: string
-      description: What app the URL will open in - browser or integrated webview window.
-      enum:
-      - OPEN_URL_APPLICATION_UNSPECIFIED
-      - WEBVIEW
-      - BROWSER
-    CreateCalendarEventAction:
-      type: object
-      properties:
-        startTime:
-          type: string
-          description: <span style="color:#dd1e2e;">Required.</span> Event start time.
-        endTime:
-          type: string
-          description: <span style="color:#dd1e2e;">Required.</span> Event end time.
-        title:
-          type: string
-          maxLength: 100
-          description: <span style="color:#dd1e2e;">Required.</span> Event title.
-        description:
-          type: string
-          maxLength: 500
-          description: Optional. Event description.
-    RichMessageClassificationType:
-      type: string
-      enum:
-      - RICH_MESSAGE_CLASSIFICATION_TYPE_UNSPECIFIED
-      - RICH_MESSAGE
-      - RICH_MEDIA_MESSAGE
-      - SUGGESTED_ACTION_CLICK
-    Capabilities:
-      type: object
-      required:
-      - features
-      properties:
-        carrier:
-          type: string
-          description: Output only. The carrier information that the user's phone number belongs to, according to Google RCS backends.
-        features:
-          type: array
-          description: List of Vibes RBM features that this device supports.
-          items:
-            $ref: '#/components/schemas/Feature'
-    StandaloneCard:
-      type: object
-      properties:
-        cardOrientation:
-          description: Orientation of the card.
-          $ref: '#/components/schemas/CardOrientation'
-        thumbnailImageAlignment:
-          description: Alignment of image preview for standalone cards with horizontal layout.
-          $ref: '#/components/schemas/ThumbnailImageAlignment'
-        cardContent:
-          $ref: '#/components/schemas/CardContent'
-    ViewLocationAction:
-      type: object
-      description: Opens the device's default map app and selects the specified location or searches around the device's location given an agent-specified query.
-      properties:
-        label:
-          type: string
-          description: Optional. Text label of the location opened.
-        latLong:
-          description: <span style="color:#dd1e2e;">Required.</span>
-          $ref: '#/components/schemas/LatLng'
-        query:
-          type: string
-          description: Optional, only supported on Android Messages clients. Rather than specify a lat_long, a query string. For default map apps that support search functionality, tapping this suggested action results in a location search centered around the user's current location. <br><br> If the query is sufficiently specific, it select any location in the world. For instance, setting the query string to "Growing Tree Bank" will show all Growing Tree Bank locations in the device's vicinity. Setting the query string to "1600 Amphitheater Parkway, Mountain View, CA 94043" will select that specific address, regardless of the user's location.
-    ApiError:
-      type: object
-      properties:
-        error:
-          type: string
-    LatLng:
-      type: object
-      properties:
-        latitude:
-          type: number
-        longitude:
-          type: number
-    ContentInfo:
-      type: object
-      properties:
-        fileUrl:
-          type: string
-          description: Publicly reachable URL of the file. The Vibes RBM platform determines the MIME type of the file from the content-type field in the HTTP headers when the platform fetches the file. The content-type field must be present and accurate in the HTTP response from the URL. Recommended maximum file size of 100 MB.
-        thumbnailUrl:
-          type: string
-          description: For image, audio and video files only. Publicly reachable URL of the thumbnail. Maximum size of 100 kB. If you don't provide a thumbnail URL, the Vibes RBM platform displays a blank placeholder thumbnail until the user's device downloads the file. Depending on the user's setting, the file may not download automatically and may require the user to tap a download button. Recommended maximum file size of 100 kB.
-        forceRefresh:
-          type: boolean
-          description: Default is false. If true, the Vibes RBM platform fetches the file and thumbnail from the specified URLs, even if the platform has cached copies of the file (and/or of the thumbnail).
-    CardOrientation:
-      type: string
-      enum:
-      - CARD_ORIENTATION_UNSPECIFIED
-      - HORIZONTAL
-      - VERTICAL
     MediaHeight:
       type: string
       enum:
@@ -546,25 +403,26 @@ components:
       - SHORT
       - MEDIUM
       - TALL
-    CardContent:
+    WebviewViewMode:
+      type: string
+      description: If URL is opened in integrated webview, specify view mode. Default is full view.
+      enum:
+      - WEBVIEW_VIEW_MODE_UNSPECIFIED
+      - FULL
+      - HALF
+      - TALL
+    UploadedRbmFile:
       type: object
-      description: Each rich card must have at least one of title, description, or media.
+      description: A file that has been uploaded to the RCS Business Messaging platform.
       properties:
-        title:
+        fileName:
           type: string
-          maxLength: 200
-          description: Title on the rich card.
-        description:
+          description: The name of the file, as provided by the RBM platform when the file is uploaded.
+          readOnly: true
+        thumbnailName:
           type: string
-          maxLength: 500
-          description: Description text on the rich card.
-        media:
-          $ref: '#/components/schemas/Media'
-        suggestions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Suggestion'
-          maxItems: 10
+          description: The name of the thumbnail associated with the file, as provided by the RBM platform when the file is uploaded.
+          readOnly: true
     Media:
       type: object
       properties:
@@ -577,6 +435,50 @@ components:
         uploadedRbmFile:
           $ref: '#/components/schemas/UploadedRbmFile'
           description: A file that was uploaded to the RCS Business Messaging platform.
+    CarouselCard:
+      type: object
+      description: A carousel of rich cards.
+      properties:
+        cardWidth:
+          $ref: '#/components/schemas/CardWidth'
+          description: The width of the cards in the carousel.
+        cardContents:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardContent'
+          maxItems: 10
+    DialAction:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+          description: <span style="color:#dd1e2e;">Required.</span> Phone number to dial, in E.164 format.
+          example: '+15555555555'
+    Tester:
+      type: object
+      properties:
+        agentId:
+          type: string
+          description: The ID of an agent.
+        inviteStatus:
+          allOf:
+          - $ref: '#/components/schemas/TesterInviteStatus'
+          description: Output only. The status of the invitation. Returned by the platform.
+          readOnly: true
+        name:
+          type: string
+          description: Output only. The unique identifier of the tester.
+          readOnly: true
+        phoneNumber:
+          type: string
+          description: The phone number of the tester in E.164 format.
+      required:
+      - phoneNumber
+    ApiError:
+      type: object
+      properties:
+        error:
+          type: string
     SuggestedAction:
       type: object
       properties:
@@ -607,6 +509,17 @@ components:
         shareLocationAction:
           description: Shares the device's location with the agent.
           $ref: '#/components/schemas/ShareLocationAction'
+    Feature:
+      type: string
+      enum:
+      - FEATURE_UNSPECIFIED
+      - RICHCARD_STANDALONE
+      - RICHCARD_CAROUSEL
+      - ACTION_CREATE_CALENDAR_EVENT
+      - ACTION_DIAL
+      - ACTION_OPEN_URL
+      - ACTION_SHARE_LOCATION
+      - ACTION_VIEW_LOCATION
     SuggestedReply:
       type: object
       title: A suggested reply, which users can tap to send the text reply back to the agent.
@@ -618,6 +531,51 @@ components:
         postbackData:
           type: string
           description: <span style="color:#dd1e2e;">Required.</span> The base64-encoded payload that the agent receives in a user event when the user taps the suggested reply. Maximum
+    AgentEventType:
+      type: string
+      enum:
+      - TYPE_UNSPECIFIED
+      - IS_TYPING
+      - READ
+    AgentEvent:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Do not set this field. It will be populated by the API when the operation returns.
+        eventType:
+          $ref: '#/components/schemas/AgentEventType'
+        messageId:
+          type: string
+          description: If you are sending a read receipt event, the alphanumeric identifier of the message the read receipt is associated with.
+        sendTime:
+          type: string
+          description: Do not set this field. It will be populated by the API when the operation returns.
+      required:
+      - eventType
+    ViewLocationAction:
+      type: object
+      description: Opens the device's default map app and selects the specified location or searches around the device's location given an agent-specified query.
+      properties:
+        label:
+          type: string
+          description: Optional. Text label of the location opened.
+        latLong:
+          description: <span style="color:#dd1e2e;">Required.</span>
+          $ref: '#/components/schemas/LatLng'
+        query:
+          type: string
+          description: Optional, only supported on Android Messages clients. Rather than specify a lat_long, a query string. For default map apps that support search functionality, tapping this suggested action results in a location search centered around the user's current location. <br><br> If the query is sufficiently specific, it select any location in the world. For instance, setting the query string to "Growing Tree Bank" will show all Growing Tree Bank locations in the device's vicinity. Setting the query string to "1600 Amphitheater Parkway, Mountain View, CA 94043" will select that specific address, regardless of the user's location.
+    Suggestion:
+      type: object
+      title: Add a suggested reply or action
+      properties:
+        reply:
+          title: Suggested reply
+          $ref: '#/components/schemas/SuggestedReply'
+        action:
+          title: Suggested action
+          $ref: '#/components/schemas/SuggestedAction'
     AgentMessage:
       type: object
       required:
@@ -658,6 +616,50 @@ components:
           type: string
           description: Optional. Time in seconds the message will live before it is automatically revoked.
           example: '3.5'
+    LatLng:
+      type: object
+      properties:
+        latitude:
+          type: number
+        longitude:
+          type: number
+    Capabilities:
+      type: object
+      required:
+      - features
+      properties:
+        carrier:
+          type: string
+          description: Output only. The carrier information that the user's phone number belongs to, according to Google RCS backends.
+        features:
+          type: array
+          description: List of Vibes RBM features that this device supports.
+          items:
+            $ref: '#/components/schemas/Feature'
+    OpenUrlApplication:
+      type: string
+      description: What app the URL will open in - browser or integrated webview window.
+      enum:
+      - OPEN_URL_APPLICATION_UNSPECIFIED
+      - WEBVIEW
+      - BROWSER
+    CreateCalendarEventAction:
+      type: object
+      properties:
+        startTime:
+          type: string
+          description: <span style="color:#dd1e2e;">Required.</span> Event start time.
+        endTime:
+          type: string
+          description: <span style="color:#dd1e2e;">Required.</span> Event end time.
+        title:
+          type: string
+          maxLength: 100
+          description: <span style="color:#dd1e2e;">Required.</span> Event title.
+        description:
+          type: string
+          maxLength: 500
+          description: Optional. Event description.
     TesterInviteStatus:
       type: string
       enum:
@@ -665,62 +667,78 @@ components:
       - PENDING
       - ACCEPTED
       - DECLINED
-    DialAction:
+    AgentContentMessage:
+      type: object
+      description: The content of the agent message.
+      properties:
+        text:
+          type: string
+          description: The body text of your message.
+        contentInfo:
+          description: Information about a file, including the URL of the file and the URL of the file’s thumbnail. The Vibes RBM platform serves content from a cache, but an agent can force the Vibes RBM platform to fetch a new version of the content and refresh the cache.
+          $ref: '#/components/schemas/ContentInfo'
+        suggestions:
+          type: array
+          description: Provide end users with suggested actions or responses.
+          items:
+            $ref: '#/components/schemas/Suggestion'
+          maxItems: 11
+        uploadedRbmFile:
+          $ref: '#/components/schemas/UploadedRbmFile'
+          description: A file that was uploaded to the RCS Business Messaging platform.
+        richCard:
+          $ref: '#/components/schemas/RichCard'
+    StandaloneCard:
       type: object
       properties:
-        phoneNumber:
-          type: string
-          description: <span style="color:#dd1e2e;">Required.</span> Phone number to dial, in E.164 format.
-          example: '+15555555555'
-    Tester:
-      type: object
-      properties:
-        agentId:
-          type: string
-          description: The ID of an agent.
-        inviteStatus:
-          allOf:
-          - $ref: '#/components/schemas/TesterInviteStatus'
-          description: Output only. The status of the invitation. Returned by the platform.
-          readOnly: true
-        name:
-          type: string
-          description: Output only. The unique identifier of the tester.
-          readOnly: true
-        phoneNumber:
-          type: string
-          description: The phone number of the tester in E.164 format.
-      required:
-      - phoneNumber
-    AgentEvent:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Do not set this field. It will be populated by the API when the operation returns.
-        eventType:
-          $ref: '#/components/schemas/AgentEventType'
-        messageId:
-          type: string
-          description: If you are sending a read receipt event, the alphanumeric identifier of the message the read receipt is associated with.
-        sendTime:
-          type: string
-          description: Do not set this field. It will be populated by the API when the operation returns.
-      required:
-      - eventType
-    ThumbnailImageAlignment:
-      type: string
-      description: Alignment of image preview for standalone cards with horizontal layout.
-      enum:
-      - THUMBNAIL_IMAGE_ALIGNMENT_UNSPECIFIED
-      - LEFT
-      - RIGHT
-    AgentEventType:
+        cardOrientation:
+          description: Orientation of the card.
+          $ref: '#/components/schemas/CardOrientation'
+        thumbnailImageAlignment:
+          description: Alignment of image preview for standalone cards with horizontal layout.
+          $ref: '#/components/schemas/ThumbnailImageAlignment'
+        cardContent:
+          $ref: '#/components/schemas/CardContent'
+    CardOrientation:
       type: string
       enum:
-      - TYPE_UNSPECIFIED
-      - IS_TYPING
-      - READ
+      - CARD_ORIENTATION_UNSPECIFIED
+      - HORIZONTAL
+      - VERTICAL
+    CardContent:
+      type: object
+      description: Each rich card must have at least one of title, description, or media.
+      properties:
+        title:
+          type: string
+          maxLength: 200
+          description: Title on the rich card.
+        description:
+          type: string
+          maxLength: 500
+          description: Description text on the rich card.
+        media:
+          $ref: '#/components/schemas/Media'
+        suggestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Suggestion'
+          maxItems: 10
+    OpenUrlAction:
+      type: object
+      properties:
+        url:
+          type: string
+          maxLength: 2048
+          description: <span style="color:#dd1e2e;">Required.</span>
+        application:
+          description: What app the URL will open in - browser or integrated webview window.
+          $ref: '#/components/schemas/OpenUrlApplication'
+        webviewViewMode:
+          description: If URL is opened in integrated webview, specify view mode. Default is full view.
+          $ref: '#/components/schemas/WebviewViewMode'
+        description:
+          type: string
     RichMessageClassification:
       type: object
       description: Output only. Classifies the message according to the US billing model.
@@ -732,14 +750,13 @@ components:
           type: integer
           format: int32
           description: The number of 160-byte segments for the message's text, always rounded up. Calculated from the total UTF-8 byte length of the text content only; data from suggested replies or actions is excluded.
-    WebviewViewMode:
+    ThumbnailImageAlignment:
       type: string
-      description: If URL is opened in integrated webview, specify view mode. Default is full view.
+      description: Alignment of image preview for standalone cards with horizontal layout.
       enum:
-      - WEBVIEW_VIEW_MODE_UNSPECIFIED
-      - FULL
-      - HALF
-      - TALL
+      - THUMBNAIL_IMAGE_ALIGNMENT_UNSPECIFIED
+      - LEFT
+      - RIGHT
     MessageTrafficType:
       type: string
       enum:
@@ -749,59 +766,42 @@ components:
       - PROMOTION
       - SERVICEREQUEST
       - ACKNOWLEDGEMENT
-    UploadedRbmFile:
+    RichCard:
       type: object
-      description: A file that has been uploaded to the RCS Business Messaging platform.
       properties:
-        fileName:
-          type: string
-          description: The name of the file, as provided by the RBM platform when the file is uploaded.
-          readOnly: true
-        thumbnailName:
-          type: string
-          description: The name of the thumbnail associated with the file, as provided by the RBM platform when the file is uploaded.
-          readOnly: true
-    Suggestion:
-      type: object
-      title: Add a suggested reply or action
-      properties:
-        reply:
-          title: Suggested reply
-          $ref: '#/components/schemas/SuggestedReply'
-        action:
-          title: Suggested action
-          $ref: '#/components/schemas/SuggestedAction'
-    Feature:
-      type: string
-      enum:
-      - FEATURE_UNSPECIFIED
-      - RICHCARD_STANDALONE
-      - RICHCARD_CAROUSEL
-      - ACTION_CREATE_CALENDAR_EVENT
-      - ACTION_DIAL
-      - ACTION_OPEN_URL
-      - ACTION_SHARE_LOCATION
-      - ACTION_VIEW_LOCATION
-    ShareLocationAction:
-      type: object
+        carouselCard:
+          description: A carousel of rich cards.
+          $ref: '#/components/schemas/CarouselCard'
+        standaloneCard:
+          description: A single rich card.
+          $ref: '#/components/schemas/StandaloneCard'
     CardWidth:
       type: string
       enum:
       - CARD_WIDTH_UNSPECIFIED
       - SMALL
       - MEDIUM
-    CarouselCard:
+    RichMessageClassificationType:
+      type: string
+      enum:
+      - RICH_MESSAGE_CLASSIFICATION_TYPE_UNSPECIFIED
+      - RICH_MESSAGE
+      - RICH_MEDIA_MESSAGE
+      - SUGGESTED_ACTION_CLICK
+    ContentInfo:
       type: object
-      description: A carousel of rich cards.
       properties:
-        cardWidth:
-          $ref: '#/components/schemas/CardWidth'
-          description: The width of the cards in the carousel.
-        cardContents:
-          type: array
-          items:
-            $ref: '#/components/schemas/CardContent'
-          maxItems: 10
+        fileUrl:
+          type: string
+          description: Publicly reachable URL of the file. The Vibes RBM platform determines the MIME type of the file from the content-type field in the HTTP headers when the platform fetches the file. The content-type field must be present and accurate in the HTTP response from the URL. Recommended maximum file size of 100 MB.
+        thumbnailUrl:
+          type: string
+          description: For image, audio and video files only. Publicly reachable URL of the thumbnail. Maximum size of 100 kB. If you don't provide a thumbnail URL, the Vibes RBM platform displays a blank placeholder thumbnail until the user's device downloads the file. Depending on the user's setting, the file may not download automatically and may require the user to tap a download button. Recommended maximum file size of 100 kB.
+        forceRefresh:
+          type: boolean
+          description: Default is false. If true, the Vibes RBM platform fetches the file and thumbnail from the specified URLs, even if the platform has cached copies of the file (and/or of the thumbnail).
+    ShareLocationAction:
+      type: object
   securitySchemes:
     OAuth2Auth:
       type: oauth2

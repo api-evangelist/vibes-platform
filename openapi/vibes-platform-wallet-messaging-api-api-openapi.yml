@@ -132,111 +132,16 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    first-class-filters:
+    wallet-filters-any:
       type: object
-      title: Filter by first-class field.
-      description: <a href="https://developer-platform.vibes.com/reference/first-class-fields">Learn more about first-class fields.</a>
+      title: Filter by another field using selector "any".
       properties:
         name:
           type: string
           enum:
-          - first_class_field
-        field_name:
-          type: string
-          enum:
-          - email_address
-          - external_email_id
-          - first_name
-          - last_name
-          - code
+          - group_code
+          - provider
           - expiration_date
-          - account_number
-          - balance
-          - tier
-          - offer_value
-          - loyalty_tier
-          - loyalty_balance
-          - strip_image_code
-        selector:
-          type: string
-          enum:
-          - starts_with
-          - between
-          - '='
-          - <
-          - <=
-          - '>'
-          - '>='
-          - before
-          - after
-          - between
-          - 'on'
-        value:
-          type: string
-    walletMessagesResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/walletMessageResponse'
-    walletMessageRequest:
-      example:
-        message:
-          header: Reminder
-          template: Your Spring Sale offer expires soon!
-        filters:
-        - name: group_code
-          selector: '='
-          value: vip
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: object
-          description: The message content delivered to each targeted pass.
-          properties:
-            template:
-              type: string
-              description: Message body sent to each pass. Supports Liquid personalization tags.
-            header:
-              type: string
-              description: Optional header shown with the message.
-            message_type:
-              type: string
-              description: Optional message type used to categorize the notification.
-        filters:
-          type: array
-          description: Filters that target the message to specific passes in the campaign. Omit to message all passes.
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/first-class-filters'
-            - $ref: '#/components/schemas/wallet-filters'
-            - $ref: '#/components/schemas/first-class-filters-any'
-            - $ref: '#/components/schemas/wallet-filters-any'
-    first-class-filters-any:
-      type: object
-      title: Filter by first-class field using selector "any".
-      description: <a href="https://developer-platform.vibes.com/reference/first-class-fields">Learn more about first-class fields.</a>
-      properties:
-        name:
-          type: string
-          enum:
-          - first_class_field
-        field-name:
-          type: string
-          enum:
-          - email_address
-          - external_email_id
-          - first_name
-          - last_name
-          - code
-          - expiration_date
-          - account_number
-          - balance
-          - tier
-          - offer_value
-          - loyalty_tier
-          - loyalty_balance
-          - strip_image_code
         selector:
           type: string
           enum:
@@ -272,6 +177,10 @@ components:
           - 'on'
         value:
           type: string
+    walletMessagesResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/walletMessageResponse'
     walletMessageResponse:
       type: object
       properties:
@@ -325,16 +234,72 @@ components:
         url:
           type: string
           description: A reference URL to this message, as a relative URL on the API domain.
-    wallet-filters-any:
+    first-class-filters:
       type: object
-      title: Filter by another field using selector "any".
+      title: Filter by first-class field.
+      description: <a href="https://developer-platform.vibes.com/reference/first-class-fields">Learn more about first-class fields.</a>
       properties:
         name:
           type: string
           enum:
-          - group_code
-          - provider
+          - first_class_field
+        field_name:
+          type: string
+          enum:
+          - email_address
+          - external_email_id
+          - first_name
+          - last_name
+          - code
           - expiration_date
+          - account_number
+          - balance
+          - tier
+          - offer_value
+          - loyalty_tier
+          - loyalty_balance
+          - strip_image_code
+        selector:
+          type: string
+          enum:
+          - starts_with
+          - between
+          - '='
+          - <
+          - <=
+          - '>'
+          - '>='
+          - before
+          - after
+          - between
+          - 'on'
+        value:
+          type: string
+    first-class-filters-any:
+      type: object
+      title: Filter by first-class field using selector "any".
+      description: <a href="https://developer-platform.vibes.com/reference/first-class-fields">Learn more about first-class fields.</a>
+      properties:
+        name:
+          type: string
+          enum:
+          - first_class_field
+        field-name:
+          type: string
+          enum:
+          - email_address
+          - external_email_id
+          - first_name
+          - last_name
+          - code
+          - expiration_date
+          - account_number
+          - balance
+          - tier
+          - offer_value
+          - loyalty_tier
+          - loyalty_balance
+          - strip_image_code
         selector:
           type: string
           enum:
@@ -344,6 +309,41 @@ components:
           description: Add each value in its own string
           items:
             type: string
+    walletMessageRequest:
+      example:
+        message:
+          header: Reminder
+          template: Your Spring Sale offer expires soon!
+        filters:
+        - name: group_code
+          selector: '='
+          value: vip
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: object
+          description: The message content delivered to each targeted pass.
+          properties:
+            template:
+              type: string
+              description: Message body sent to each pass. Supports Liquid personalization tags.
+            header:
+              type: string
+              description: Optional header shown with the message.
+            message_type:
+              type: string
+              description: Optional message type used to categorize the notification.
+        filters:
+          type: array
+          description: Filters that target the message to specific passes in the campaign. Omit to message all passes.
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/first-class-filters'
+            - $ref: '#/components/schemas/wallet-filters'
+            - $ref: '#/components/schemas/first-class-filters-any'
+            - $ref: '#/components/schemas/wallet-filters-any'
   securitySchemes:
     basicAuth:
       type: http

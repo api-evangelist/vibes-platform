@@ -108,12 +108,43 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
+  responses:
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Number of seconds to wait before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     person_key:
       name: person_key
       in: path
       required: true
       description: The internal Vibes person key for the subscriber.
+      schema:
+        type: string
+    subscription_list_id:
+      name: subscription_list_id
+      in: path
+      required: true
+      description: The unique identifier for the subscription list.
       schema:
         type: string
     company_key:
@@ -128,13 +159,6 @@ components:
       in: path
       required: true
       description: The external person identifier for the subscriber.
-      schema:
-        type: string
-    subscription_list_id:
-      name: subscription_list_id
-      in: path
-      required: true
-      description: The unique identifier for the subscription list.
       schema:
         type: string
   schemas:
@@ -171,30 +195,6 @@ components:
           type: string
           format: date-time
           description: When the subscription list was created.
-  responses:
-    TooManyRequests:
-      description: Rate limit exceeded - too many requests.
-      headers:
-        Retry-After:
-          schema:
-            type: integer
-          description: Number of seconds to wait before retrying.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized - invalid or missing credentials.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     basicAuth:
       type: http

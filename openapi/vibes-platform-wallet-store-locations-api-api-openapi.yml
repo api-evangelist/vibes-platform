@@ -192,14 +192,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    walletLocationResponse:
-      allOf:
-      - type: object
-        properties:
-          id:
-            type: integer
-            description: Unique identifier of the store location.
-      - $ref: '#/components/schemas/walletLocation'
     walletLocationsBulkRequest:
       example:
         locations:
@@ -221,10 +213,6 @@ components:
           description: Store locations to add (up to 1000 per request).
           items:
             $ref: '#/components/schemas/walletLocation'
-    walletLocationsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/walletLocationResponse'
     walletLocation:
       type: object
       description: A store location attached to a wallet campaign.
@@ -265,6 +253,18 @@ components:
         notification_message:
           type: string
           description: Lock-screen message shown to pass holders when they are near this location.
+    walletLocationResponse:
+      allOf:
+      - type: object
+        properties:
+          id:
+            type: integer
+            description: Unique identifier of the store location.
+      - $ref: '#/components/schemas/walletLocation'
+    walletLocationsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/walletLocationResponse'
   securitySchemes:
     basicAuth:
       type: http

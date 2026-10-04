@@ -167,6 +167,25 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    locationSelectorRequest:
+      example:
+        location_selector:
+          header:
+            title: Add your pass
+            tagline: Tap below to save it to your wallet
+          colors:
+            background: '#ffffff'
+            foreground: '#000000'
+            label: '#888888'
+          include_zipcode: true
+          add_to_wallet_language: en-US
+      type: object
+      required:
+      - location_selector
+      properties:
+        location_selector:
+          allOf:
+          - $ref: '#/components/schemas/locationSelectorBody'
     locationSelectorBody:
       type: object
       description: Branding for the "Add to Wallet" landing page a customer sees before the pass is generated — the page where they pick their store location (drawn from the campaign's locations) and tap to install.
@@ -215,25 +234,6 @@ components:
           - es-419
           - fr-FR
           description: Locale of the "Add to Wallet" button. One of `en-US` (English), `es-ES` (Spanish - Spain), `es-419` (Spanish - Latin America), or `fr-FR` (French).
-    locationSelectorRequest:
-      example:
-        location_selector:
-          header:
-            title: Add your pass
-            tagline: Tap below to save it to your wallet
-          colors:
-            background: '#ffffff'
-            foreground: '#000000'
-            label: '#888888'
-          include_zipcode: true
-          add_to_wallet_language: en-US
-      type: object
-      required:
-      - location_selector
-      properties:
-        location_selector:
-          allOf:
-          - $ref: '#/components/schemas/locationSelectorBody'
     locationSelectorResponse:
       allOf:
       - type: object

@@ -72,7 +72,49 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
+  responses:
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Number of seconds to wait before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    CallbackCreate:
+      type: object
+      required:
+      - callback_type
+      - url
+      properties:
+        callback_type:
+          type: string
+          description: Type of event that triggers this callback.
+          enum:
+          - opt_in
+          - opt_out
+          - delivery_status
+          - mms_received
+        url:
+          type: string
+          format: uri
+          description: HTTPS URL to receive callback POST requests.
     Callback:
       type: object
       properties:
@@ -95,24 +137,6 @@ components:
           type: string
           format: date-time
           description: When the callback was registered.
-    CallbackCreate:
-      type: object
-      required:
-      - callback_type
-      - url
-      properties:
-        callback_type:
-          type: string
-          description: Type of event that triggers this callback.
-          enum:
-          - opt_in
-          - opt_out
-          - delivery_status
-          - mms_received
-        url:
-          type: string
-          format: uri
-          description: HTTPS URL to receive callback POST requests.
     Error:
       type: object
       properties:
@@ -127,30 +151,6 @@ components:
           items:
             type: string
           description: Additional error details.
-  responses:
-    BadRequest:
-      description: Bad request - invalid parameters or request body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Rate limit exceeded - too many requests.
-      headers:
-        Retry-After:
-          schema:
-            type: integer
-          description: Number of seconds to wait before retrying.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized - invalid or missing credentials.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   parameters:
     company_key:
       name: company_key

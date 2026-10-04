@@ -211,21 +211,45 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    incentiveCodeIssuanceRequest:
+    incentiveCodeResponse:
       type: object
       properties:
-        external_issuee_id:
-          type: string
-          description: Unique external issuee ID.
         code:
           type: string
-          description: If provided, this specific code is issued.
-        referring_application:
+          description: The incentive code.
+        active:
+          type: boolean
+          description: Whether issuance of the incentive code is currently allowed.
+        issuances:
+          type: object
+          properties:
+            total:
+              type: integer
+              description: The total number of times this code has been issued.
+            unique:
+              type: integer
+              description: The number of unique times this code has been issued.
+        redemptions:
+          type: object
+          properties:
+            total:
+              type: integer
+              description: The total number of times this code has been redeemed.
+            unique:
+              type: integer
+              description: The number of unique times this code has been redeemed.
+        created_at:
           type: string
-          description: Application issuing the code. Required in pools requiring a campaign_registration.
-        referring_application_ref_id:
+          description: The date this code was created, in the ISO-8601 format.
+        updated_at:
           type: string
-          description: Application reference ID. Required in pools requiring a campaign_registration.
+          description: The date this code was last updated, in the ISO-8601 format.
+        url:
+          type: string
+    incentiveCodeIssuancesResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/incentiveCodeIssuanceResponse'
     incentiveCodeIssuanceResponse:
       type: object
       properties:
@@ -270,45 +294,21 @@ components:
         updated_at:
           type: string
           description: The date this issuance was last updated, in the ISO-8601 format.
-    incentiveCodeResponse:
+    incentiveCodeIssuanceRequest:
       type: object
       properties:
+        external_issuee_id:
+          type: string
+          description: Unique external issuee ID.
         code:
           type: string
-          description: The incentive code.
-        active:
-          type: boolean
-          description: Whether issuance of the incentive code is currently allowed.
-        issuances:
-          type: object
-          properties:
-            total:
-              type: integer
-              description: The total number of times this code has been issued.
-            unique:
-              type: integer
-              description: The number of unique times this code has been issued.
-        redemptions:
-          type: object
-          properties:
-            total:
-              type: integer
-              description: The total number of times this code has been redeemed.
-            unique:
-              type: integer
-              description: The number of unique times this code has been redeemed.
-        created_at:
+          description: If provided, this specific code is issued.
+        referring_application:
           type: string
-          description: The date this code was created, in the ISO-8601 format.
-        updated_at:
+          description: Application issuing the code. Required in pools requiring a campaign_registration.
+        referring_application_ref_id:
           type: string
-          description: The date this code was last updated, in the ISO-8601 format.
-        url:
-          type: string
-    incentiveCodeIssuancesResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/incentiveCodeIssuanceResponse'
+          description: Application reference ID. Required in pools requiring a campaign_registration.
   securitySchemes:
     basicAuth:
       type: http

@@ -91,15 +91,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type identifier.
-        message:
-          type: string
-          description: Human-readable error message.
     MmsMessageCreate:
       type: object
       required:
@@ -135,24 +126,6 @@ components:
           type: string
           format: uri
           description: URL to receive delivery receipt callbacks.
-    MmsMessageResponse:
-      type: object
-      properties:
-        message_id:
-          type: string
-          description: Unique identifier for the submitted MMS message.
-        status:
-          type: string
-          description: Delivery status of the MMS message.
-          enum:
-          - accepted
-          - queued
-          - sent
-          - delivered
-          - failed
-        to:
-          type: string
-          description: Recipient mobile number.
     SmsMessageCreate:
       type: object
       required:
@@ -176,6 +149,15 @@ components:
           type: string
           format: uri
           description: URL to receive delivery receipt callbacks.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier.
+        message:
+          type: string
+          description: Human-readable error message.
     SmsMessageResponse:
       type: object
       properties:
@@ -197,6 +179,24 @@ components:
         from:
           type: string
           description: Sender short code or long code.
+    MmsMessageResponse:
+      type: object
+      properties:
+        message_id:
+          type: string
+          description: Unique identifier for the submitted MMS message.
+        status:
+          type: string
+          description: Delivery status of the MMS message.
+          enum:
+          - accepted
+          - queued
+          - sent
+          - delivered
+          - failed
+        to:
+          type: string
+          description: Recipient mobile number.
   securitySchemes:
     basicAuth:
       type: http

@@ -72,29 +72,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    company_key:
-      name: company_key
-      in: path
-      required: true
-      description: Your Vibes company identifier.
-      schema:
-        type: string
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type identifier.
-        message:
-          type: string
-          description: Human-readable error message.
-        details:
-          type: array
-          items:
-            type: string
-          description: Additional error details.
     EventCreate:
       type: object
       required:
@@ -112,6 +90,20 @@ components:
           description: Custom attributes to personalize triggered messages.
           additionalProperties:
             type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier.
+        message:
+          type: string
+          description: Human-readable error message.
+        details:
+          type: array
+          items:
+            type: string
+          description: Additional error details.
     Event:
       type: object
       properties:
@@ -135,6 +127,14 @@ components:
           type: string
           format: date-time
           description: When the event was submitted.
+  parameters:
+    company_key:
+      name: company_key
+      in: path
+      required: true
+      description: Your Vibes company identifier.
+      schema:
+        type: string
   securitySchemes:
     basicAuth:
       type: http

@@ -68,13 +68,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   parameters:
-    company_key:
-      name: company_key
-      in: path
-      required: true
-      description: Your Vibes company identifier.
-      schema:
-        type: string
     person_key:
       name: person_key
       in: path
@@ -82,21 +75,14 @@ components:
       description: The internal Vibes person key for the subscriber.
       schema:
         type: string
+    company_key:
+      name: company_key
+      in: path
+      required: true
+      description: Your Vibes company identifier.
+      schema:
+        type: string
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type identifier.
-        message:
-          type: string
-          description: Human-readable error message.
-        details:
-          type: array
-          items:
-            type: string
-          description: Additional error details.
     Person:
       type: object
       properties:
@@ -119,6 +105,20 @@ components:
           type: string
           format: date-time
           description: When the person was added.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier.
+        message:
+          type: string
+          description: Human-readable error message.
+        details:
+          type: array
+          items:
+            type: string
+          description: Additional error details.
   securitySchemes:
     basicAuth:
       type: http

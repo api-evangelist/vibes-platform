@@ -148,6 +148,49 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    incentivePoolRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name given to the incentive pool.
+        issuance_allowed:
+          type: boolean
+          description: Indicates whether codes are currently allowed to be issued from this code pool.
+        redemption_allowed:
+          type: boolean
+          description: Indicates whether codes from this code pool are currently allowed to be redeemed.
+        incentive_codes:
+          type: object
+          properties:
+            low_threshold:
+              type: integer
+              description: The number of remaining incentive codes where a notification is sent.
+            max_characters:
+              type: integer
+              description: The maximum number of characters allowed in an incentive code in this pool.
+          required:
+          - low_threshold
+          - max_characters
+        distribution:
+          type: object
+          properties:
+            method:
+              type: string
+              description: The method of distribution.
+              enum:
+              - unique
+              - multi
+        notification_email_address:
+          type: string
+          description: The email address for all notifications.
+      required:
+      - name
+      - issuance_allowed
+      - redemption_allowed
+      - incentive_codes
+      - distribution
+      - notification_email_address
     incentivePoolResponse:
       type: object
       properties:
@@ -198,49 +241,6 @@ components:
           description: The date this pool was last updated in ISO-8601 format.
         url:
           type: string
-    incentivePoolRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name given to the incentive pool.
-        issuance_allowed:
-          type: boolean
-          description: Indicates whether codes are currently allowed to be issued from this code pool.
-        redemption_allowed:
-          type: boolean
-          description: Indicates whether codes from this code pool are currently allowed to be redeemed.
-        incentive_codes:
-          type: object
-          properties:
-            low_threshold:
-              type: integer
-              description: The number of remaining incentive codes where a notification is sent.
-            max_characters:
-              type: integer
-              description: The maximum number of characters allowed in an incentive code in this pool.
-          required:
-          - low_threshold
-          - max_characters
-        distribution:
-          type: object
-          properties:
-            method:
-              type: string
-              description: The method of distribution.
-              enum:
-              - unique
-              - multi
-        notification_email_address:
-          type: string
-          description: The email address for all notifications.
-      required:
-      - name
-      - issuance_allowed
-      - redemption_allowed
-      - incentive_codes
-      - distribution
-      - notification_email_address
     incentivePoolsResponse:
       type: array
       items:

@@ -171,54 +171,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    acquisitionsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/acquisitionResponse'
-    acquisitionParticipantsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/acquisitionParticipantResponse'
-    acquisitionResponse:
-      type: object
-      properties:
-        acquisition_id:
-          type: string
-          description: A Vibes-assigned alphanumeric unique identifier for each acquisition campaign.
-        description:
-          type: string
-          description: The name of the acquisition campaign.
-        campaign_type:
-          type: object
-          properties:
-            code:
-              type: string
-        status:
-          type: string
-          description: The status of the acquisition campaign. Values are scheduled, active, deleted, or past. Values are always lowercase.
-        start_date:
-          type: string
-          description: The date the campaign is starting, formatted in ISO-8601 format.
-        end_date:
-          type: string
-          description: The date the campaign is ending or has ended, formatted in ISO-8601 format.
-        created_date:
-          type: string
-          description: The date the campaign was created, formated in ISO-8601 format.
-        updated_date:
-          type: string
-          description: The date of the last time the campaign was updated, formated in ISO-8601 format.
-        acquisition_campaign:
-          type: object
-          properties:
-            keywords:
-              type: array
-              description: The keywords that a user can send in via SMS to join the campaign and begin the subscription process.
-              items:
-                type: string
-        url:
-          type: string
-          description: Unique resource URL for the acquisition campaign.
     acquisitionParticipantResponse:
       type: object
       properties:
@@ -262,6 +214,10 @@ components:
           description: A list of custom field key/value pairs to poulate when creating Acquisition request.
           additionalProperties:
             type: string
+    acquisitionParticipantsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/acquisitionParticipantResponse'
     addParticipantResponse:
       type: object
       properties:
@@ -286,6 +242,50 @@ components:
         status:
           type: string
           description: Status of the aquisition request.
+    acquisitionsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/acquisitionResponse'
+    acquisitionResponse:
+      type: object
+      properties:
+        acquisition_id:
+          type: string
+          description: A Vibes-assigned alphanumeric unique identifier for each acquisition campaign.
+        description:
+          type: string
+          description: The name of the acquisition campaign.
+        campaign_type:
+          type: object
+          properties:
+            code:
+              type: string
+        status:
+          type: string
+          description: The status of the acquisition campaign. Values are scheduled, active, deleted, or past. Values are always lowercase.
+        start_date:
+          type: string
+          description: The date the campaign is starting, formatted in ISO-8601 format.
+        end_date:
+          type: string
+          description: The date the campaign is ending or has ended, formatted in ISO-8601 format.
+        created_date:
+          type: string
+          description: The date the campaign was created, formated in ISO-8601 format.
+        updated_date:
+          type: string
+          description: The date of the last time the campaign was updated, formated in ISO-8601 format.
+        acquisition_campaign:
+          type: object
+          properties:
+            keywords:
+              type: array
+              description: The keywords that a user can send in via SMS to join the campaign and begin the subscription process.
+              items:
+                type: string
+        url:
+          type: string
+          description: Unique resource URL for the acquisition campaign.
   securitySchemes:
     basicAuth:
       type: http
