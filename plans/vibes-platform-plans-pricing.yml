@@ -88,3 +88,38 @@ notes:
     There is no free tier and no trial. The apis.yml accessModel currently reads
     "freemium / self-serve" with method: derived; the published pricing does not support that and it
     was corrected to paid / sales-assisted in this pass.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - hybrid
+  - metered
+  units: []
+  plans:
+  - name: RCS Studio
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Platform Professional
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods:
+    - other
+  - name: Platform Enterprise
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods: []
+  - name: Vibes Connect (Tier 1 Aggregation)
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods:
+    - month
