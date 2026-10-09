@@ -1,4 +1,4 @@
-generated: '2026-09-16'
+generated: '2026-09-23'
 method: generated
 source: openapi/vibes-platform-acquisition-campaign-api-api-openapi.yml, openapi/vibes-platform-acquisition-campaigns-api-openapi.yml,
   openapi/vibes-platform-android-wallet-templates-api-api-openapi.yml, openapi/vibes-platform-authentication-api-openapi.yml,
@@ -21,11 +21,11 @@ description: Recommended x-agentic-access execution contracts, classified heuris
 summary:
   operations: 106
   by_action_class:
-    connected: 52
-    acting: 54
+    connected: 53
+    acting: 53
   by_consequence:
-    read: 52
-    write: 49
+    read: 53
+    write: 48
     physical: 4
     safety-critical: 1
   human_in_the_loop_required: 1
@@ -414,18 +414,12 @@ operations:
   method: post
   operationId: lookupCarrier
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
+      max-ttl: 3600
+    audit: none
 - path: /companies/{company_key}/events
   method: post
   operationId: postCompaniesByCompanyKeyEvents
