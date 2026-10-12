@@ -1,0 +1,86 @@
+generated: '2026-10-12'
+method: searched
+source:
+- https://zapier.com/apps/vibes/integrations
+checked:
+- https://composio.dev/toolkits/vibes-platform
+- https://monid.ai/tools/vibes-platform
+- https://n8n.io/integrations/vibes-platform/
+- https://n8n.io/integrations/vibes/
+- https://zapier.com/apps/vibes-platform/integrations
+- https://zapier.com/apps/vibes/integrations
+summary: null
+marketplace_apps:
+- marketplace: zapier
+  channel: ipaas-listing
+  app: vibes
+  url: https://zapier.com/apps/vibes/integrations
+  external_url: https://vibes.com/
+  partner_tier: BETA
+  triggers:
+  - key: new_subscriber
+    label: New Subscriber
+  actions:
+  - key: add_participant
+    label: Add Acquisition Participant
+  - key: issue_incentive_code
+    label: Issue Incentive Code
+  - key: trigger_event
+    label: Send Event-Triggered Message
+  - key: unsubscribe_by_mdn
+    label: Unsubscribe Person by MDN
+  - key: update_person
+    label: Update Person
+  searches:
+  - key: find_person_by_mdn
+    label: Find Person by MDN
+  - key: get_acquisition_campaign
+    label: Get Acquisition Campaign
+  - key: get_subscription_status
+    label: Get Subscription Status
+edges:
+- partner_name: Facebook Lead Ads
+  partner: facebook-lead-ads
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/vibes/integrations/facebook-lead-ads
+  direction: third-party
+  category: Ads & Conversion
+  partner_url: https://www.facebook.com/business/ads/lead-ads
+- partner_name: Airtable
+  partner: airtable
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/vibes/integrations/airtable
+  direction: third-party
+  category: Databases
+  partner_url: https://airtable.com/
+- partner_name: ActiveCampaign
+  partner: activecampaign
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/vibes/integrations/activecampaign
+  direction: third-party
+  category: Marketing Automation
+  partner_url: https://www.activecampaign.com/?utm_source=unpaid_syndication_website&utm_medium=referral&utm_campaign=zapier_listing
+- partner_name: Microsoft Excel
+  partner: null
+  partner_match: null
+  partner_candidate: zapier
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/vibes/integrations/excel
+  direction: third-party
+  category: Microsoft
+  partner_url: https://zapier.com/office.com
+templates: []
