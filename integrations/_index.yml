@@ -41,7 +41,6 @@
   arazzo: null
 - slug: vibes-platform-microsoft-excel
   label: Microsoft Excel
-  partner: microsoft-excel
   partner_name: Microsoft Excel
   category: Microsoft
   type: marketplace
@@ -49,5 +48,30 @@
   channel: ipaas-usage
   evidence: https://zapier.com/apps/vibes/integrations/excel
   source: edge
+  status: pending-partner-spec
+  arazzo: null
+- slug: vibes-platform-zapier
+  label: Zapier
+  partner: zapier
+  partner_name: Zapier
+  type: marketplace
+  marketplace: zapier-directory
+  channel: ipaas-listing
+  evidence: https://zapier.com/apps/vibes/integrations
+  source: edge
+  relationship: ipaas-bridge
+  contract_reference:
+    register: Zapier app directory (zapier.com/api/v4/apps)
+    spec_file: null
+    role: ipaas-connector:zapier
+    registered_name: Vibes
+    matched_domain: vibes.com
+    matched_by: domain
+    detected_by: sweep-workflow-automation.py
+    detected: '2026-10-15'
+    signal_note: one edge per (provider, platform); actions, triggers and usage counts are context, never read
+    app_slug: vibes
+    beta: true
+    builder: unknown (not in the directory record)
   status: pending-generation
   arazzo: null
