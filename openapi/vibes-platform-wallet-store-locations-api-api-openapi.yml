@@ -213,6 +213,14 @@ components:
           description: Store locations to add (up to 1000 per request).
           items:
             $ref: '#/components/schemas/walletLocation'
+    walletLocationResponse:
+      allOf:
+      - type: object
+        properties:
+          id:
+            type: integer
+            description: Unique identifier of the store location.
+      - $ref: '#/components/schemas/walletLocation'
     walletLocation:
       type: object
       description: A store location attached to a wallet campaign.
@@ -253,14 +261,6 @@ components:
         notification_message:
           type: string
           description: Lock-screen message shown to pass holders when they are near this location.
-    walletLocationResponse:
-      allOf:
-      - type: object
-        properties:
-          id:
-            type: integer
-            description: Unique identifier of the store location.
-      - $ref: '#/components/schemas/walletLocation'
     walletLocationsResponse:
       type: array
       items:

@@ -231,6 +231,10 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    subscriptionsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/subscriptionResponse'
     subscriptionResponse:
       type: object
       properties:
@@ -276,10 +280,6 @@ components:
         url:
           type: string
           description: A reference URL to the existing object, as a relative URL to the existing domain.
-    subscriptionsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/subscriptionResponse'
   securitySchemes:
     basicAuth:
       type: http

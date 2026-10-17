@@ -53,12 +53,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    eventResponse:
-      type: object
-      properties:
-        event_id:
-          type: string
-          description: Unique identifier for the event triggered.
     eventRequest:
       type: object
       properties:
@@ -89,6 +83,12 @@ components:
       required:
       - event_type
       - event_data
+    eventResponse:
+      type: object
+      properties:
+        event_id:
+          type: string
+          description: Unique identifier for the event triggered.
   securitySchemes:
     basicAuth:
       type: http

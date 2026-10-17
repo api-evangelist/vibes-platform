@@ -138,23 +138,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    androidTemplateResponse:
-      allOf:
-      - type: object
-        properties:
-          id:
-            type: string
-            description: Unique identifier of the Google Wallet template.
-          active:
-            type: boolean
-            description: Whether the template is active.
-          created_at:
-            type: string
-            description: When the template was created, in ISO-8601 format.
-          updated_at:
-            type: string
-            description: When the template was last updated, in ISO-8601 format.
-      - $ref: '#/components/schemas/googleWalletTemplateBody'
     androidTemplateRequest:
       example:
         wallet_template:
@@ -463,6 +446,23 @@ components:
             sort_index:
               type: integer
               description: Position of this pass within its group.
+    androidTemplateResponse:
+      allOf:
+      - type: object
+        properties:
+          id:
+            type: string
+            description: Unique identifier of the Google Wallet template.
+          active:
+            type: boolean
+            description: Whether the template is active.
+          created_at:
+            type: string
+            description: When the template was created, in ISO-8601 format.
+          updated_at:
+            type: string
+            description: When the template was last updated, in ISO-8601 format.
+      - $ref: '#/components/schemas/googleWalletTemplateBody'
   securitySchemes:
     basicAuth:
       type: http

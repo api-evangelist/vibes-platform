@@ -167,6 +167,23 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    locationSelectorResponse:
+      allOf:
+      - type: object
+        properties:
+          token:
+            type: string
+            description: Public token of the location selector.
+          url:
+            type: string
+            description: Public landing page URL.
+          created_at:
+            type: string
+            description: When the location selector was created, in ISO-8601 format.
+          updated_at:
+            type: string
+            description: When the location selector was last updated, in ISO-8601 format.
+      - $ref: '#/components/schemas/locationSelectorBody'
     locationSelectorRequest:
       example:
         location_selector:
@@ -234,23 +251,6 @@ components:
           - es-419
           - fr-FR
           description: Locale of the "Add to Wallet" button. One of `en-US` (English), `es-ES` (Spanish - Spain), `es-419` (Spanish - Latin America), or `fr-FR` (French).
-    locationSelectorResponse:
-      allOf:
-      - type: object
-        properties:
-          token:
-            type: string
-            description: Public token of the location selector.
-          url:
-            type: string
-            description: Public landing page URL.
-          created_at:
-            type: string
-            description: When the location selector was created, in ISO-8601 format.
-          updated_at:
-            type: string
-            description: When the location selector was last updated, in ISO-8601 format.
-      - $ref: '#/components/schemas/locationSelectorBody'
   securitySchemes:
     basicAuth:
       type: http

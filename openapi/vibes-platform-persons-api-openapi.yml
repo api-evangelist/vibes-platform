@@ -43,6 +43,58 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type identifier.
+        message:
+          type: string
+          description: Human-readable error message.
+        details:
+          type: array
+          items:
+            type: string
+          description: Additional error details.
+    Person:
+      type: object
+      properties:
+        person_key:
+          type: string
+          description: Internal Vibes person key.
+        external_person_id:
+          type: string
+          description: External person identifier.
+        mobile_phone:
+          type: string
+          description: Person's mobile phone number.
+        status:
+          type: string
+          description: Subscription status.
+          enum:
+          - subscribed
+          - unsubscribed
+        created_at:
+          type: string
+          format: date-time
+          description: When the person was added.
+  parameters:
+    person_key:
+      name: person_key
+      in: path
+      required: true
+      description: The internal Vibes person key for the subscriber.
+      schema:
+        type: string
+    company_key:
+      name: company_key
+      in: path
+      required: true
+      description: Your Vibes company identifier.
+      schema:
+        type: string
   responses:
     TooManyRequests:
       description: Rate limit exceeded - too many requests.
@@ -67,58 +119,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    person_key:
-      name: person_key
-      in: path
-      required: true
-      description: The internal Vibes person key for the subscriber.
-      schema:
-        type: string
-    company_key:
-      name: company_key
-      in: path
-      required: true
-      description: Your Vibes company identifier.
-      schema:
-        type: string
-  schemas:
-    Person:
-      type: object
-      properties:
-        person_key:
-          type: string
-          description: Internal Vibes person key.
-        external_person_id:
-          type: string
-          description: External person identifier.
-        mobile_phone:
-          type: string
-          description: Person's mobile phone number.
-        status:
-          type: string
-          description: Subscription status.
-          enum:
-          - subscribed
-          - unsubscribed
-        created_at:
-          type: string
-          format: date-time
-          description: When the person was added.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type identifier.
-        message:
-          type: string
-          description: Human-readable error message.
-        details:
-          type: array
-          items:
-            type: string
-          description: Additional error details.
   securitySchemes:
     basicAuth:
       type: http

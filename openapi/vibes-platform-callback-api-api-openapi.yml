@@ -254,6 +254,124 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    callbackRequest-Wallet:
+      type: object
+      title: Wallet Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback to register.
+          enum:
+          - wallet_item_install
+          - wallet_item_remove
+        destination:
+          type: object
+          properties:
+            url:
+              type: string
+              description: External URL to submit the callback data.
+            method:
+              type: string
+              description: Method to submit the data to the destination URL.
+              enum:
+              - POST
+              - PUT
+              default: POST
+            content_type:
+              type: string
+              description: Content type to set when submitting the data to the destination URL.
+              enum:
+              - application/json
+              - text/json
+              default: application/json
+          required:
+          - url
+        wallet_item_install:
+          type: object
+          description: Required for Wallet Item Install callback.
+          properties:
+            campaign_token:
+              type: string
+              description: The campaign token for the wallet campaign.
+        wallet_item_remove:
+          type: object
+          description: Required for Wallet Item Remove callback.
+          properties:
+            campaign_token:
+              type: string
+              description: The campaign token for the wallet campaign.
+        start_date:
+          type: string
+          description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
+          example: yyyy-mm-dd
+        end_date:
+          type: string
+          description: Date you’d like to stop receiving this callback in ISO-8601 format. Leave blank for no end date.
+          example: yyyy-mm-dd
+      required:
+      - callback_type
+      - destination
+    callbackRequest-Sub:
+      type: object
+      title: Subscription Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback to register.
+          enum:
+          - subscription_added
+          - subscription_removed
+        destination:
+          type: object
+          properties:
+            url:
+              type: string
+              description: External URL to submit the callback data.
+            method:
+              type: string
+              description: Method to submit the data to the destination URL.
+              enum:
+              - POST
+              - PUT
+              default: POST
+            content_type:
+              type: string
+              description: Content type to set when submitting the data to the destination URL.
+              enum:
+              - application/json
+              - text/json
+              default: application/json
+          required:
+          - url
+        subscription_added:
+          type: object
+          description: Required for Subscription Added callback.
+          properties:
+            list_id:
+              type: string
+              description: Vibes unique identifier for a subscription list.
+        subscription_removed:
+          type: object
+          description: Required for Subscription Removed callback.
+          properties:
+            list_id:
+              type: string
+              description: Vibes unique identifier for a subscription list.
+        start_date:
+          type: string
+          description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
+          example: yyyy-mm-dd
+        end_date:
+          type: string
+          description: Date you’d like to stop receiving this callback in ISO-8601 format. Leave blank for no end date.
+          example: yyyy-mm-dd
+      required:
+      - callback_type
+      - destination
+    callbacksResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/callbackResponse'
     callbackResponse:
       type: object
       properties:
@@ -384,6 +502,58 @@ components:
         updated_date:
           type: string
           description: The date the campaign was last updated in ISO-8601 format.
+    testCallbackResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: confirmation of test callback type requested.
+        event_id:
+          type: string
+          description: System defined event_id for the callback.
+    callbackRequest-Person:
+      type: object
+      title: Person Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback to register.
+          enum:
+          - person_added
+          - person_updated
+        destination:
+          type: object
+          properties:
+            url:
+              type: string
+              description: External URL to submit the callback data.
+            method:
+              type: string
+              description: Method to submit the data to the destination URL.
+              enum:
+              - POST
+              - PUT
+              default: POST
+            content_type:
+              type: string
+              description: Content type to set when submitting the data to the destination URL.
+              enum:
+              - application/json
+              - text/json
+              default: application/json
+          required:
+          - url
+        start_date:
+          type: string
+          description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
+          example: yyyy-mm-dd
+        end_date:
+          type: string
+          description: Date you’d like to stop receiving this callback in ISO-8601 format. Leave blank for no end date.
+          example: yyyy-mm-dd
+      required:
+      - callback_type
+      - destination
     testcallbackRequest-Ack:
       type: object
       title: Acquisition Callbacks
@@ -428,17 +598,15 @@ components:
                   description: The subscription_list_id of the list the participant is being added to.
       required:
       - callback_type
-    callbackRequest-Push:
+    callbackRequest-Unmatched:
       type: object
-      title: Push Device Callbacks
+      title: Unmatched Message Callback
       properties:
         callback_type:
           type: string
           description: The type of callback to register.
           enum:
-          - device_added
-          - device_removed
-          - device_updated
+          - unmatched_message_received
         destination:
           type: object
           properties:
@@ -461,27 +629,18 @@ components:
               default: application/json
           required:
           - url
-        device_added:
+        unmatched_message_received:
           type: object
-          description: Required for Push Device Added callback.
+          description: Required for Unmatched Message callback.
           properties:
-            app_id:
+            source_code:
               type: string
-              description: Your push application id.
-        device_removed:
-          type: object
-          description: Required for Push Device Removed callback.
-          properties:
-            app_id:
+              description: The short code, long code, or alpha code you want to receive unmatched message events for.
+            country_code:
               type: string
-              description: Your push application id.
-        device_updated:
-          type: object
-          description: Required for Push Device Updated callback.
-          properties:
-            app_id:
-              type: string
-              description: Your push application id.
+              description: The country code for the source code you want to receive unmatched message events for.
+          required:
+          - source_code
         start_date:
           type: string
           description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
@@ -493,76 +652,40 @@ components:
       required:
       - callback_type
       - destination
-    callbackRequest-Sub:
+      - unmatched_message_received
+    testcallbackRequest-Person:
       type: object
-      title: Subscription Callbacks
+      title: Person Callbacks
       properties:
         callback_type:
           type: string
-          description: The type of callback to register.
+          description: The type of callback you'd like to receive the test callback for.
           enum:
-          - subscription_added
-          - subscription_removed
-        destination:
+          - person_added
+          - person_updated
+        person:
           type: object
           properties:
-            url:
+            person_id:
               type: string
-              description: External URL to submit the callback data.
-            method:
+              description: person_id for person being added or updated.
+            external_person_id:
               type: string
-              description: Method to submit the data to the destination URL.
-              enum:
-              - POST
-              - PUT
-              default: POST
-            content_type:
-              type: string
-              description: Content type to set when submitting the data to the destination URL.
-              enum:
-              - application/json
-              - text/json
-              default: application/json
-          required:
-          - url
-        subscription_added:
-          type: object
-          description: Required for Subscription Added callback.
-          properties:
-            list_id:
-              type: string
-              description: Vibes unique identifier for a subscription list.
-        subscription_removed:
-          type: object
-          description: Required for Subscription Removed callback.
-          properties:
-            list_id:
-              type: string
-              description: Vibes unique identifier for a subscription list.
-        start_date:
-          type: string
-          description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
-          example: yyyy-mm-dd
-        end_date:
-          type: string
-          description: Date you’d like to stop receiving this callback in ISO-8601 format. Leave blank for no end date.
-          example: yyyy-mm-dd
+              description: external_person_id for person being added or updated.
+            mobile:
+              type: object
+              properties:
+                mdn:
+                  type: string
+                  description: Mobile phone number of person being added or updated.
+                carrier_code:
+                  type: string
+                  description: <a href="https://developer-aggregation.vibes.com/reference/carrier-codes">Carrier code</a> for person's mobile phone carrier.
+            custom_fields:
+              type: object
+              description: Any custom fields being added or updated for the person.
       required:
       - callback_type
-      - destination
-    testCallbackResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          description: confirmation of test callback type requested.
-        event_id:
-          type: string
-          description: System defined event_id for the callback.
-    callbacksResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/callbackResponse'
     testcallbackRequest-Push:
       type: object
       title: Push Device Callbacks
@@ -597,6 +720,85 @@ components:
               type: string
       required:
       - callback_type
+    testcallbackRequest-SubList:
+      type: object
+      title: Subscription List Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback you'd like to receive the test callback for.
+          enum:
+          - subscription_list_added
+          - subscription_list_updated
+        subscription_list:
+          type: object
+          properties:
+            id:
+              type: string
+              description: subscription_list_id for the list that is being added or updated.
+            name:
+              type: string
+              description: Name of subscription list being added or updated.
+      required:
+      - callback_type
+    callbackRequest-Event:
+      type: object
+      title: Event-Triggered Callbacks
+      properties:
+        callback_type:
+          type: string
+          description: The type of callback to register.
+          enum:
+          - event_processed
+        destination:
+          type: object
+          properties:
+            url:
+              type: string
+              description: External URL to submit the callback data.
+            method:
+              type: string
+              description: Method to submit the data to the destination URL.
+              enum:
+              - POST
+              - PUT
+              default: POST
+            content_type:
+              type: string
+              description: Content type to set when submitting the data to the destination URL.
+              enum:
+              - application/json
+              - text/json
+              default: application/json
+          required:
+          - url
+        event_processed:
+          type: object
+          properties:
+            event_type:
+              type: string
+              description: The name of the event that you would like to receive callbacks for.
+            callbacks_to_send:
+              type: string
+              description: Choose which callbacks you'd like to receive. Default is all.
+              enum:
+              - all
+              - only_failures
+              - routing
+              - carrier_dlr
+              - handset_dlr
+        start_date:
+          type: string
+          description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
+          example: yyyy-mm-dd
+        end_date:
+          type: string
+          description: Date you’d like to stop receiving this callback in ISO-8601 format. Leave blank for no end date.
+          example: yyyy-mm-dd
+      required:
+      - event_processed
+      - callback_type
+      - destination
     testcallbackRequest-Event:
       type: object
       title: Event-Triggered Callbacks
@@ -660,171 +862,6 @@ components:
       required:
       - callback_type
       - destination
-    callbackRequest-Unmatched:
-      type: object
-      title: Unmatched Message Callback
-      properties:
-        callback_type:
-          type: string
-          description: The type of callback to register.
-          enum:
-          - unmatched_message_received
-        destination:
-          type: object
-          properties:
-            url:
-              type: string
-              description: External URL to submit the callback data.
-            method:
-              type: string
-              description: Method to submit the data to the destination URL.
-              enum:
-              - POST
-              - PUT
-              default: POST
-            content_type:
-              type: string
-              description: Content type to set when submitting the data to the destination URL.
-              enum:
-              - application/json
-              - text/json
-              default: application/json
-          required:
-          - url
-        unmatched_message_received:
-          type: object
-          description: Required for Unmatched Message callback.
-          properties:
-            source_code:
-              type: string
-              description: The short code, long code, or alpha code you want to receive unmatched message events for.
-            country_code:
-              type: string
-              description: The country code for the source code you want to receive unmatched message events for.
-          required:
-          - source_code
-        start_date:
-          type: string
-          description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
-          example: yyyy-mm-dd
-        end_date:
-          type: string
-          description: Date you’d like to stop receiving this callback in ISO-8601 format. Leave blank for no end date.
-          example: yyyy-mm-dd
-      required:
-      - callback_type
-      - destination
-      - unmatched_message_received
-    testcallbackRequest-Sub:
-      type: object
-      title: Subscription Callbacks
-      properties:
-        callback_type:
-          type: string
-          description: The type of callback you'd like to receive the test callback for.
-          enum:
-          - subscription_added
-          - subscription_removed
-        subscription:
-          type: object
-          properties:
-            person:
-              type: object
-              properties:
-                id:
-                  type: string
-                  description: person_id for the subscriber.
-            subscription_list:
-              type: object
-              properties:
-                id:
-                  type: string
-                  description: subscription_list_id for list for which a subscriber is being added or removed.
-              required:
-              - id
-          required:
-          - subscription_list
-      required:
-      - callback_type
-    callbackRequest-Event:
-      type: object
-      title: Event-Triggered Callbacks
-      properties:
-        callback_type:
-          type: string
-          description: The type of callback to register.
-          enum:
-          - event_processed
-        destination:
-          type: object
-          properties:
-            url:
-              type: string
-              description: External URL to submit the callback data.
-            method:
-              type: string
-              description: Method to submit the data to the destination URL.
-              enum:
-              - POST
-              - PUT
-              default: POST
-            content_type:
-              type: string
-              description: Content type to set when submitting the data to the destination URL.
-              enum:
-              - application/json
-              - text/json
-              default: application/json
-          required:
-          - url
-        event_processed:
-          type: object
-          properties:
-            event_type:
-              type: string
-              description: The name of the event that you would like to receive callbacks for.
-            callbacks_to_send:
-              type: string
-              description: Choose which callbacks you'd like to receive. Default is all.
-              enum:
-              - all
-              - only_failures
-              - routing
-              - carrier_dlr
-              - handset_dlr
-        start_date:
-          type: string
-          description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
-          example: yyyy-mm-dd
-        end_date:
-          type: string
-          description: Date you’d like to stop receiving this callback in ISO-8601 format. Leave blank for no end date.
-          example: yyyy-mm-dd
-      required:
-      - event_processed
-      - callback_type
-      - destination
-    testcallbackRequest-SubList:
-      type: object
-      title: Subscription List Callbacks
-      properties:
-        callback_type:
-          type: string
-          description: The type of callback you'd like to receive the test callback for.
-          enum:
-          - subscription_list_added
-          - subscription_list_updated
-        subscription_list:
-          type: object
-          properties:
-            id:
-              type: string
-              description: subscription_list_id for the list that is being added or updated.
-            name:
-              type: string
-              description: Name of subscription list being added or updated.
-      required:
-      - callback_type
     callbackRequest-Ack:
       type: object
       title: Acquisition Callbacks
@@ -884,49 +921,48 @@ components:
       required:
       - callback_type
       - destination
-    testcallbackRequest-Person:
+    testcallbackRequest-Sub:
       type: object
-      title: Person Callbacks
+      title: Subscription Callbacks
       properties:
         callback_type:
           type: string
           description: The type of callback you'd like to receive the test callback for.
           enum:
-          - person_added
-          - person_updated
-        person:
+          - subscription_added
+          - subscription_removed
+        subscription:
           type: object
           properties:
-            person_id:
-              type: string
-              description: person_id for person being added or updated.
-            external_person_id:
-              type: string
-              description: external_person_id for person being added or updated.
-            mobile:
+            person:
               type: object
               properties:
-                mdn:
+                id:
                   type: string
-                  description: Mobile phone number of person being added or updated.
-                carrier_code:
-                  type: string
-                  description: <a href="https://developer-aggregation.vibes.com/reference/carrier-codes">Carrier code</a> for person's mobile phone carrier.
-            custom_fields:
+                  description: person_id for the subscriber.
+            subscription_list:
               type: object
-              description: Any custom fields being added or updated for the person.
+              properties:
+                id:
+                  type: string
+                  description: subscription_list_id for list for which a subscriber is being added or removed.
+              required:
+              - id
+          required:
+          - subscription_list
       required:
       - callback_type
-    callbackRequest-Person:
+    callbackRequest-Push:
       type: object
-      title: Person Callbacks
+      title: Push Device Callbacks
       properties:
         callback_type:
           type: string
           description: The type of callback to register.
           enum:
-          - person_added
-          - person_updated
+          - device_added
+          - device_removed
+          - device_updated
         destination:
           type: object
           properties:
@@ -949,63 +985,27 @@ components:
               default: application/json
           required:
           - url
-        start_date:
-          type: string
-          description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.
-          example: yyyy-mm-dd
-        end_date:
-          type: string
-          description: Date you’d like to stop receiving this callback in ISO-8601 format. Leave blank for no end date.
-          example: yyyy-mm-dd
-      required:
-      - callback_type
-      - destination
-    callbackRequest-Wallet:
-      type: object
-      title: Wallet Callbacks
-      properties:
-        callback_type:
-          type: string
-          description: The type of callback to register.
-          enum:
-          - wallet_item_install
-          - wallet_item_remove
-        destination:
+        device_added:
           type: object
+          description: Required for Push Device Added callback.
           properties:
-            url:
+            app_id:
               type: string
-              description: External URL to submit the callback data.
-            method:
-              type: string
-              description: Method to submit the data to the destination URL.
-              enum:
-              - POST
-              - PUT
-              default: POST
-            content_type:
-              type: string
-              description: Content type to set when submitting the data to the destination URL.
-              enum:
-              - application/json
-              - text/json
-              default: application/json
-          required:
-          - url
-        wallet_item_install:
+              description: Your push application id.
+        device_removed:
           type: object
-          description: Required for Wallet Item Install callback.
+          description: Required for Push Device Removed callback.
           properties:
-            campaign_token:
+            app_id:
               type: string
-              description: The campaign token for the wallet campaign.
-        wallet_item_remove:
+              description: Your push application id.
+        device_updated:
           type: object
-          description: Required for Wallet Item Remove callback.
+          description: Required for Push Device Updated callback.
           properties:
-            campaign_token:
+            app_id:
               type: string
-              description: The campaign token for the wallet campaign.
+              description: Your push application id.
         start_date:
           type: string
           description: Date you’d like to start receiving this callback in ISO-8601 format. Leave blank to start immediately.

@@ -200,14 +200,6 @@ components:
           description: The date this person was last updated, in the ISO-8601 format.
         url:
           type: string
-    acquisitionsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/acquisitionResponse'
-    subscriptionListsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/subscriptionListResponse'
     acquisitionResponse:
       type: object
       properties:
@@ -248,6 +240,14 @@ components:
         url:
           type: string
           description: Unique resource URL for the acquisition campaign.
+    subscriptionListsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/subscriptionListResponse'
+    acquisitionsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/acquisitionResponse'
   securitySchemes:
     basicAuth:
       type: http

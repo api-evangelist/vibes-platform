@@ -48,48 +48,7 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  responses:
-    TooManyRequests:
-      description: Rate limit exceeded - too many requests.
-      headers:
-        Retry-After:
-          schema:
-            type: integer
-          description: Number of seconds to wait before retrying.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request - invalid parameters or request body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized - invalid or missing credentials.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    EventCreate:
-      type: object
-      required:
-      - event_type
-      - person_key
-      properties:
-        event_type:
-          type: string
-          description: Type of event that triggers messaging.
-        person_key:
-          type: string
-          description: Internal Vibes person key or external_person_id.
-        attributes:
-          type: object
-          description: Custom attributes to personalize triggered messages.
-          additionalProperties:
-            type: string
     Error:
       type: object
       properties:
@@ -127,6 +86,47 @@ components:
           type: string
           format: date-time
           description: When the event was submitted.
+    EventCreate:
+      type: object
+      required:
+      - event_type
+      - person_key
+      properties:
+        event_type:
+          type: string
+          description: Type of event that triggers messaging.
+        person_key:
+          type: string
+          description: Internal Vibes person key or external_person_id.
+        attributes:
+          type: object
+          description: Custom attributes to personalize triggered messages.
+          additionalProperties:
+            type: string
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Number of seconds to wait before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     company_key:
       name: company_key

@@ -124,66 +124,18 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  responses:
-    TooManyRequests:
-      description: Rate limit exceeded - too many requests.
-      headers:
-        Retry-After:
-          schema:
-            type: integer
-          description: Number of seconds to wait before retrying.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request - invalid parameters or request body.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized - invalid or missing credentials.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    AcquisitionCampaign:
+    ParticipantCreate:
       type: object
+      required:
+      - mobile_phone
       properties:
-        id:
+        mobile_phone:
           type: string
-          description: Unique identifier for the acquisition campaign.
-        name:
+          description: Participant's mobile phone number (E.164 format recommended).
+        external_person_id:
           type: string
-          description: Name of the acquisition campaign.
-        status:
-          type: string
-          description: Current status of the campaign.
-          enum:
-          - active
-          - inactive
-          - expired
-        subscription_list_id:
-          type: string
-          description: The subscription list subscribers will be added to.
-        keyword:
-          type: string
-          description: SMS keyword associated with the campaign (e.g., JOIN).
-        short_code:
-          type: string
-          description: SMS short code for the campaign.
-        created_at:
-          type: string
-          format: date-time
-          description: When the campaign was created.
+          description: External identifier for the person.
     Error:
       type: object
       properties:
@@ -218,17 +170,65 @@ components:
           type: string
           format: date-time
           description: When the participant was added.
-    ParticipantCreate:
+    AcquisitionCampaign:
       type: object
-      required:
-      - mobile_phone
       properties:
-        mobile_phone:
+        id:
           type: string
-          description: Participant's mobile phone number (E.164 format recommended).
-        external_person_id:
+          description: Unique identifier for the acquisition campaign.
+        name:
           type: string
-          description: External identifier for the person.
+          description: Name of the acquisition campaign.
+        status:
+          type: string
+          description: Current status of the campaign.
+          enum:
+          - active
+          - inactive
+          - expired
+        subscription_list_id:
+          type: string
+          description: The subscription list subscribers will be added to.
+        keyword:
+          type: string
+          description: SMS keyword associated with the campaign (e.g., JOIN).
+        short_code:
+          type: string
+          description: SMS short code for the campaign.
+        created_at:
+          type: string
+          format: date-time
+          description: When the campaign was created.
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters or request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded - too many requests.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Number of seconds to wait before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     campaign_id:
       name: campaign_id
