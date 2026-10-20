@@ -1,4 +1,4 @@
-generated: '2026-10-12'
+generated: '2026-10-20'
 method: searched
 source:
 - https://zapier.com/apps/vibes/integrations
@@ -47,50 +47,6 @@ marketplace_apps:
   - key: get_subscription_status
     label: Get Subscription Status
 edges:
-- partner_name: Facebook Lead Ads
-  partner: facebook-lead-ads
-  partner_match: name-exact
-  partner_candidate: null
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/vibes/integrations/facebook-lead-ads
-  direction: third-party
-  category: Ads & Conversion
-  partner_url: https://www.facebook.com/business/ads/lead-ads
-- partner_name: Airtable
-  partner: airtable
-  partner_match: domain
-  partner_candidate: null
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/vibes/integrations/airtable
-  direction: third-party
-  category: Databases
-  partner_url: https://airtable.com/
-- partner_name: ActiveCampaign
-  partner: activecampaign
-  partner_match: domain
-  partner_candidate: null
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/vibes/integrations/activecampaign
-  direction: third-party
-  category: Marketing Automation
-  partner_url: https://www.activecampaign.com/?utm_source=unpaid_syndication_website&utm_medium=referral&utm_campaign=zapier_listing
-- partner_name: Microsoft Excel
-  partner: null
-  partner_match: null
-  partner_candidate: zapier
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/vibes/integrations/excel
-  direction: third-party
-  category: Microsoft
-  partner_url: https://zapier.com/office.com
 - partner_name: Zapier
   partner: zapier
   partner_match: aggregator
@@ -155,4 +111,52 @@ edges:
     detected: '2026-10-18'
   detected_by: sweep-official-sdks.py
   first_seen: '2026-10-18'
+- partner_name: Facebook Lead Ads
+  partner: facebook-lead-ads
+  partner_match: domain+name-among-holders
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  relationship: ipaas-bridge
+  evidence: https://zapier.com/apps/vibes/integrations/facebook-lead-ads
+  direction: third-party
+  category: Ads & Conversion
+  partner_url: https://www.facebook.com/business/ads/lead-ads
+- partner_name: Airtable
+  partner: airtable
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  relationship: ipaas-bridge
+  evidence: https://zapier.com/apps/vibes/integrations/airtable
+  direction: third-party
+  category: Databases
+  partner_url: https://airtable.com/
+- partner_name: ActiveCampaign
+  partner: activecampaign
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  relationship: ipaas-bridge
+  evidence: https://zapier.com/apps/vibes/integrations/activecampaign
+  direction: third-party
+  category: Marketing Automation
+  partner_url: https://www.activecampaign.com/?utm_source=unpaid_syndication_website&utm_medium=referral&utm_campaign=zapier_listing
+- partner_name: Microsoft Excel
+  partner: null
+  partner_match: null
+  partner_candidate: zapier
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  relationship: ipaas-bridge
+  evidence: https://zapier.com/apps/vibes/integrations/excel
+  direction: third-party
+  category: Microsoft
+  partner_url: https://zapier.com/office.com
 templates: []
