@@ -17,6 +17,9 @@ checked:
 - https://zapier.com/api/v4/apps/
 - https://zapier.com/apps/vibes-platform/integrations
 - https://zapier.com/apps/vibes/integrations
+- adobe-campaign/integrations/adobe-campaign-integration-edges.yml
+- adobe-experience-cloud/integrations/adobe-experience-cloud-integration-edges.yml
+- marketo/integrations/marketo-integration-edges.yml
 summary: null
 marketplace_apps:
 - marketplace: zapier
@@ -159,4 +162,55 @@ edges:
   direction: third-party
   category: Microsoft
   partner_url: https://zapier.com/office.com
+- partner_name: Adobe Campaign (own)
+  partner: adobe-campaign
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://exchange.adobe.com/apps/ec/90050
+  mirror_of: adobe-campaign/integrations/adobe-campaign-integration-edges.yml
+  apps:
+  - Vibes MRM Connector for Adobe Campaign
+  listing_count: 1
+  detected: '2026-10-23'
+  detected_by: mirror-platform-listings.py
+  category: Adobe Exchange Experience Cloud listing (Campaign)
+- partner_name: Adobe Experience Cloud (own)
+  partner: adobe-experience-cloud
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://exchange.adobe.com/apps/ec/600179
+  mirror_of: adobe-experience-cloud/integrations/adobe-experience-cloud-integration-edges.yml
+  apps:
+  - Vibes RCS, Wallet, SMS and MMS for Adobe Journey Optimizer
+  listing_count: 1
+  detected: '2026-10-23'
+  detected_by: mirror-platform-listings.py
+  category: Adobe Exchange Experience Cloud listing (Journey Optimizer)
+- partner_name: Marketo (own)
+  partner: marketo
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://exchange.adobe.com/apps/ec/108203
+  mirror_of: marketo/integrations/marketo-integration-edges.yml
+  apps:
+  - Vibes SMS for Adobe Marketo Engage
+  listing_count: 1
+  detected: '2026-10-23'
+  detected_by: mirror-platform-listings.py
+  category: Adobe Exchange Experience Cloud listing (Marketo Engage)
 templates: []

@@ -119,3 +119,42 @@
   relationship: ipaas-bridge
   status: pending-partner-spec
   arazzo: null
+- slug: vibes-platform-adobe-campaign-own
+  label: Adobe Campaign (own)
+  partner: adobe-campaign
+  partner_name: Adobe Campaign (own)
+  category: Adobe Exchange Experience Cloud listing (Campaign)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/90050
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: vibes-platform-adobe-experience-cloud-own
+  label: Adobe Experience Cloud (own)
+  partner: adobe-experience-cloud
+  partner_name: Adobe Experience Cloud (own)
+  category: Adobe Exchange Experience Cloud listing (Journey Optimizer)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/600179
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: vibes-platform-marketo-own
+  label: Marketo (own)
+  partner: marketo
+  partner_name: Marketo (own)
+  category: Adobe Exchange Experience Cloud listing (Marketo Engage)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/108203
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
