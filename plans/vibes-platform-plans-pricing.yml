@@ -44,7 +44,7 @@ plans:
   period: none
   included_quota: Volume-based monthly pricing, typically 20%+ lower than alternatives
 x-canonical:
-  generated: '2026-11-01'
+  generated: '2026-11-02'
   vocabulary: engine/economics/plans-canonical.yml
   models:
   - subscription
